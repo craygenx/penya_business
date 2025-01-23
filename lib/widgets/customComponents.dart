@@ -128,3 +128,72 @@ class IncomeCards extends StatelessWidget {
   }
 
 }
+class SocialAnalyticsCard extends StatelessWidget {
+  final String text1;
+  final String text2;
+  final String text3;
+  final double width;
+  final double height;
+
+  const SocialAnalyticsCard({
+    super.key,
+    required this.text1,
+    required this.text2,
+    required this.text3,
+    this.width = 0.7,
+    this.height = 80,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width * width,
+      height: height,
+      decoration: BoxDecoration(
+        color: Colors.blueGrey,
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Text(text1),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Text(text2,
+              style: TextStyle(
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * width,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Text('vs. last month'),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: Text(text3,
+                    style: TextStyle(
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.w500,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
