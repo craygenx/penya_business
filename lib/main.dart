@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:penya_business/Screens/sign_up.dart';
+
+import 'Screens/homepage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Penya business',
-      home: const Signup(),
+      home: const Dashboard(),
     );
   }
 }
