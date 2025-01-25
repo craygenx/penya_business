@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'Screens/homepage.dart';
+import 'Screens/new_product.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Penya business',
-      home: const Dashboard(),
+      home: const NewProduct(),
     );
   }
 }

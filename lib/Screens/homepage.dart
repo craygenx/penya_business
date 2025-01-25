@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../widgets/customComponents.dart';
 
@@ -149,6 +150,7 @@ class _DashboardState extends State<Dashboard> {
                                 SizedBox(
                                   height: 35,
                                   width: 35,
+                                  child: Icon(FontAwesomeIcons.tiktok),
                                 ),
                                 SizedBox(
                                   width: 100,
@@ -176,6 +178,7 @@ class _DashboardState extends State<Dashboard> {
                                 SizedBox(
                                   height: 35,
                                   width: 35,
+                                  child: Icon(FontAwesomeIcons.instagram),
                                 ),
                                 SizedBox(
                                   width: 100,
@@ -203,6 +206,7 @@ class _DashboardState extends State<Dashboard> {
                                 SizedBox(
                                   height: 35,
                                   width: 35,
+                                  child: Icon(FontAwesomeIcons.facebook),
                                 ),
                                 SizedBox(
                                   width: 100,
