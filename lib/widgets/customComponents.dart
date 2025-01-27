@@ -562,3 +562,146 @@ class LineChartImplementation extends StatelessWidget {
   }
 
 }
+class ProductStoreCard extends StatelessWidget {
+  const ProductStoreCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    return Container(
+      color: Colors.white,
+      child: Column(
+        children: [
+          SizedBox(
+            width: width,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: width * .95,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: width *.7,
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: width * .4,
+                                child: Text('Abomination Perfume',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18.0,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 100,
+                                child: Row(
+                                  children: [
+                                    Text(' 29.7%',
+                                      style: TextStyle(
+                                        color: Colors.green,
+                                      ),
+                                    ),
+                                    Icon(
+                                      color: Colors.green,
+                                      size: 12.0,
+                                      FontAwesomeIcons.arrowUp,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                      ),
+                      Text.rich(
+                        TextSpan(
+                          text: 'Kes',
+                          style: TextStyle(
+                            color: Colors.black12,
+                            fontSize: 12.0,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: ' 500',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              )
+                            ),
+                          ]
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: width * .5,
+                  child: Text('This is products Description is long.',
+                    style: TextStyle(
+                      overflow: TextOverflow.ellipsis,
+                      color: Colors.grey,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            width: width * .95,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: 200,
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10.0),
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 35,
+                          width: 35,
+                          decoration: BoxDecoration(
+                            color: Colors.black12,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Text('76'),
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.black12,
+                          borderRadius: BorderRadius.all(Radius.circular(10.0))
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 5.0, bottom: 5.0, left: 10.0, right: 10.0),
+                          child: Text('Out of Stock',
+                            style: TextStyle(
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: Container(
+                    color: Colors.black12,
+                    width: 130,
+                    height: 80,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+}
