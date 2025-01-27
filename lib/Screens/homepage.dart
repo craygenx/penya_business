@@ -17,17 +17,16 @@ class _DashboardState extends State<Dashboard> {
       appBar: AppBar(),
       body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             SizedBox(
-              width: MediaQuery.of(context).size.width,
+              width: MediaQuery.of(context).size.width * .95,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
                     width: 150,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           'Dashboard',
@@ -56,53 +55,35 @@ class _DashboardState extends State<Dashboard> {
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.3,
+              height: 110,
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 15.0, right: 10.0),
+                      padding: const EdgeInsets.only(left: 15.0, right: 10.0, top: 10.0, bottom: 10.0),
                       child: IncomeCards(text1: 'Total Income', text2: 'Compared to last month.', text3: '994,373'),
                     ),
-                    IncomeCards(text1: 'Profit', text2: 'Compared to last month.', text3: '765,573'),
-                    IncomeCards(text1: 'Pending Orders', text2: 'Compared to last month.', text3: '420'),
-                    IncomeCards(text1: 'Conversion Rate', text2: 'Compared to last month.', text3: '4,38%'),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.3,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-                      child: SocialAnalyticsCard(text1: 'Product viewed 2.9%', text2: '411.2K', text3: '500K'),
+                      padding: const EdgeInsets.only(left: 15.0, right: 10.0, top: 10.0, bottom: 10.0),
+                      child: IncomeCards(text1: 'Profit', text2: 'Compared to last month.', text3: '765,573'),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-                      child: SocialAnalyticsCard(text1: 'Product shared 13.9%', text2: '230.4K', text3: '115K'),
+                      padding: const EdgeInsets.only(left: 15.0, right: 10.0, top: 10.0, bottom: 10.0),
+                      child: IncomeCards(text1: 'Pending Orders', text2: 'Compared to last month.', text3: '420'),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-                      child: SocialAnalyticsCard(text1: 'Product added to cart 4.3%', text2: '34.6K', text3: '44K'),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-                      child: SocialAnalyticsCard(text1: 'Product checked out 32.2%', text2: '617.7K', text3: '560K'),
+                      padding: const EdgeInsets.only(left: 15.0, right: 10.0, top: 10.0, bottom: 10.0),
+                      child: IncomeCards(text1: 'Conversion Rate', text2: 'Compared to last month.', text3: '4,38%'),
                     ),
                   ],
                 ),
               ),
             ),
+            LineChartImplementation(),
+
             SizedBox(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
               child: Column(
                 children: [
                   SizedBox(
@@ -122,13 +103,18 @@ class _DashboardState extends State<Dashboard> {
                         Padding(
                           padding: const EdgeInsets.only(right: 10.0),
                           child: Container(
+                            alignment: Alignment.center,
+                            height: 40,
                             decoration: BoxDecoration(
                               color: Colors.blueGrey,
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                             child: Padding(
                               padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0, bottom: 5.0),
-                              child: Text('Add platform'),
+                              child: Text(
+                                textAlign: TextAlign.center,
+                                  'Add platform',
+                              ),
                             ),
                           ),
                         )
@@ -137,15 +123,17 @@ class _DashboardState extends State<Dashboard> {
                   ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * 0.2,
+                    height: 70,
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: [
                           SizedBox(
                             width: 150,
-                            height: 150,
+                            height: 70,
                             child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 SizedBox(
                                   height: 35,
@@ -154,8 +142,9 @@ class _DashboardState extends State<Dashboard> {
                                 ),
                                 SizedBox(
                                   width: 100,
-                                  height: 150,
+                                  height: 70,
                                   child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text('Tik tok'),
                                       Text('90.1k',
@@ -172,7 +161,7 @@ class _DashboardState extends State<Dashboard> {
                           ),
                           SizedBox(
                             width: 150,
-                            height: 150,
+                            height: 70,
                             child: Row(
                               children: [
                                 SizedBox(
@@ -182,8 +171,9 @@ class _DashboardState extends State<Dashboard> {
                                 ),
                                 SizedBox(
                                   width: 100,
-                                  height: 150,
+                                  height: 70,
                                   child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text('Instagram'),
                                       Text('90.1k',
@@ -200,7 +190,7 @@ class _DashboardState extends State<Dashboard> {
                           ),
                           SizedBox(
                             width: 150,
-                            height: 150,
+                            height: 70,
                             child: Row(
                               children: [
                                 SizedBox(
@@ -210,11 +200,11 @@ class _DashboardState extends State<Dashboard> {
                                 ),
                                 SizedBox(
                                   width: 100,
-                                  height: 150,
+                                  height: 70,
                                   child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text('Facebook'
-                                          ''),
+                                      Text('Facebook'),
                                       Text('90.1k',
                                         style: TextStyle(
                                           color: Colors.deepPurple,
@@ -232,6 +222,38 @@ class _DashboardState extends State<Dashboard> {
                     ),
                   )
                 ],
+              ),
+            ),
+            LineChartImplementation(),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20.0),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 100,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                        child: SocialAnalyticsCard(text1: 'Product viewed 2.9%', text2: '411.2K', text3: '500K'),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                        child: SocialAnalyticsCard(text1: 'Product shared 13.9%', text2: '230.4K', text3: '115K'),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                        child: SocialAnalyticsCard(text1: 'Product added to cart 4.3%', text2: '34.6K', text3: '44K'),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                        child: SocialAnalyticsCard(text1: 'Product checked out 32.2%', text2: '617.7K', text3: '560K'),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ],

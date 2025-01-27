@@ -1,4 +1,6 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CustomTextFormField extends StatefulWidget {
   final String hintText;
@@ -84,7 +86,7 @@ class IncomeCards extends StatelessWidget {
     required this.text1,
     required this.text2,
     required this.text3,
-    this.width = 0.7,
+    this.width = 0.6,
     this.height = 200,
   });
   @override
@@ -150,7 +152,6 @@ class SocialAnalyticsCard extends StatelessWidget {
       width: MediaQuery.of(context).size.width * width,
       height: height,
       decoration: BoxDecoration(
-        color: Colors.blueGrey,
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Column(
@@ -186,6 +187,7 @@ class SocialAnalyticsCard extends StatelessWidget {
                       fontSize: 17.0,
                       fontWeight: FontWeight.w500,
                       fontStyle: FontStyle.italic,
+                      color: Colors.black12,
                     ),
                   ),
                 )
@@ -196,4 +198,367 @@ class SocialAnalyticsCard extends StatelessWidget {
       ),
     );
   }
+}
+class OrderCard extends StatelessWidget{
+  const OrderCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    return SizedBox(
+      width: width,
+      child: Column(
+        children: [
+          SizedBox(
+            width: width * .95,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: 100,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Order ID'),
+                      Text('#7812657',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: width * .6,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(10.0))
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 10.0),
+                            child: Text('28 May 2024 .'),
+                          )
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0))
+                        ),
+                        child: Text('On Delivery',
+                          style: TextStyle(
+                            color: Colors.green,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+            child: SizedBox(
+              width: width * .95,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: width * .45,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0))
+                    ),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: Icon(FontAwesomeIcons.truckFast),
+                        ),
+                        Text('Nairobi, KE'),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: width * .45,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0))
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: Icon(FontAwesomeIcons.locationDot),
+                        ),
+                        Text('Nakuru, KE'),
+                      ],
+                    ),
+                  ),
+
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+            child: SizedBox(
+              width: width * .95,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text.rich(
+                    TextSpan(
+                      text: 'Kes 5, 765',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold
+                      ),
+                      children: [
+                        TextSpan(
+                            text: ' (6 items)',
+                            style: TextStyle(
+                              color: Colors.black12,
+                            )
+                        )
+                      ],
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: (){},
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueGrey,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        )
+                    ),
+                    child: Text('Details',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        color: Colors.black
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+class LineChartImplementation extends StatelessWidget {
+  const LineChartImplementation({super.key});
+
+
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * .95,
+      height: 360,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: width,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: width,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: width * .45,
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 10.0),
+                              child: Icon(
+                                  size: 16,
+                                  FontAwesomeIcons.chartBar
+                              ),
+                            ),
+                            Text('Revenue Breakdown'),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: 100,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 0.5,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 10.0, top: 8, bottom: 8),
+                              child: Icon(size: 16, FontAwesomeIcons.filter),
+                            ),
+                            Text('Filter'),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0, bottom: 20.0),
+                  child: SizedBox(
+                    width: width,
+                    child: Row(
+                      children: [
+                        Text.rich(
+                          TextSpan(
+                              text: 'Kes ',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black12
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: '4,650,300',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ]
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20.0),
+                          child: Icon(
+                            color: Colors.red,
+                            size: 12.0,
+                            FontAwesomeIcons.arrowDown,
+                          ),
+                        ),
+                        Text.rich(
+                            TextSpan(
+                              text: '39%',
+                              style: TextStyle(
+                                fontSize: 12.0,
+                                color: Colors.red,
+                              ),
+                              children: [
+                                TextSpan(
+                                    text: ' decrease vs last month',
+                                    style: TextStyle(
+                                      fontSize: 12.0,
+                                      color: Colors.black12,
+                                    )
+                                )
+                              ],
+                            )
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 230,
+            width: MediaQuery.of(context).size.width * .95,
+            child: LineChart(
+              LineChartData(
+                gridData: FlGridData(
+                    show: true,
+                    drawVerticalLine: true,
+                    verticalInterval: 1,
+                    drawHorizontalLine: false,
+                    getDrawingVerticalLine: (value) => FlLine(
+                      color: Colors.grey.withOpacity(0.5),
+                      strokeWidth: 0.5 ,
+                    )
+                ),
+                titlesData: FlTitlesData(
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: true, interval: 500, reservedSize: 40),
+                  ),
+                  bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        getTitlesWidget: (value, meta) {
+                          const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                          return Text(
+                            months[value.toInt()],
+                            style: TextStyle(
+                              fontSize: 12.0,
+                            ),
+                          );
+                        },
+                        interval: 1,
+                      )
+                  ),
+                  rightTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: false,
+                    ),
+                  ),
+                  topTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: false,
+                    ),
+                  ),
+                ),
+                borderData: FlBorderData(
+                    show: true,
+                    border: Border(
+                      left: BorderSide(
+                        color: Colors.black,
+                        width: 1,
+                      ),
+                      bottom: BorderSide(
+                        color: Colors.black,
+                        width: 1,
+                      ),
+                      right: BorderSide.none,
+                      top: BorderSide.none,
+                    )
+                ),
+                lineBarsData: [
+                  LineChartBarData(
+                      spots: const [
+                        FlSpot(0, 1800),
+                        FlSpot(1, 2500),
+                        FlSpot(3, 2200),
+                        FlSpot(4, 3000),
+                        FlSpot(5, 2700),
+                        FlSpot(6, 3200),
+                      ],
+                      isCurved: false,
+                      color: Colors.blue,
+                      dotData: FlDotData(show: false),
+                      belowBarData: BarAreaData(
+                        show: true,
+                        color: Colors.blue.withOpacity(0.4),
+                        gradient: LinearGradient(
+                            colors: [
+                              Colors.blue.withOpacity(0.4),
+                              Colors.blue.withOpacity(0.0),
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter
+                        ),
+                      )
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
 }
