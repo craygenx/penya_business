@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
+import 'package:penya_business/providers/order_provider.dart';
 
+import '../providers/orders_dash_provider.dart';
 import '../widgets/customComponents.dart';
 
-class OrdersDash extends StatefulWidget {
+class OrdersDash extends ConsumerWidget {
   const OrdersDash({super.key});
 
   @override
-  State<OrdersDash> createState() => _OrdersDashState();
-}
-
-class _OrdersDashState extends State<OrdersDash> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     double width = MediaQuery.of(context).size.width;
+    final orders = ref.watch(ordersProvider);
+    final stats = ref.watch(ordersStatsProvider);
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
@@ -46,7 +47,7 @@ class _OrdersDashState extends State<OrdersDash> {
                   SizedBox(
                     width: 150,
                     child: ElevatedButton(
-                        onPressed: (){},
+                        onPressed: () => context.go('/store'),
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.black12,
                             shape: RoundedRectangleBorder(
@@ -92,15 +93,19 @@ class _OrdersDashState extends State<OrdersDash> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                        child: SocialAnalyticsCard(text1: 'New Orders', text2: '120.4K', text3: '30.5K',),
+                        child: SocialAnalyticsCard(text1: 'Total Orders', text2: '${stats.totalOrders}', text3: '30.5K',),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 10.0, right: 10),
-                        child: SocialAnalyticsCard(text1: 'Pending Orders', text2: '50K', text3: '3K',),
+                        child: SocialAnalyticsCard(text1: 'Pending Orders', text2: '${stats.pendingOrders}', text3: '3K',),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10.0, right: 10),
+                        child: SocialAnalyticsCard(text1: 'Cancelled Orders', text2: '${stats.canceledOrders}', text3: '3K',),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                        child: SocialAnalyticsCard(text1: 'Delivered Orders', text2: '300.4K', text3: '400.4K',),
+                        child: SocialAnalyticsCard(text1: 'Delivered Orders', text2: '${stats.deliveredOrders}', text3: '400.4K',),
                       )
                     ],
                   ),
@@ -169,30 +174,45 @@ class _OrdersDashState extends State<OrdersDash> {
               constraints: BoxConstraints(
                 maxHeight: MediaQuery.of(context).size.height * .6
               ),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0, bottom: 10),
-                      child: OrderCard(),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0, bottom: 10),
-                      child: OrderCard(),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0, bottom: 10),
-                      child: OrderCard(),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0, bottom: 10),
-                      child: OrderCard(),
-                    ),
-                  ],
-                ),
+              child: ListView.builder(
+                itemCount: orders.length,
+                itemBuilder: (context, index){
+                  final order = orders[index];
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 10.0, bottom: 10),
+                    child: GestureDetector(
+                      onTap: (){
+                        print(order.orderId);
+                        context.go('/orders/${order.orderId}');
+                        },
+                        child: OrderCard(orderId: order.orderId, status: order.status, destination: 'Nakuru, KE', siteLocation: 'Nakuru, KE', amount: order.totalAmount, totalItems: order.products.length.toString(),)),
+                  );
+                },
               ),
             ),
+            // SingleChildScrollView(
+            //   child: Column(
+            //     mainAxisSize: MainAxisSize.min,
+            //     children: [
+            //       Padding(
+            //         padding: const EdgeInsets.only(top: 10.0, bottom: 10),
+            //         child: OrderCard(),
+            //       ),
+            //       Padding(
+            //         padding: const EdgeInsets.only(top: 10.0, bottom: 10),
+            //         child: OrderCard(),
+            //       ),
+            //       Padding(
+            //         padding: const EdgeInsets.only(top: 10.0, bottom: 10),
+            //         child: OrderCard(),
+            //       ),
+            //       Padding(
+            //         padding: const EdgeInsets.only(top: 10.0, bottom: 10),
+            //         child: OrderCard(),
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),

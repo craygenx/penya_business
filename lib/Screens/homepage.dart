@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
+import 'package:penya_business/providers/dashboard_provider.dart';
 
 import '../widgets/customComponents.dart';
 
-class Dashboard extends StatefulWidget {
+class Dashboard extends ConsumerWidget {
   const Dashboard({super.key});
 
   @override
-  State<Dashboard> createState() => _DashboardState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final stats = ref.watch(dashboardStatsProvider);
 
-class _DashboardState extends State<Dashboard> {
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
@@ -28,11 +28,12 @@ class _DashboardState extends State<Dashboard> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Dashboard',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold
+                        GestureDetector(
+                          onTap: () => context.go('/orders'),
+                          child: Text(
+                            'Dashboard',
+                            style: TextStyle(
+                                fontSize: 18.0, fontWeight: FontWeight.bold),
                           ),
                         ),
                         Text('Nov 3, 2025')
@@ -43,9 +44,7 @@ class _DashboardState extends State<Dashboard> {
                     width: 200,
                     child: Row(
                       children: [
-                        Icon(
-                          Icons.calendar_month_outlined
-                        ),
+                        Icon(Icons.calendar_month_outlined),
                         Text('Aug 16, 2024-Sep 16, 2024'),
                       ],
                     ),
@@ -61,27 +60,42 @@ class _DashboardState extends State<Dashboard> {
                 child: Row(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 15.0, right: 10.0, top: 10.0, bottom: 10.0),
-                      child: IncomeCards(text1: 'Total Income', text2: 'Compared to last month.', text3: '994,373'),
+                      padding: const EdgeInsets.only(
+                          left: 15.0, right: 10.0, top: 10.0, bottom: 10.0),
+                      child: IncomeCards(
+                          text1: 'Total Income',
+                          text2: 'Compared to last month.',
+                          text3: stats.totalIncome.toStringAsFixed(2)),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 15.0, right: 10.0, top: 10.0, bottom: 10.0),
-                      child: IncomeCards(text1: 'Profit', text2: 'Compared to last month.', text3: '765,573'),
+                      padding: const EdgeInsets.only(
+                          left: 15.0, right: 10.0, top: 10.0, bottom: 10.0),
+                      child: IncomeCards(
+                          text1: 'Profit',
+                          text2: 'Compared to last month.',
+                          text3: '765,573'),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 15.0, right: 10.0, top: 10.0, bottom: 10.0),
-                      child: IncomeCards(text1: 'Pending Orders', text2: 'Compared to last month.', text3: '420'),
+                      padding: const EdgeInsets.only(
+                          left: 15.0, right: 10.0, top: 10.0, bottom: 10.0),
+                      child: IncomeCards(
+                          text1: 'Pending Orders',
+                          text2: 'Compared to last month.',
+                          text3: '${stats.pendingOrders}'),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 15.0, right: 10.0, top: 10.0, bottom: 10.0),
-                      child: IncomeCards(text1: 'Conversion Rate', text2: 'Compared to last month.', text3: '4,38%'),
+                      padding: const EdgeInsets.only(
+                          left: 15.0, right: 10.0, top: 10.0, bottom: 10.0),
+                      child: IncomeCards(
+                          text1: 'Conversion Rate',
+                          text2: 'Compared to last month.',
+                          text3: '${stats.conversionRate.toStringAsFixed(2)}%'),
                     ),
                   ],
                 ),
               ),
             ),
             LineChartImplementation(),
-
             SizedBox(
               width: MediaQuery.of(context).size.width,
               child: Column(
@@ -93,7 +107,8 @@ class _DashboardState extends State<Dashboard> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(left: 10.0),
-                          child: Text('Platform view',
+                          child: Text(
+                            'Platform view',
                             style: TextStyle(
                               fontSize: 24.0,
                               fontWeight: FontWeight.bold,
@@ -110,10 +125,14 @@ class _DashboardState extends State<Dashboard> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0, bottom: 5.0),
+                              padding: const EdgeInsets.only(
+                                  left: 15.0,
+                                  right: 15.0,
+                                  top: 5.0,
+                                  bottom: 5.0),
                               child: Text(
                                 textAlign: TextAlign.center,
-                                  'Add platform',
+                                'Add platform',
                               ),
                             ),
                           ),
@@ -147,7 +166,8 @@ class _DashboardState extends State<Dashboard> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text('Tik tok'),
-                                      Text('90.1k',
+                                      Text(
+                                        '90.1k',
                                         style: TextStyle(
                                           color: Colors.deepPurple,
                                           fontWeight: FontWeight.bold,
@@ -176,7 +196,8 @@ class _DashboardState extends State<Dashboard> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text('Instagram'),
-                                      Text('90.1k',
+                                      Text(
+                                        '90.1k',
                                         style: TextStyle(
                                           color: Colors.deepPurple,
                                           fontWeight: FontWeight.bold,
@@ -205,7 +226,8 @@ class _DashboardState extends State<Dashboard> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text('Facebook'),
-                                      Text('90.1k',
+                                      Text(
+                                        '90.1k',
                                         style: TextStyle(
                                           color: Colors.deepPurple,
                                           fontWeight: FontWeight.bold,
@@ -237,19 +259,31 @@ class _DashboardState extends State<Dashboard> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-                        child: SocialAnalyticsCard(text1: 'Product viewed 2.9%', text2: '411.2K', text3: '500K'),
+                        child: SocialAnalyticsCard(
+                            text1: 'Product viewed 2.9%',
+                            text2: '411.2K',
+                            text3: '500K'),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-                        child: SocialAnalyticsCard(text1: 'Product shared 13.9%', text2: '230.4K', text3: '115K'),
+                        child: SocialAnalyticsCard(
+                            text1: 'Product shared 13.9%',
+                            text2: '230.4K',
+                            text3: '115K'),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-                        child: SocialAnalyticsCard(text1: 'Product added to cart 4.3%', text2: '34.6K', text3: '44K'),
+                        child: SocialAnalyticsCard(
+                            text1: 'Product added to cart 4.3%',
+                            text2: '34.6K',
+                            text3: '44K'),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-                        child: SocialAnalyticsCard(text1: 'Product checked out 32.2%', text2: '617.7K', text3: '560K'),
+                        child: SocialAnalyticsCard(
+                            text1: 'Product checked out 32.2%',
+                            text2: '617.7K',
+                            text3: '560K'),
                       ),
                     ],
                   ),

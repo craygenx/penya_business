@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 class CustomTextFormField extends StatefulWidget {
   final String hintText;
@@ -200,7 +201,16 @@ class SocialAnalyticsCard extends StatelessWidget {
   }
 }
 class OrderCard extends StatelessWidget{
-  const OrderCard({super.key});
+  final String orderId;
+  final String status;
+  final String destination;
+  final String siteLocation;
+  final String amount;
+  final String totalItems;
+
+  const OrderCard({
+    super.key, required this.orderId, required this.status, required this.destination, required this.siteLocation, required this.amount, required this.totalItems
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -220,7 +230,7 @@ class OrderCard extends StatelessWidget{
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Order ID'),
-                      Text('#7812657',
+                      Text(orderId,
                         style: TextStyle(
                           fontWeight: FontWeight.bold
                         ),
@@ -246,7 +256,7 @@ class OrderCard extends StatelessWidget{
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(10.0))
                         ),
-                        child: Text('On Delivery',
+                        child: Text(status,
                           style: TextStyle(
                             color: Colors.green,
                           ),
@@ -276,7 +286,7 @@ class OrderCard extends StatelessWidget{
                           padding: const EdgeInsets.only(right: 10.0),
                           child: Icon(FontAwesomeIcons.truckFast),
                         ),
-                        Text('Nairobi, KE'),
+                        Text(siteLocation),
                       ],
                     ),
                   ),
@@ -292,7 +302,7 @@ class OrderCard extends StatelessWidget{
                           padding: const EdgeInsets.only(right: 10.0),
                           child: Icon(FontAwesomeIcons.locationDot),
                         ),
-                        Text('Nakuru, KE'),
+                        Text(destination),
                       ],
                     ),
                   ),
@@ -310,13 +320,13 @@ class OrderCard extends StatelessWidget{
                 children: [
                   Text.rich(
                     TextSpan(
-                      text: 'Kes 5, 765',
+                      text: 'Kes $amount',
                       style: TextStyle(
                           fontWeight: FontWeight.bold
                       ),
                       children: [
                         TextSpan(
-                            text: ' (6 items)',
+                            text: ' ($totalItems items)',
                             style: TextStyle(
                               color: Colors.black12,
                             )
@@ -325,14 +335,14 @@ class OrderCard extends StatelessWidget{
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: (){},
+                    onPressed: ()=> context.go('/orders/$orderId'),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blueGrey,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         )
                     ),
-                    child: Text('Details',
+                    child: Text('Details btn',
                       style: TextStyle(
                         fontSize: 18.0,
                         color: Colors.black
@@ -563,7 +573,17 @@ class LineChartImplementation extends StatelessWidget {
 
 }
 class ProductStoreCard extends StatelessWidget {
-  const ProductStoreCard({super.key});
+  final String title;
+  final String description;
+  final int stock;
+  final double price;
+  const ProductStoreCard({
+    super.key,
+    required this.title,
+    required this.description,
+    required this.price,
+    required this.stock,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -588,7 +608,7 @@ class ProductStoreCard extends StatelessWidget {
                             children: [
                               SizedBox(
                                 width: width * .4,
-                                child: Text('Abomination Perfume',
+                                child: Text(title,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -625,7 +645,7 @@ class ProductStoreCard extends StatelessWidget {
                           ),
                           children: [
                             TextSpan(
-                              text: ' 500',
+                              text: price.toString(),
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               )
@@ -638,7 +658,8 @@ class ProductStoreCard extends StatelessWidget {
                 ),
                 SizedBox(
                   width: width * .5,
-                  child: Text('This is products Description is long.',
+                  child: Text(
+                    description,
                     style: TextStyle(
                       overflow: TextOverflow.ellipsis,
                       color: Colors.grey,
@@ -667,7 +688,7 @@ class ProductStoreCard extends StatelessWidget {
                             color: Colors.black12,
                             shape: BoxShape.circle,
                           ),
-                          child: Text('76'),
+                          child: Text(stock.toString()),
                         ),
                       ),
                       Container(
