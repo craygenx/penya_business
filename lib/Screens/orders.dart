@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:penya_business/main.dart';
 import 'package:penya_business/providers/order_provider.dart';
 
 import '../providers/orders_dash_provider.dart';
@@ -13,8 +14,77 @@ class OrdersDash extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     double width = MediaQuery.of(context).size.width;
-    final orders = ref.watch(ordersProvider);
+    final orders = ref.watch(ordersProvider.notifier).getFilteredOrders();
     final stats = ref.watch(ordersStatsProvider);
+    final overlayEntry = ref.watch(overlayProvider);
+    final searchController = TextEditingController();
+
+    final filterState = ref.watch(orderFilterProvider);
+    final sortOrderState = ref.watch(sortOrderProvider);
+
+    String currentOrderStatus = ref.read(orderFilterProvider).value;
+
+    void _showDropdown(BuildContext context, GlobalKey key) {
+      final overlayNotifier = ref.read(overlayProvider.notifier);
+      overlayNotifier.state?.remove();
+      overlayNotifier.state = null;
+      if(overlayEntry != null){
+        return;
+      }
+      final renderBox = key.currentContext?.findRenderObject()
+      as RenderBox;
+      final position = renderBox.localToGlobal(Offset.zero);
+      final screenWidth = MediaQuery.of(context).size.width;
+      final overlayWidth = 150.0;
+      double leftPosition = position.dx;
+      if(position.dx + overlayWidth > screenWidth){
+        leftPosition = screenWidth - overlayWidth - 10.0;
+      }
+      final entry =OverlayEntry(
+          builder: (context) => Positioned(
+            left: leftPosition,
+            top: position.dy + renderBox.size.height,
+            child: Material(
+              color: Colors.transparent,
+              child: Container(
+                width: 150,
+                padding: EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [BoxShadow(blurRadius: 5, color: Colors.black26)],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Column(
+                  children:
+                    OrderStatus.values.map((status){
+                      String passedStatus = status.toString().split('.').last;
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Container(
+                          width: 145,
+                          color: currentOrderStatus == passedStatus ? Colors.lightBlueAccent : Colors.black26,
+                          child: TextButton(
+                              onPressed: (){
+                                ref.read(orderFilterProvider.notifier).state = status;
+                              },
+                              child: Text(status.toString().split('.').last)),
+                        ),
+                      );
+                    }).toList(),
+                ),
+              ),
+            ),
+          ),
+      );
+      Overlay.of(context).insert(entry);
+      overlayNotifier.state = entry;
+    }
+
+    final GlobalKey key1 = GlobalKey();
+    final GlobalKey key2 = GlobalKey();
+
+    FocusNode focusNode = ref.watch(searchFocusNodeProvider);
+    final isFocused = ref.watch(isSearchFocusedProvider);
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
@@ -119,9 +189,35 @@ class OrdersDash extends ConsumerWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(),
+                        borderRadius: BorderRadius.all(Radius.circular(10.0))
+                      ),
                       width: width * .5,
-                      child: CustomTextFormField(hintText: 'Search...'),
+                      child: TextField(
+                        controller: searchController,
+                        focusNode: focusNode,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          prefixIcon: isFocused ? null : Icon(Icons.search),
+                          suffixIcon: isFocused ? IconButton(
+                            onPressed: (){
+                              searchController.clear();
+                              ref.read(searchQueryProvider.notifier).state = '';
+                            },
+                            icon: Icon(Icons.clear),
+                          ) : null,
+                        ),
+                        onChanged: (value){
+                          ref.read(searchQueryProvider.notifier).state = value;
+                        },
+                        onEditingComplete: (){
+                          ref.read(isSearchFocusedProvider.notifier).state = false;
+                          focusNode.unfocus();
+                        }
+                      )
+                      // CustomTextFormField(hintText: 'Search...'),
                     ),
                     SizedBox(
                       width: width * .4,
@@ -133,6 +229,8 @@ class OrdersDash extends ConsumerWidget {
                             width: 35,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
+                              color: currentOrderStatus == 'all' ? Colors.blueGrey : Colors.transparent,
+                                border: Border.all(),
                                 borderRadius: BorderRadius.all(Radius.circular(10.0))
                             ),
                             child: Text('All',
@@ -141,15 +239,19 @@ class OrdersDash extends ConsumerWidget {
                               ),
                             ),
                           ),
-                          Container(
-                            width: 35,
-                            height: 35,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(10.0))
-                            ),
-                            child: IconButton(
-                              onPressed: (){},
-                              icon: Icon(FontAwesomeIcons.filter),
+                          GestureDetector(
+                            key: key1,
+                            onTap: () {
+                              _showDropdown(context, key1);
+                            },
+                            child: Container(
+                              width: 35,
+                              height: 35,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(10.0))
+                              ),
+                              child:
+                                Icon(FontAwesomeIcons.filter),
                             ),
                           ),
                           Container(
@@ -182,7 +284,6 @@ class OrdersDash extends ConsumerWidget {
                     padding: const EdgeInsets.only(top: 10.0, bottom: 10),
                     child: GestureDetector(
                       onTap: (){
-                        print(order.orderId);
                         context.go('/orders/${order.orderId}');
                         },
                         child: OrderCard(orderId: order.orderId, status: order.status, destination: 'Nakuru, KE', siteLocation: 'Nakuru, KE', amount: order.totalAmount, totalItems: order.products.length.toString(),)),

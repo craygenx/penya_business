@@ -4,8 +4,11 @@ import 'package:go_router/go_router.dart';
 
 import 'Screens/Store.dart';
 import 'Screens/homepage.dart';
+import 'Screens/new_product.dart';
 import 'Screens/order_details.dart';
 import 'Screens/orders.dart';
+
+final overlayProvider = StateProvider<OverlayEntry?>((ref)=>null);
 
 void main() {
   runApp( ProviderScope(child: MyApp()) );
@@ -28,10 +31,15 @@ class MyApp extends StatelessWidget {
     GoRoute(
       path: '/orders/:id',
       builder: (context, state){
-
         final String orderId = state.pathParameters['id']!;
-        print(orderId);
         return OrderDetails(orderId: orderId);
+      } ,
+    ),
+    GoRoute(
+      path: '/product/:id',
+      builder: (context, state){
+        final String productId = state.pathParameters['id']!;
+        return NewProduct(productId: productId,);
       } ,
     ),
   ]);

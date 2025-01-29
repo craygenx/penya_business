@@ -1,19 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../providers/product_provider.dart';
 import '../widgets/customComponents.dart';
 
-class NewProduct extends StatefulWidget {
-  final Map<String, String> product;
-  const NewProduct({super.key, required this.product});
+class NewProduct extends ConsumerWidget {
+  final String productId;
+  const NewProduct({super.key, required this.productId});
 
   @override
-  State<NewProduct> createState() => _NewProductState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
 
-class _NewProductState extends State<NewProduct> {
-  @override
-  Widget build(BuildContext context) {
+    TextEditingController nameEditingController = TextEditingController();
+    TextEditingController descriptionEditingController = TextEditingController();
+    TextEditingController categoryEditingController = TextEditingController();
+    TextEditingController basePriceEditingController = TextEditingController();
+    TextEditingController stockEditingController = TextEditingController();
+    TextEditingController discountEditingController = TextEditingController();
+    TextEditingController discountTypeEditingController = TextEditingController();
+
+    if(productId.isNotEmpty){
+      final product = ref.watch(productsProvider).where((product) => product.id == productId);
+      nameEditingController.text = product.toList()[0].title;
+      descriptionEditingController.text = product.toList()[0].description;
+      categoryEditingController.text = product.toList()[0].category;
+      basePriceEditingController.text = product.toList()[0].price.toString();
+      stockEditingController.text = product.toList()[0].stock.toString();
+      discountEditingController.text = product.toList()[0].discountPercentage.toString();
+      discountTypeEditingController.text = 'Holiday Offer';
+    }
+
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(),
@@ -36,7 +53,7 @@ class _NewProductState extends State<NewProduct> {
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0),
                           child: Text(
-                            'Add New Product',
+                            productId.isNotEmpty ? 'Edit Product':'Add New Product',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
@@ -55,10 +72,10 @@ class _NewProductState extends State<NewProduct> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                           ),
-                          child: Padding(
+                          child: productId.isNotEmpty ? Padding(
                             padding: const EdgeInsets.only(right: 8.0),
                             child: Icon(FontAwesomeIcons.trashCan),
-                          ),
+                          ) : null,
                         ),
                         Container(
                           width: 130,
@@ -76,7 +93,9 @@ class _NewProductState extends State<NewProduct> {
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text('Add Product'),
+                                child: Text(
+                                    productId.isNotEmpty ? 'Edit Product' : 'Add Product'
+                                ),
                               ),
                             ],
                           ),
@@ -169,6 +188,7 @@ class _NewProductState extends State<NewProduct> {
                       child: Text('Product Name'),
                     ),
                     CustomTextFormField(
+                      controller: nameEditingController,
                       hintText: '',
                       width: width,
                     ),
@@ -183,6 +203,7 @@ class _NewProductState extends State<NewProduct> {
                           color: Colors.black12,
                         ),
                         child: TextField(
+                          controller: descriptionEditingController,
                             maxLines: null,
                             expands: true,
                             textAlignVertical: TextAlignVertical.top,
@@ -194,6 +215,7 @@ class _NewProductState extends State<NewProduct> {
                       child: Text('Product Category'),
                     ),
                     CustomTextFormField(
+                      controller: categoryEditingController,
                       hintText: '',
                       width: width,
                     ),
@@ -236,6 +258,7 @@ class _NewProductState extends State<NewProduct> {
                                       child: Text('Base Price'),
                                     ),
                                     CustomTextFormField(
+                                      controller: basePriceEditingController,
                                       hintText: '0',
                                     ),
                                   ],
@@ -252,6 +275,7 @@ class _NewProductState extends State<NewProduct> {
                                       child: Text('Stock'),
                                     ),
                                     CustomTextFormField(
+                                      controller: stockEditingController,
                                       hintText: '0',
                                     ),
                                   ],
@@ -276,6 +300,7 @@ class _NewProductState extends State<NewProduct> {
                                       child: Text('Discount'),
                                     ),
                                     CustomTextFormField(
+                                      controller: discountEditingController,
                                       hintText: 'e.g 10%',
                                     ),
                                   ],
@@ -292,6 +317,7 @@ class _NewProductState extends State<NewProduct> {
                                       child: Text('Discount Type'),
                                     ),
                                     CustomTextFormField(
+                                      controller: discountTypeEditingController,
                                       hintText: '',
                                     ),
                                   ],

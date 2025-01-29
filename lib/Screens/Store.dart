@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:penya_business/providers/product_provider.dart';
 import 'package:penya_business/widgets/customComponents.dart';
 
@@ -181,7 +182,9 @@ class Store extends ConsumerWidget {
                   final product = products[index];
                   return Padding(
                     padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10.0),
-                    child: ProductStoreCard(title: product.title, description: product.description, price: product.price, stock: product.stock,),
+                    child: GestureDetector(
+                      onTap: ()=> context.go('/product/${product.id}'),
+                        child: ProductStoreCard(title: product.title, description: product.description, price: product.price, stock: product.stock,)),
                   );
                 },
               ),
