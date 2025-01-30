@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:penya_business/providers/product_image_provider.dart';
 
 import '../providers/product_provider.dart';
 import '../widgets/customComponents.dart';
@@ -11,6 +12,8 @@ class NewProduct extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final selectedImages = ref.watch(imageSelectionProvider);
+    final imageNotifier =  ref.read(imageSelectionProvider.notifier);
 
     TextEditingController nameEditingController = TextEditingController();
     TextEditingController descriptionEditingController = TextEditingController();
@@ -115,10 +118,16 @@ class NewProduct extends ConsumerWidget {
                     borderRadius: BorderRadius.all(Radius.circular(10.0))),
                 child: Column(
                   children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.95,
-                      height: 260,
-                      decoration: BoxDecoration(color: Colors.blueGrey),
+                    GestureDetector(
+                      onTap: ()=> imageNotifier.pickImages(),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.95,
+                        height: 260,
+                        decoration: BoxDecoration(color: Colors.blueGrey),
+                        child: selectedImages.isNotEmpty
+                            ? Image.file(selectedImages[0], fit: BoxFit.cover,)
+                        :Icon(Icons.add_a_photo_outlined, size: 50, color: Colors.grey,),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 20.0),
@@ -130,32 +139,22 @@ class NewProduct extends ConsumerWidget {
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
+                          children: List.generate(3, (index){
+                            return Container(
                               width: 100,
                               height: 100,
                               decoration: BoxDecoration(
                                   color: Colors.black12,
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0))),
-                            ),
-                            Container(
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                  color: Colors.black12,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0))),
-                            ),
-                            Container(
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                  color: Colors.black12,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0))),
-                            ),
-                          ],
+                                  BorderRadius.all(Radius.circular(10.0)),
+                                image: selectedImages.length > index ? DecorationImage(
+                                    image: FileImage(selectedImages[index]),
+                                    fit: BoxFit.cover,
+                                ) : null,
+                              ),
+                              child: selectedImages.length <= index ? Icon(Icons.image, color: Colors.grey, size: 40,):null,
+                            );
+                          })
                         ),
                       ),
                     ),
