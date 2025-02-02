@@ -26,6 +26,13 @@ final sortOrderProvider = StateProvider<SortOrder>((ref) => SortOrder.descending
 final searchFocusNodeProvider = Provider<FocusNode>((ref){
   final focusNode = FocusNode();
   ref.onDispose(focusNode.dispose);
+  focusNode.addListener(() {
+    if(!focusNode.hasFocus){
+      ref.watch(isSearchFocusedProvider.notifier).state = true;
+    }else{
+      ref.watch(isSearchFocusedProvider.notifier).state = false;
+    }
+  });
   return focusNode;
 });
 final isSearchFocusedProvider = StateProvider<bool>((ref)=> false);

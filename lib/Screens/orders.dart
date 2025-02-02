@@ -19,13 +19,13 @@ class OrdersDash extends ConsumerWidget {
     final overlayEntry = ref.watch(overlayProvider);
     final searchController = TextEditingController();
 
-    final filterState = ref.watch(orderFilterProvider);
-    final sortOrderState = ref.watch(sortOrderProvider);
+    // final filterState = ref.watch(orderFilterProvider);
+    // final sortOrderState = ref.watch(sortOrderProvider);
 
-    String currentOrderStatus = ref.read(orderFilterProvider).value;
+    String currentOrderStatus = ref.watch(orderFilterProvider).value;
 
-    void _showDropdown(BuildContext context, GlobalKey key) {
-      final overlayNotifier = ref.read(overlayProvider.notifier);
+    void showDropdown(BuildContext context, GlobalKey key) {
+      final overlayNotifier = ref.watch(overlayProvider.notifier);
       overlayNotifier.state?.remove();
       overlayNotifier.state = null;
       if(overlayEntry != null){
@@ -81,7 +81,7 @@ class OrdersDash extends ConsumerWidget {
     }
 
     final GlobalKey key1 = GlobalKey();
-    final GlobalKey key2 = GlobalKey();
+    // final GlobalKey key2 = GlobalKey();
 
     FocusNode focusNode = ref.watch(searchFocusNodeProvider);
     final isFocused = ref.watch(isSearchFocusedProvider);
@@ -207,10 +207,10 @@ class OrdersDash extends ConsumerWidget {
                               ref.read(searchQueryProvider.notifier).state = '';
                             },
                             icon: Icon(Icons.clear),
-                          ) : null,
+                          ) : Icon(Icons.home),
                         ),
                         onChanged: (value){
-                          ref.read(searchQueryProvider.notifier).state = value;
+                          ref.watch(searchQueryProvider.notifier).state = value;
                         },
                         onEditingComplete: (){
                           ref.read(isSearchFocusedProvider.notifier).state = false;
@@ -242,7 +242,7 @@ class OrdersDash extends ConsumerWidget {
                           GestureDetector(
                             key: key1,
                             onTap: () {
-                              _showDropdown(context, key1);
+                              showDropdown(context, key1);
                             },
                             child: Container(
                               width: 35,
@@ -291,29 +291,6 @@ class OrdersDash extends ConsumerWidget {
                 },
               ),
             ),
-            // SingleChildScrollView(
-            //   child: Column(
-            //     mainAxisSize: MainAxisSize.min,
-            //     children: [
-            //       Padding(
-            //         padding: const EdgeInsets.only(top: 10.0, bottom: 10),
-            //         child: OrderCard(),
-            //       ),
-            //       Padding(
-            //         padding: const EdgeInsets.only(top: 10.0, bottom: 10),
-            //         child: OrderCard(),
-            //       ),
-            //       Padding(
-            //         padding: const EdgeInsets.only(top: 10.0, bottom: 10),
-            //         child: OrderCard(),
-            //       ),
-            //       Padding(
-            //         padding: const EdgeInsets.only(top: 10.0, bottom: 10),
-            //         child: OrderCard(),
-            //       ),
-            //     ],
-            //   ),
-            // ),
           ],
         ),
       ),

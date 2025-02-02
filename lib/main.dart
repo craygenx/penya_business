@@ -9,6 +9,7 @@ import 'Screens/order_details.dart';
 import 'Screens/orders.dart';
 
 final overlayProvider = StateProvider<OverlayEntry?>((ref)=>null);
+final storeOverlayProvider = StateProvider<OverlayEntry?>((ref)=>null);
 
 void main() {
   runApp( ProviderScope(child: MyApp()) );
