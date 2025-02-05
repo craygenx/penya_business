@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:penya_business/providers/product_image_provider.dart';
 
-import '../providers/product_provider.dart';
+// import '../providers/product_provider.dart';
 import '../widgets/customComponents.dart';
 
 class NewProduct extends ConsumerWidget {
@@ -13,24 +13,34 @@ class NewProduct extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedImages = ref.watch(imageSelectionProvider);
-    final imageNotifier =  ref.read(imageSelectionProvider.notifier);
+    final imageNotifier = ref.read(imageSelectionProvider.notifier);
 
     TextEditingController nameEditingController = TextEditingController();
-    TextEditingController descriptionEditingController = TextEditingController();
+    TextEditingController descriptionEditingController =
+        TextEditingController();
     TextEditingController categoryEditingController = TextEditingController();
     TextEditingController basePriceEditingController = TextEditingController();
     TextEditingController stockEditingController = TextEditingController();
     TextEditingController discountEditingController = TextEditingController();
-    TextEditingController discountTypeEditingController = TextEditingController();
+    TextEditingController discountTypeEditingController =
+        TextEditingController();
 
-    if(productId.isNotEmpty){
-      final product = ref.watch(productsProvider).where((product) => product.id == productId);
-      nameEditingController.text = product.toList()[0].title;
+    if (productId.isNotEmpty) {
+      // final productAsync = ref.watch(productsProvider);
+      final product = [];
+      // final product = productAsync.when(
+      //   data: (products) =>
+      //       products.where((product) => product.id == productId),
+      //   error: (error, stackTrace) => [],
+      //   loading: () => [],
+      // );
+      nameEditingController.text = product[0].title;
       descriptionEditingController.text = product.toList()[0].description;
       categoryEditingController.text = product.toList()[0].category;
       basePriceEditingController.text = product.toList()[0].price.toString();
       stockEditingController.text = product.toList()[0].stock.toString();
-      discountEditingController.text = product.toList()[0].discountPercentage.toString();
+      discountEditingController.text =
+          product.toList()[0].discountPercentage.toString();
       discountTypeEditingController.text = 'Holiday Offer';
     }
 
@@ -56,7 +66,9 @@ class NewProduct extends ConsumerWidget {
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0),
                           child: Text(
-                            productId.isNotEmpty ? 'Edit Product':'Add New Product',
+                            productId.isNotEmpty
+                                ? 'Edit Product'
+                                : 'Add New Product',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
@@ -75,10 +87,12 @@ class NewProduct extends ConsumerWidget {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                           ),
-                          child: productId.isNotEmpty ? Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Icon(FontAwesomeIcons.trashCan),
-                          ) : null,
+                          child: productId.isNotEmpty
+                              ? Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Icon(FontAwesomeIcons.trashCan),
+                                )
+                              : null,
                         ),
                         Container(
                           width: 130,
@@ -96,9 +110,9 @@ class NewProduct extends ConsumerWidget {
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                    productId.isNotEmpty ? 'Edit Product' : 'Add Product'
-                                ),
+                                child: Text(productId.isNotEmpty
+                                    ? 'Edit Product'
+                                    : 'Add Product'),
                               ),
                             ],
                           ),
@@ -119,14 +133,21 @@ class NewProduct extends ConsumerWidget {
                 child: Column(
                   children: [
                     GestureDetector(
-                      onTap: ()=> imageNotifier.pickImages(),
+                      onTap: () => imageNotifier.pickImages(),
                       child: Container(
                         width: MediaQuery.of(context).size.width * 0.95,
                         height: 260,
                         decoration: BoxDecoration(color: Colors.blueGrey),
                         child: selectedImages.isNotEmpty
-                            ? Image.file(selectedImages[0], fit: BoxFit.cover,)
-                        :Icon(Icons.add_a_photo_outlined, size: 50, color: Colors.grey,),
+                            ? Image.file(
+                                selectedImages[0],
+                                fit: BoxFit.cover,
+                              )
+                            : Icon(
+                                Icons.add_a_photo_outlined,
+                                size: 50,
+                                color: Colors.grey,
+                              ),
                       ),
                     ),
                     Padding(
@@ -138,24 +159,32 @@ class NewProduct extends ConsumerWidget {
                           color: Colors.white,
                         ),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: List.generate(3, (index){
-                            return Container(
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: List.generate(3, (index) {
+                              return Container(
+                                width: 100,
+                                height: 100,
+                                decoration: BoxDecoration(
                                   color: Colors.black12,
                                   borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)),
-                                image: selectedImages.length > index ? DecorationImage(
-                                    image: FileImage(selectedImages[index]),
-                                    fit: BoxFit.cover,
-                                ) : null,
-                              ),
-                              child: selectedImages.length <= index ? Icon(Icons.image, color: Colors.grey, size: 40,):null,
-                            );
-                          })
-                        ),
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                  image: selectedImages.length > index
+                                      ? DecorationImage(
+                                          image:
+                                              FileImage(selectedImages[index]),
+                                          fit: BoxFit.cover,
+                                        )
+                                      : null,
+                                ),
+                                child: selectedImages.length <= index
+                                    ? Icon(
+                                        Icons.image,
+                                        color: Colors.grey,
+                                        size: 40,
+                                      )
+                                    : null,
+                              );
+                            })),
                       ),
                     ),
                   ],
@@ -202,7 +231,7 @@ class NewProduct extends ConsumerWidget {
                           color: Colors.black12,
                         ),
                         child: TextField(
-                          controller: descriptionEditingController,
+                            controller: descriptionEditingController,
                             maxLines: null,
                             expands: true,
                             textAlignVertical: TextAlignVertical.top,

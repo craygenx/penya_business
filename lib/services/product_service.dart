@@ -1,9 +1,9 @@
 import 'package:penya_business/models/product.dart';
 
-import '../models/data.dart';
+// import '../models/data.dart';
 
 class ProductService {
-  final List<Product> _products = products;
+  final List<Product> _products = [];
   List<Product> fetchProducts() {
     return _products;
   }
