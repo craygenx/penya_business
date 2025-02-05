@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "191155982390",
+    "project_id": "penya-business-31670",
+    "storage_bucket": "penya-business-31670.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:191155982390:android:5eae0aec47d07fff8c8897",
+        "android_client_info": {
+          "package_name": "com.example.penya_business"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUgX7gEzQuyyrIoKjWnTSNxDc6RmHi_nw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

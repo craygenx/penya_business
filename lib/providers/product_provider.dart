@@ -4,11 +4,19 @@ import 'package:penya_business/models/product.dart';
 import 'package:penya_business/providers/store_dash_provider.dart';
 import 'package:penya_business/services/product_service.dart';
 
+enum StoreProductsStatus {
+  outOfStock,
+  leastPerforming,
+  bestPerforming,
+  groceries,
+  electronics,
+  drinks,
+  all
+}
 
-enum StoreProductsStatus {outOfStock, leastPerforming, bestPerforming, groceries, electronics, drinks, all}
 extension StoreProductsStatusExtension on StoreProductsStatus {
   String get value {
-    switch(this){
+    switch (this) {
       case StoreProductsStatus.outOfStock:
         return 'Out of stock';
       case StoreProductsStatus.leastPerforming:
@@ -27,16 +35,17 @@ extension StoreProductsStatusExtension on StoreProductsStatus {
   }
 }
 
-final storeFilterProvider = StateProvider<StoreProductsStatus>((ref) => StoreProductsStatus.all);
+final storeFilterProvider =
+    StateProvider<StoreProductsStatus>((ref) => StoreProductsStatus.all);
 final productServiceProvider = Provider((ref) => ProductService());
 final searchQueryProvider = StateProvider<String>((ref) => '');
 
-final searchFocusNodeProvider = Provider<FocusNode>((ref){
+final searchFocusNodeProvider = Provider<FocusNode>((ref) {
   final focusNode = FocusNode();
   ref.onDispose(focusNode.dispose);
   return focusNode;
 });
-final isSearchFocusedProvider = StateProvider<bool>((ref)=> false);
+final isSearchFocusedProvider = StateProvider<bool>((ref) => false);
 
 final productsProvider =
     StateNotifierProvider<ProductNotifier, List<Product>>((ref) {
@@ -70,70 +79,121 @@ class ProductNotifier extends StateNotifier<List<Product>> {
     loadProducts();
   }
 
-  List<Product> getFilteredProducts(){
+  List<Product> getFilteredProducts() {
     final productsStatus = read(storeFilterProvider);
     List<Product> filteredProducts = state;
     final totalProducts = filteredProducts.length;
 
-    final searchQuery = read(searchQueryProvider).toString().split('.').last.trim().toLowerCase();
+    final searchQuery = read(searchQueryProvider)
+        .toString()
+        .split('.')
+        .last
+        .trim()
+        .toLowerCase();
     // final sortOrder = read(sortOrderProvider);
 
-    List<ProductPerformance> productz = filteredProducts.map((product){
+    List<ProductPerformance> productz = filteredProducts.map((product) {
       final views = product.views;
       final addToCart = product.addedToCart;
       final checkOuts = product.checkedOut;
       final score = (views * 2) + (addToCart * 0.3) + (checkOuts * 0.5);
 
-      return ProductPerformance(views: views, score: score, addedToCart: product.addedToCart, checkedOut: product.checkedOut, description: product.description, discountPercentage: product.discountPercentage, rating: product.rating, brand: product.brand, thumbnail: product.thumbnail, images: product.images, title: product.title, price: product.price, stock: product.stock, category: product.category, id: product.id);
+      return ProductPerformance(
+          views: views,
+          score: score,
+          addedToCart: product.addedToCart,
+          checkedOut: product.checkedOut,
+          description: product.description,
+          discountPercentage: product.discountPercentage,
+          rating: product.rating,
+          brand: product.brand,
+          thumbnail: product.thumbnail,
+          images: product.images,
+          title: product.title,
+          price: product.price,
+          stock: product.stock,
+          category: product.category,
+          id: product.id);
     }).toList();
     productz.sort((a, b) => b.score.compareTo(a.score));
     int bestCutoff = (0.2 * totalProducts).round();
     int leastCutoff = (0.8 * totalProducts).round();
-    int bestCount =bestCutoff;
-    int leastCount = totalProducts - leastCutoff;
-    int averageCount = totalProducts - (bestCount + leastCount);
+    // int bestCount =bestCutoff;
+    // int leastCount = totalProducts - leastCutoff;
+    // int averageCount = totalProducts - (bestCount + leastCount);
 
-    List<ProductPerformance> bestPerformingProducts= productz.take(bestCutoff).toList();
-    List<ProductPerformance> leastPerformingProducts= productz.skip(leastCutoff).toList();
+    List<ProductPerformance> bestPerformingProducts =
+        productz.take(bestCutoff).toList();
+    List<ProductPerformance> leastPerformingProducts =
+        productz.skip(leastCutoff).toList();
 
-
-    if(productsStatus != StoreProductsStatus.all){
-      if(productsStatus == StoreProductsStatus.leastPerforming){
-        filteredProducts = leastPerformingProducts.map((product)=> Product(views: product.views, addedToCart: product.addedToCart,
-            checkedOut: product.checkedOut, description: product.description,
-            discountPercentage: product.discountPercentage, rating: product.rating, brand: product.brand,
-            thumbnail: product.thumbnail, images: product.images, title: product.title,
-            price: product.price, stock: product.stock, category: product.category, id: product.id)).toList();
-      } else if(productsStatus == StoreProductsStatus.bestPerforming){
-        filteredProducts = bestPerformingProducts.map((product)=> Product(views: product.views, addedToCart: product.addedToCart,
-            checkedOut: product.checkedOut, description: product.description,
-            discountPercentage: product.discountPercentage, rating: product.rating, brand: product.brand,
-            thumbnail: product.thumbnail, images: product.images, title: product.title,
-            price: product.price, stock: product.stock, category: product.category, id: product.id)).toList();
-      }else{
-        filteredProducts = filteredProducts.where((product)=> product.category == productsStatus.toString().split('.').last).toList();
+    if (productsStatus != StoreProductsStatus.all) {
+      if (productsStatus == StoreProductsStatus.leastPerforming) {
+        filteredProducts = leastPerformingProducts
+            .map((product) => Product(
+                views: product.views,
+                addedToCart: product.addedToCart,
+                checkedOut: product.checkedOut,
+                description: product.description,
+                discountPercentage: product.discountPercentage,
+                rating: product.rating,
+                brand: product.brand,
+                thumbnail: product.thumbnail,
+                images: product.images,
+                title: product.title,
+                price: product.price,
+                stock: product.stock,
+                category: product.category,
+                id: product.id))
+            .toList();
+      } else if (productsStatus == StoreProductsStatus.bestPerforming) {
+        filteredProducts = bestPerformingProducts
+            .map((product) => Product(
+                views: product.views,
+                addedToCart: product.addedToCart,
+                checkedOut: product.checkedOut,
+                description: product.description,
+                discountPercentage: product.discountPercentage,
+                rating: product.rating,
+                brand: product.brand,
+                thumbnail: product.thumbnail,
+                images: product.images,
+                title: product.title,
+                price: product.price,
+                stock: product.stock,
+                category: product.category,
+                id: product.id))
+            .toList();
+      } else {
+        filteredProducts = filteredProducts
+            .where((product) =>
+                product.category == productsStatus.toString().split('.').last)
+            .toList();
       }
       // filteredProducts = filteredProducts.where((product)=> product.category == productsStatus.toString().split('.').last).toList();
     }
 
-    if(searchQuery.isNotEmpty){
-      List<String> searchTerms = searchQuery.split('&').map((term) => term.trim()).toList();
-      filteredProducts = filteredProducts.where((product){
+    if (searchQuery.isNotEmpty) {
+      List<String> searchTerms =
+          searchQuery.split('&').map((term) => term.trim()).toList();
+      filteredProducts = filteredProducts.where((product) {
         bool matches = true;
-        for(String term in searchTerms){
-          if(term.startsWith('<')){
+        for (String term in searchTerms) {
+          if (term.startsWith('<')) {
             double? amount = double.tryParse(term.substring(1));
-            if(amount != null){
+            if (amount != null) {
               matches &= product.price < amount;
             }
-          }else if (term.startsWith('>')){
+          } else if (term.startsWith('>')) {
             double? amount = double.tryParse(term.substring(1));
-            if(amount != null) {
+            if (amount != null) {
               matches &= product.price > amount;
             }
-          }else if (product.id.toLowerCase().contains(term) || product.id.toString() == term || product.price.toString().contains(term)){
+          } else if (product.id.toLowerCase().contains(term) ||
+              product.id.toString() == term ||
+              product.price.toString().contains(term)) {
             matches &= true;
-          }else{
+          } else {
             matches = false;
           }
         }

@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -8,11 +9,13 @@ import 'Screens/new_product.dart';
 import 'Screens/order_details.dart';
 import 'Screens/orders.dart';
 
-final overlayProvider = StateProvider<OverlayEntry?>((ref)=>null);
-final storeOverlayProvider = StateProvider<OverlayEntry?>((ref)=>null);
+final overlayProvider = StateProvider<OverlayEntry?>((ref) => null);
+final storeOverlayProvider = StateProvider<OverlayEntry?>((ref) => null);
 
-void main() {
-  runApp( ProviderScope(child: MyApp()) );
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initialize();
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -31,17 +34,19 @@ class MyApp extends StatelessWidget {
     ),
     GoRoute(
       path: '/orders/:id',
-      builder: (context, state){
+      builder: (context, state) {
         final String orderId = state.pathParameters['id']!;
         return OrderDetails(orderId: orderId);
-      } ,
+      },
     ),
     GoRoute(
       path: '/product/:id',
-      builder: (context, state){
+      builder: (context, state) {
         final String productId = state.pathParameters['id']!;
-        return NewProduct(productId: productId,);
-      } ,
+        return NewProduct(
+          productId: productId,
+        );
+      },
     ),
   ]);
   MyApp({super.key});
