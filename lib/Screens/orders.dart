@@ -6,6 +6,7 @@ import 'package:penya_business/main.dart';
 import 'package:penya_business/providers/order_provider.dart';
 
 import '../providers/orders_dash_provider.dart';
+import '../providers/text_controller_notifier.dart';
 import '../widgets/customComponents.dart';
 
 class OrdersDash extends ConsumerWidget {
@@ -17,8 +18,10 @@ class OrdersDash extends ConsumerWidget {
     final orders = ref.watch(ordersProvider.notifier).getFilteredOrders();
     final stats = ref.watch(ordersStatsProvider);
     final overlayEntry = ref.watch(overlayProvider);
-    final searchController = TextEditingController();
-
+    // final searchController = TextEditingController();
+    final multiController = ref.read(multiTextControllerProvider.notifier);
+    multiController.initController('orderSearch');
+    final searchController = multiController.getController('orderSearch');
     // final filterState = ref.watch(orderFilterProvider);
     // final sortOrderState = ref.watch(sortOrderProvider);
 

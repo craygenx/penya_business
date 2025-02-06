@@ -7,6 +7,7 @@ import 'package:penya_business/providers/product_provider.dart';
 import 'package:penya_business/widgets/customComponents.dart';
 
 import '../providers/store_dash_provider.dart';
+import '../providers/text_controller_notifier.dart';
 
 class Store extends ConsumerWidget {
   const Store({super.key});
@@ -15,9 +16,16 @@ class Store extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final productsAsync = ref.watch(productsProvider);
     final stats = ref.watch(storeStatsProvider);
-    final searchController = TextEditingController();
+    final multiController = ref.read(multiTextControllerProvider.notifier);
+    multiController.initController('storeSearch');
+    // final searchController = TextEditingController();
     final overlayEntry = ref.watch(storeOverlayProvider);
     String currentProductsStatus = ref.watch(storeFilterProvider).value;
+    final totalProducts = productsAsync.when(
+      data: (products) => products.length,
+      error: (error, stackTrace) => 0,
+      loading: () => 0,
+    );
 
     FocusNode focusNode = ref.read(searchFocusNodeProvider);
     final isFocused = ref.read(isSearchFocusedProvider);
@@ -121,7 +129,7 @@ class Store extends ConsumerWidget {
                           ),
                         ),
                         Text(
-                          '200 Items',
+                          '$totalProducts Items',
                           style: TextStyle(color: Colors.black12),
                         )
                       ],
@@ -133,7 +141,7 @@ class Store extends ConsumerWidget {
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                     width: 240,
                     child: TextField(
-                        controller: searchController,
+                        controller: multiController.getController('storeSearch'),
                         focusNode: focusNode,
                         decoration: InputDecoration(
                           border: InputBorder.none,
@@ -141,7 +149,9 @@ class Store extends ConsumerWidget {
                           suffixIcon: isFocused
                               ? IconButton(
                                   onPressed: () {
-                                    searchController.clear();
+                                    multiController
+                                        .getController('storeSearch')
+                                        .clear();
                                     ref
                                         .read(searchQueryProvider.notifier)
                                         .state = '';
@@ -255,7 +265,15 @@ class Store extends ConsumerWidget {
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(10)))
                                     : null,
-                                child: Text('Groceries'),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 5.0,
+                                      bottom: 5.0,
+                                      left: 10.0,
+                                      right: 10.0
+                                  ),
+                                  child: Text('Groceries'),
+                                ),
                               ),
                             ),
                           ),
@@ -278,7 +296,15 @@ class Store extends ConsumerWidget {
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(10)))
                                         : null,
-                                child: Text('Electronics'),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 5.0,
+                                      bottom: 5.0,
+                                      left: 10.0,
+                                      right: 10.0
+                                  ),
+                                  child: Text('Electronics'),
+                                ),
                               ),
                             ),
                           ),
@@ -300,7 +326,15 @@ class Store extends ConsumerWidget {
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(10)))
                                     : null,
-                                child: Text('Drinks'),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 5.0,
+                                      bottom: 5.0,
+                                      left: 10.0,
+                                      right: 10.0
+                                  ),
+                                  child: Text('Drinks'),
+                                ),
                               ),
                             ),
                           ),
