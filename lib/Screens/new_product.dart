@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:penya_business/models/product.dart';
 import 'package:penya_business/providers/product_image_provider.dart';
+import 'package:penya_business/providers/product_provider.dart';
+import 'package:uuid/uuid.dart';
 
 // import '../providers/product_provider.dart';
+import '../providers/text_controller_notifier.dart';
 import '../widgets/customComponents.dart';
 
 class NewProduct extends ConsumerWidget {
@@ -12,18 +16,18 @@ class NewProduct extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var uuid = Uuid();
     final selectedImages = ref.watch(imageSelectionProvider);
     final imageNotifier = ref.read(imageSelectionProvider.notifier);
+    final multiController = ref.read(multiTextControllerProvider.notifier);
 
-    TextEditingController nameEditingController = TextEditingController();
-    TextEditingController descriptionEditingController =
-        TextEditingController();
-    TextEditingController categoryEditingController = TextEditingController();
-    TextEditingController basePriceEditingController = TextEditingController();
-    TextEditingController stockEditingController = TextEditingController();
-    TextEditingController discountEditingController = TextEditingController();
-    TextEditingController discountTypeEditingController =
-        TextEditingController();
+    multiController.initController('name');
+    multiController.initController('description');
+    multiController.initController('category');
+    multiController.initController('basePrice');
+    multiController.initController('stock');
+    multiController.initController('discount');
+    multiController.initController('discountType');
 
     if (productId.isNotEmpty) {
       // final productAsync = ref.watch(productsProvider);
@@ -34,14 +38,14 @@ class NewProduct extends ConsumerWidget {
       //   error: (error, stackTrace) => [],
       //   loading: () => [],
       // );
-      nameEditingController.text = product[0].title;
-      descriptionEditingController.text = product.toList()[0].description;
-      categoryEditingController.text = product.toList()[0].category;
-      basePriceEditingController.text = product.toList()[0].price.toString();
-      stockEditingController.text = product.toList()[0].stock.toString();
-      discountEditingController.text =
-          product.toList()[0].discountPercentage.toString();
-      discountTypeEditingController.text = 'Holiday Offer';
+
+      multiController.updateText('name', product[0].title);
+      multiController.updateText('description', product.toList()[0].description);
+      multiController.updateText('category', product.toList()[0].category);
+      multiController.updateText('basePrice', product.toList()[0].price.toString());
+      multiController.updateText('stock', product.toList()[0].stock.toString());
+      multiController.updateText('discount', product.toList()[0].discountPercentage.toString());
+      multiController.updateText('discountType', 'Holiday Offer');
     }
 
     double width = MediaQuery.of(context).size.width;
@@ -94,27 +98,56 @@ class NewProduct extends ConsumerWidget {
                                 )
                               : null,
                         ),
-                        Container(
-                          width: 130,
-                          decoration: BoxDecoration(
-                            color: Colors.blueGrey,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10.0),
+                        GestureDetector(
+                          onTap: () {
+                            final productNew = Product(
+                                id: uuid.v1(),
+                                title: multiController.getController('name').text,
+                                views: 0,
+                                addedToCart: 0,
+                                checkedOut: 0,
+                                price: double.tryParse(
+                                        multiController.getController('basePrice').text) ??
+                                    0.0,
+                                description: multiController.getController('description').text,
+                                discountPercentage: double.tryParse(
+                                        multiController.getController('discount').text) ??
+                                    0.0,
+                                rating: 0,
+                                brand: 'Johny walker',
+                                thumbnail: '',
+                                images: [],
+                                stock:
+                                    int.tryParse(multiController.getController('stock').text) ??
+                                        0,
+                                category: multiController.getController('category').text,);
+                            ref
+                                .read(productNotifierProvider.notifier)
+                                .addProduct(productNew, ref);
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            width: 130,
+                            decoration: BoxDecoration(
+                              color: Colors.blueGrey,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10.0),
+                              ),
                             ),
-                          ),
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Icon(FontAwesomeIcons.check),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(productId.isNotEmpty
-                                    ? 'Edit Product'
-                                    : 'Add Product'),
-                              ),
-                            ],
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: Icon(FontAwesomeIcons.check),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(productId.isNotEmpty
+                                      ? 'Edit Product'
+                                      : 'Add Product'),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -216,7 +249,7 @@ class NewProduct extends ConsumerWidget {
                       child: Text('Product Name'),
                     ),
                     CustomTextFormField(
-                      controller: nameEditingController,
+                      controller: multiController.getController('name'),
                       hintText: '',
                       width: width,
                     ),
@@ -231,7 +264,7 @@ class NewProduct extends ConsumerWidget {
                           color: Colors.black12,
                         ),
                         child: TextField(
-                            controller: descriptionEditingController,
+                            controller: multiController.getController('description'),
                             maxLines: null,
                             expands: true,
                             textAlignVertical: TextAlignVertical.top,
@@ -243,7 +276,7 @@ class NewProduct extends ConsumerWidget {
                       child: Text('Product Category'),
                     ),
                     CustomTextFormField(
-                      controller: categoryEditingController,
+                      controller: multiController.getController('category'),
                       hintText: '',
                       width: width,
                     ),
@@ -286,7 +319,7 @@ class NewProduct extends ConsumerWidget {
                                       child: Text('Base Price'),
                                     ),
                                     CustomTextFormField(
-                                      controller: basePriceEditingController,
+                                      controller: multiController.getController('basePrice'),
                                       hintText: '0',
                                     ),
                                   ],
@@ -303,7 +336,7 @@ class NewProduct extends ConsumerWidget {
                                       child: Text('Stock'),
                                     ),
                                     CustomTextFormField(
-                                      controller: stockEditingController,
+                                      controller: multiController.getController('stock'),
                                       hintText: '0',
                                     ),
                                   ],
@@ -328,7 +361,7 @@ class NewProduct extends ConsumerWidget {
                                       child: Text('Discount'),
                                     ),
                                     CustomTextFormField(
-                                      controller: discountEditingController,
+                                      controller: multiController.getController('discount'),
                                       hintText: 'e.g 10%',
                                     ),
                                   ],
@@ -345,7 +378,7 @@ class NewProduct extends ConsumerWidget {
                                       child: Text('Discount Type'),
                                     ),
                                     CustomTextFormField(
-                                      controller: discountTypeEditingController,
+                                      controller: multiController.getController('discountType'),
                                       hintText: '',
                                     ),
                                   ],
@@ -354,7 +387,9 @@ class NewProduct extends ConsumerWidget {
                             ],
                           ),
                         ),
-                      ])),
+                      ]
+                  ),
+              ),
             ),
           ],
         ),

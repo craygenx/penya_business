@@ -108,11 +108,14 @@ class Store extends ConsumerWidget {
                                   size: 22.0,
                                 ),
                               ),
-                              Text(
-                                'Store',
-                                style: TextStyle(
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.bold),
+                              GestureDetector(
+                                onTap: () => context.go('/product'),
+                                child: Text(
+                                  'Store',
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ],
                           ),

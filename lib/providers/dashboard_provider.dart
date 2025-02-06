@@ -23,8 +23,14 @@ final dashboardStatsProvider = Provider<DashboardStats>((ref) {
   // products.fold(0, (sum, product) => sum + product.stock);
   double conversionRateCalculator() {
     if (productsAsync.value == null) return 0.0;
-    double totalConversionRate = productsAsync.value!
-        .fold(0.0, (sum, product) => sum + product.conversionRate);
+    double totalConversionRate = productsAsync.when(
+      data: (product) =>
+          product.fold(0.0, (sum, product) => sum + product.conversionRate),
+      error: (error, stackTrace) => 0.0,
+      loading: () => 0.0,
+    );
+    // productsAsync.value!
+    //     .fold(0.0, (sum, product) => sum + product.conversionRate);
     return totalConversionRate / productsAsync.value!.length;
     // if (productz.isEmpty) return 0.0;
     // double totalConversionRate =
@@ -43,8 +49,12 @@ final dashboardStatsProvider = Provider<DashboardStats>((ref) {
   return DashboardStats(
     totalIncome: totalIncome,
     totalStock: totalStock,
-    outOfStock:
-        productsAsync.value!.where((product) => product.stock == 0).length,
+    outOfStock: productsAsync.when(
+      data: (product) => product.where((product) => product.stock == 0).length,
+      error: (error, stacktrace) => 0,
+      loading: () => 0,
+    ),
+    // productsAsync.value!.where((product) => product.stock == 0).length,
     pendingOrders: orders.where((order) => order.status == 'pending').length,
     conversionRate: conversionRate,
   );

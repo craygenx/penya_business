@@ -44,6 +44,10 @@ class MyApp extends StatelessWidget {
       },
     ),
     GoRoute(
+      path: '/product',
+      builder: (context, state) => NewProduct(productId: ''),
+    ),
+    GoRoute(
       path: '/product/:id',
       builder: (context, state) {
         final String productId = state.pathParameters['id']!;

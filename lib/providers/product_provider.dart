@@ -203,20 +203,30 @@
 //     return filteredProducts;
 //   }
 // }
-import 'package:flutter/material.dart';
+
+// Future<void> addProduct(Product product, WidgetRef ref) async {
+//     final firestore = FirebaseFirestore.instance;
+//     final imageNotifier = ref.read(imageSelectionProvider.notifier);
+
+//     // Upload images and get URLs
+//     List<String> imageUrls = await imageNotifier.uploadImages();
+
+//     // Add product to Firestore with image URLs
+//     await firestore.collection('products').doc(product.id).set({
+//       ...product.toMap(),
+//       'images': imageUrls, // Store image URLs
+//     });
+
+//     // Clear selected images after upload
+//     ref.read(imageSelectionProvider.notifier).state = [];
+//   }
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:penya_business/models/product.dart';
+import 'package:penya_business/models/product_performance.dart';
 import 'package:penya_business/providers/product_image_provider.dart';
-
-/// Enable Firestore offline persistence
-void enablePersistence() async {
-  FirebaseFirestore.instance.settings =
-      const Settings(persistenceEnabled: true);
-}
-
-// Call the function when the app starts
-// enablePersistence();
 
 enum StoreProductsStatus {
   outOfStock,
@@ -249,64 +259,27 @@ extension StoreProductsStatusExtension on StoreProductsStatus {
   }
 }
 
-/// Firestore reference
+// Firestore reference for products collection
 final firestoreProvider = Provider((ref) => FirebaseFirestore.instance);
-
-/// Filters & Search
 final storeFilterProvider =
     StateProvider<StoreProductsStatus>((ref) => StoreProductsStatus.all);
 final searchQueryProvider = StateProvider<String>((ref) => '');
-final searchFocusNodeProvider = Provider<FocusNode>((ref) {
+final searchFocusNodeProvider = Provider((ref) {
   final focusNode = FocusNode();
   ref.onDispose(focusNode.dispose);
   return focusNode;
 });
 final isSearchFocusedProvider = StateProvider<bool>((ref) => false);
 
-/// Pagination State
-final lastDocumentProvider = StateProvider<DocumentSnapshot?>((ref) => null);
-
-/// Firestore StreamProvider with Pagination
-final productsProvider =
-    StreamProvider.autoDispose<List<Product>>((ref) async* {
+// Firestore StreamProvider for real-time product updates
+final productsProvider = StreamProvider<List<Product>>((ref) {
   final firestore = ref.watch(firestoreProvider);
-  final storeFilter = ref.watch(storeFilterProvider);
-  final searchQuery = ref.watch(searchQueryProvider).toLowerCase().trim();
-  final lastDocument = ref.watch(lastDocumentProvider);
-
-  Query query = firestore.collection('products').orderBy('title').limit(10);
-
-  if (lastDocument != null) {
-    query = query.startAfterDocument(lastDocument);
-  }
-
-  final snapshot = await query.get();
-  if (snapshot.docs.isNotEmpty) {
-    ref.read(lastDocumentProvider.notifier).state = snapshot.docs.last;
-  }
-
-  List<Product> products =
-      snapshot.docs.map((doc) => Product.fromFirestore(doc)).toList();
-
-  // Filtering
-  if (storeFilter != StoreProductsStatus.all) {
-    products = products
-        .where((product) => product.category == storeFilter.value)
-        .toList();
-  }
-
-  // Search
-  if (searchQuery.isNotEmpty) {
-    products = products.where((product) {
-      return product.title.toLowerCase().contains(searchQuery) ||
-          product.category.toLowerCase().contains(searchQuery);
-    }).toList();
-  }
-
-  yield products;
+  return firestore.collection('products').snapshots().map((snapshot) {
+    return snapshot.docs.map((doc) => Product.fromFirestore(doc)).toList();
+  });
 });
 
-/// Notifier for Firestore CRUD Operations
+// Notifier for handling Firestore CRUD operations
 class ProductNotifier extends StateNotifier<List<Product>> {
   final FirebaseFirestore _firestore;
   ProductNotifier(this._firestore) : super([]) {
@@ -321,16 +294,19 @@ class ProductNotifier extends StateNotifier<List<Product>> {
 
   Future<void> addProduct(Product product, WidgetRef ref) async {
     final firestore = FirebaseFirestore.instance;
-    final imageNotifier = ref.read(imageSelectionProvider.notifier);
+    // final imageNotifier = ref.read(imageSelectionProvider.notifier);
 
     // Upload images and get URLs
-    List<String> imageUrls = await imageNotifier.uploadImages();
+    // List<String> imageUrls = await imageNotifier.uploadImages();
 
     // Add product to Firestore with image URLs
     await firestore.collection('products').doc(product.id).set({
       ...product.toMap(),
-      'images': imageUrls, // Store image URLs
+      'images': [], // Store image URLs
     });
+
+    //replace hapo juu
+    // 'images': imageUrls,
 
     // Clear selected images after upload
     ref.read(imageSelectionProvider.notifier).state = [];
@@ -347,13 +323,57 @@ class ProductNotifier extends StateNotifier<List<Product>> {
     await _firestore.collection('products').doc(id).delete();
   }
 
-  void loadMoreProducts(WidgetRef ref) {
-    ref.read(lastDocumentProvider.notifier).state = null;
-    ref.invalidate(productsProvider);
+  List<Product> getFilteredProducts(WidgetRef ref) {
+    final productsStatus = ref.watch(storeFilterProvider);
+    List<Product> filteredProducts = state;
+    final searchQuery = ref.watch(searchQueryProvider).trim().toLowerCase();
+
+    final totalProducts = filteredProducts.length;
+    List<ProductPerformance> productPerformanceList =
+        filteredProducts.map((product) {
+      final score = (product.views * 2) +
+          (product.addedToCart * 0.3) +
+          (product.checkedOut * 0.5);
+      return ProductPerformance.fromProduct(product, score);
+    }).toList();
+
+    productPerformanceList.sort((a, b) => b.score.compareTo(a.score));
+    int bestCutoff = (0.2 * totalProducts).round();
+    int leastCutoff = (0.8 * totalProducts).round();
+
+    List<Product> bestPerforming = productPerformanceList
+        .take(bestCutoff)
+        .map((e) => e.toProduct())
+        .toList();
+    List<Product> leastPerforming = productPerformanceList
+        .skip(leastCutoff)
+        .map((e) => e.toProduct())
+        .toList();
+
+    if (productsStatus != StoreProductsStatus.all) {
+      if (productsStatus == StoreProductsStatus.leastPerforming) {
+        filteredProducts = leastPerforming;
+      } else if (productsStatus == StoreProductsStatus.bestPerforming) {
+        filteredProducts = bestPerforming;
+      } else {
+        filteredProducts = filteredProducts
+            .where((product) => product.category == productsStatus.value)
+            .toList();
+      }
+    }
+
+    if (searchQuery.isNotEmpty) {
+      filteredProducts = filteredProducts.where((product) {
+        return product.title.toLowerCase().contains(searchQuery) ||
+            product.category.toLowerCase().contains(searchQuery);
+      }).toList();
+    }
+
+    return filteredProducts;
   }
 }
 
-/// Provider for Firestore Product CRUD
+// Provider for handling product operations
 final productNotifierProvider =
     StateNotifierProvider<ProductNotifier, List<Product>>((ref) {
   final firestore = ref.watch(firestoreProvider);
