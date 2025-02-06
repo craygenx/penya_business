@@ -9,15 +9,27 @@ import 'package:penya_business/widgets/customComponents.dart';
 import '../providers/store_dash_provider.dart';
 import '../providers/text_controller_notifier.dart';
 
-class Store extends ConsumerWidget {
+class Store extends ConsumerStatefulWidget {
   const Store({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<Store> createState() => _StoreState();
+}
+
+class _StoreState extends ConsumerState<Store> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      final multiController = ref.read(multiTextControllerProvider.notifier);
+      multiController.initController('storeSearch');
+    });
+  }
+  @override
+  Widget build(BuildContext context) {
     final productsAsync = ref.watch(productsProvider);
     final stats = ref.watch(storeStatsProvider);
     final multiController = ref.read(multiTextControllerProvider.notifier);
-    multiController.initController('storeSearch');
     // final searchController = TextEditingController();
     final overlayEntry = ref.watch(storeOverlayProvider);
     String currentProductsStatus = ref.watch(storeFilterProvider).value;
@@ -148,16 +160,16 @@ class Store extends ConsumerWidget {
                           prefixIcon: isFocused ? null : Icon(Icons.search),
                           suffixIcon: isFocused
                               ? IconButton(
-                                  onPressed: () {
-                                    multiController
-                                        .getController('storeSearch')
-                                        .clear();
-                                    ref
-                                        .read(searchQueryProvider.notifier)
-                                        .state = '';
-                                  },
-                                  icon: Icon(Icons.clear),
-                                )
+                            onPressed: () {
+                              multiController
+                                  .getController('storeSearch')
+                                  .clear();
+                              ref
+                                  .read(searchQueryProvider.notifier)
+                                  .state = '';
+                            },
+                            icon: Icon(Icons.clear),
+                          )
                               : null,
                         ),
                         onChanged: (value) {
@@ -165,7 +177,7 @@ class Store extends ConsumerWidget {
                         },
                         onEditingComplete: () {
                           ref.read(isSearchFocusedProvider.notifier).state =
-                              false;
+                          false;
                           focusNode.unfocus();
                         }),
                   ),
@@ -220,7 +232,7 @@ class Store extends ConsumerWidget {
                         children: [
                           Padding(
                             padding:
-                                const EdgeInsets.only(left: 10.0, right: 10.0),
+                            const EdgeInsets.only(left: 10.0, right: 10.0),
                             child: GestureDetector(
                               onTap: () {
                                 ref.read(storeFilterProvider.notifier).state =
@@ -229,12 +241,12 @@ class Store extends ConsumerWidget {
                               child: Container(
                                 decoration: currentProductsStatus == 'all'
                                     ? BoxDecoration(
-                                        color: Colors.black26,
-                                        border: Border.all(
-                                          width: 1.0,
-                                        ),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10)))
+                                    color: Colors.black26,
+                                    border: Border.all(
+                                      width: 1.0,
+                                    ),
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10)))
                                     : null,
                                 child: Padding(
                                   padding: const EdgeInsets.only(
@@ -249,7 +261,7 @@ class Store extends ConsumerWidget {
                           ),
                           Padding(
                             padding:
-                                const EdgeInsets.only(left: 10.0, right: 10.0),
+                            const EdgeInsets.only(left: 10.0, right: 10.0),
                             child: GestureDetector(
                               onTap: () {
                                 ref.read(storeFilterProvider.notifier).state =
@@ -258,12 +270,12 @@ class Store extends ConsumerWidget {
                               child: Container(
                                 decoration: currentProductsStatus == 'groceries'
                                     ? BoxDecoration(
-                                        color: Colors.black26,
-                                        border: Border.all(
-                                          width: 1.0,
-                                        ),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10)))
+                                    color: Colors.black26,
+                                    border: Border.all(
+                                      width: 1.0,
+                                    ),
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10)))
                                     : null,
                                 child: Padding(
                                   padding: const EdgeInsets.only(
@@ -279,7 +291,7 @@ class Store extends ConsumerWidget {
                           ),
                           Padding(
                             padding:
-                                const EdgeInsets.only(left: 10.0, right: 10.0),
+                            const EdgeInsets.only(left: 10.0, right: 10.0),
                             child: GestureDetector(
                               onTap: () {
                                 ref.read(storeFilterProvider.notifier).state =
@@ -287,15 +299,15 @@ class Store extends ConsumerWidget {
                               },
                               child: Container(
                                 decoration:
-                                    currentProductsStatus == 'electronics'
-                                        ? BoxDecoration(
-                                            color: Colors.black26,
-                                            border: Border.all(
-                                              width: 1.0,
-                                            ),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(10)))
-                                        : null,
+                                currentProductsStatus == 'electronics'
+                                    ? BoxDecoration(
+                                    color: Colors.black26,
+                                    border: Border.all(
+                                      width: 1.0,
+                                    ),
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10)))
+                                    : null,
                                 child: Padding(
                                   padding: const EdgeInsets.only(
                                       top: 5.0,
@@ -310,7 +322,7 @@ class Store extends ConsumerWidget {
                           ),
                           Padding(
                             padding:
-                                const EdgeInsets.only(left: 10.0, right: 10.0),
+                            const EdgeInsets.only(left: 10.0, right: 10.0),
                             child: GestureDetector(
                               onTap: () {
                                 ref.read(storeFilterProvider.notifier).state =
@@ -319,12 +331,12 @@ class Store extends ConsumerWidget {
                               child: Container(
                                 decoration: currentProductsStatus == 'drinks'
                                     ? BoxDecoration(
-                                        color: Colors.black26,
-                                        border: Border.all(
-                                          width: 1.0,
-                                        ),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10)))
+                                    color: Colors.black26,
+                                    border: Border.all(
+                                      width: 1.0,
+                                    ),
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10)))
                                     : null,
                                 child: Padding(
                                   padding: const EdgeInsets.only(
@@ -379,24 +391,24 @@ class Store extends ConsumerWidget {
                     return products.isEmpty
                         ? Center(child: Text('No products available'))
                         : ListView.builder(
-                            itemCount: products.length,
-                            itemBuilder: (context, index) {
-                              final product = products[index];
-                              return Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 10.0, bottom: 10.0, left: 10.0),
-                                child: GestureDetector(
-                                    onTap: () =>
-                                        context.go('/product/${product.id}'),
-                                    child: ProductStoreCard(
-                                      title: product.title,
-                                      description: product.description,
-                                      price: product.price,
-                                      stock: product.stock,
-                                    )),
-                              );
-                            },
-                          );
+                      itemCount: products.length,
+                      itemBuilder: (context, index) {
+                        final product = products[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                              top: 10.0, bottom: 10.0, left: 10.0),
+                          child: GestureDetector(
+                              onTap: () =>
+                                  context.go('/product/${product.id}'),
+                              child: ProductStoreCard(
+                                title: product.title,
+                                description: product.description,
+                                price: product.price,
+                                stock: product.stock,
+                              )),
+                        );
+                      },
+                    );
                   },
                   error: (error, stackTrace) =>
                       Center(child: Text(error.toString())),

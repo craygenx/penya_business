@@ -10,26 +10,37 @@ import 'package:uuid/uuid.dart';
 import '../providers/text_controller_notifier.dart';
 import '../widgets/customComponents.dart';
 
-class NewProduct extends ConsumerWidget {
+class NewProduct extends ConsumerStatefulWidget {
   final String productId;
   const NewProduct({super.key, required this.productId});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<NewProduct> createState() => _NewProductState();
+
+}
+
+class _NewProductState extends ConsumerState<NewProduct> {
+  @override
+  void initState(){
+    super.initState();
+    Future.microtask((){
+      final multiController = ref.read(multiTextControllerProvider.notifier);
+      multiController.initController('name');
+      multiController.initController('description');
+      multiController.initController('category');
+      multiController.initController('basePrice');
+      multiController.initController('stock');
+      multiController.initController('discount');
+      multiController.initController('discountType');
+    });
+  }
+  @override
+  Widget build(BuildContext context) {
     var uuid = Uuid();
     final selectedImages = ref.watch(imageSelectionProvider);
     final imageNotifier = ref.read(imageSelectionProvider.notifier);
     final multiController = ref.read(multiTextControllerProvider.notifier);
-
-    multiController.initController('name');
-    multiController.initController('description');
-    multiController.initController('category');
-    multiController.initController('basePrice');
-    multiController.initController('stock');
-    multiController.initController('discount');
-    multiController.initController('discountType');
-
-    if (productId.isNotEmpty) {
+    if (widget.productId.isNotEmpty) {
       // final productAsync = ref.watch(productsProvider);
       final product = [];
       // final product = productAsync.when(
@@ -70,7 +81,7 @@ class NewProduct extends ConsumerWidget {
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0),
                           child: Text(
-                            productId.isNotEmpty
+                            widget.productId.isNotEmpty
                                 ? 'Edit Product'
                                 : 'Add New Product',
                             style: TextStyle(
@@ -91,36 +102,36 @@ class NewProduct extends ConsumerWidget {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                           ),
-                          child: productId.isNotEmpty
+                          child: widget.productId.isNotEmpty
                               ? Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: Icon(FontAwesomeIcons.trashCan),
-                                )
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Icon(FontAwesomeIcons.trashCan),
+                          )
                               : null,
                         ),
                         GestureDetector(
                           onTap: () {
                             final productNew = Product(
-                                id: uuid.v1(),
-                                title: multiController.getController('name').text,
-                                views: 0,
-                                addedToCart: 0,
-                                checkedOut: 0,
-                                price: double.tryParse(
-                                        multiController.getController('basePrice').text) ??
-                                    0.0,
-                                description: multiController.getController('description').text,
-                                discountPercentage: double.tryParse(
-                                        multiController.getController('discount').text) ??
-                                    0.0,
-                                rating: 0,
-                                brand: 'Johny walker',
-                                thumbnail: '',
-                                images: [],
-                                stock:
-                                    int.tryParse(multiController.getController('stock').text) ??
-                                        0,
-                                category: multiController.getController('category').text,);
+                              id: uuid.v1(),
+                              title: multiController.getController('name').text,
+                              views: 0,
+                              addedToCart: 0,
+                              checkedOut: 0,
+                              price: double.tryParse(
+                                  multiController.getController('basePrice').text) ??
+                                  0.0,
+                              description: multiController.getController('description').text,
+                              discountPercentage: double.tryParse(
+                                  multiController.getController('discount').text) ??
+                                  0.0,
+                              rating: 0,
+                              brand: 'Johny walker',
+                              thumbnail: '',
+                              images: [],
+                              stock:
+                              int.tryParse(multiController.getController('stock').text) ??
+                                  0,
+                              category: multiController.getController('category').text,);
                             ref
                                 .read(productNotifierProvider.notifier)
                                 .addProduct(productNew, ref);
@@ -142,7 +153,7 @@ class NewProduct extends ConsumerWidget {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text(productId.isNotEmpty
+                                  child: Text(widget.productId.isNotEmpty
                                       ? 'Edit Product'
                                       : 'Add Product'),
                                 ),
@@ -173,14 +184,14 @@ class NewProduct extends ConsumerWidget {
                         decoration: BoxDecoration(color: Colors.blueGrey),
                         child: selectedImages.isNotEmpty
                             ? Image.file(
-                                selectedImages[0],
-                                fit: BoxFit.cover,
-                              )
+                          selectedImages[0],
+                          fit: BoxFit.cover,
+                        )
                             : Icon(
-                                Icons.add_a_photo_outlined,
-                                size: 50,
-                                color: Colors.grey,
-                              ),
+                          Icons.add_a_photo_outlined,
+                          size: 50,
+                          color: Colors.grey,
+                        ),
                       ),
                     ),
                     Padding(
@@ -200,21 +211,21 @@ class NewProduct extends ConsumerWidget {
                                 decoration: BoxDecoration(
                                   color: Colors.black12,
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0)),
+                                  BorderRadius.all(Radius.circular(10.0)),
                                   image: selectedImages.length > index
                                       ? DecorationImage(
-                                          image:
-                                              FileImage(selectedImages[index]),
-                                          fit: BoxFit.cover,
-                                        )
+                                    image:
+                                    FileImage(selectedImages[index]),
+                                    fit: BoxFit.cover,
+                                  )
                                       : null,
                                 ),
                                 child: selectedImages.length <= index
                                     ? Icon(
-                                        Icons.image,
-                                        color: Colors.grey,
-                                        size: 40,
-                                      )
+                                  Icons.image,
+                                  color: Colors.grey,
+                                  size: 40,
+                                )
                                     : null,
                               );
                             })),
@@ -287,108 +298,108 @@ class NewProduct extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
               child: Container(
-                  width: MediaQuery.of(context).size.width * 0.95,
-                  decoration: BoxDecoration(
-                      color: Colors.white24,
-                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10.0),
-                          child: Text(
-                            'Pricing And Stock',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
+                width: MediaQuery.of(context).size.width * 0.95,
+                decoration: BoxDecoration(
+                    color: Colors.white24,
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Text(
+                          'Pricing And Stock',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: width,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: width * 0.45,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 10.0, bottom: 10.0),
+                                    child: Text('Base Price'),
+                                  ),
+                                  CustomTextFormField(
+                                    controller: multiController.getController('basePrice'),
+                                    hintText: '0',
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
+                            SizedBox(
+                              width: width * 0.45,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 10.0, bottom: 10.0),
+                                    child: Text('Stock'),
+                                  ),
+                                  CustomTextFormField(
+                                    controller: multiController.getController('stock'),
+                                    hintText: '0',
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          width: width,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: width * 0.45,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 10.0, bottom: 10.0),
-                                      child: Text('Base Price'),
-                                    ),
-                                    CustomTextFormField(
-                                      controller: multiController.getController('basePrice'),
-                                      hintText: '0',
-                                    ),
-                                  ],
-                                ),
+                      ),
+                      SizedBox(
+                        width: width,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: width * 0.45,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 10.0, bottom: 10.0),
+                                    child: Text('Discount'),
+                                  ),
+                                  CustomTextFormField(
+                                    controller: multiController.getController('discount'),
+                                    hintText: 'e.g 10%',
+                                  ),
+                                ],
                               ),
-                              SizedBox(
-                                width: width * 0.45,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 10.0, bottom: 10.0),
-                                      child: Text('Stock'),
-                                    ),
-                                    CustomTextFormField(
-                                      controller: multiController.getController('stock'),
-                                      hintText: '0',
-                                    ),
-                                  ],
-                                ),
+                            ),
+                            SizedBox(
+                              width: width * 0.45,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 10.0, bottom: 10.0),
+                                    child: Text('Discount Type'),
+                                  ),
+                                  CustomTextFormField(
+                                    controller: multiController.getController('discountType'),
+                                    hintText: '',
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          width: width,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: width * 0.45,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 10.0, bottom: 10.0),
-                                      child: Text('Discount'),
-                                    ),
-                                    CustomTextFormField(
-                                      controller: multiController.getController('discount'),
-                                      hintText: 'e.g 10%',
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                width: width * 0.45,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 10.0, bottom: 10.0),
-                                      child: Text('Discount Type'),
-                                    ),
-                                    CustomTextFormField(
-                                      controller: multiController.getController('discountType'),
-                                      hintText: '',
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ]
-                  ),
+                      ),
+                    ]
+                ),
               ),
             ),
           ],
