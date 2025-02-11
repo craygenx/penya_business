@@ -39,7 +39,13 @@ class _NewProductState extends ConsumerState<NewProduct> {
     var uuid = Uuid();
     final selectedImages = ref.watch(imageSelectionProvider);
     final imageNotifier = ref.read(imageSelectionProvider.notifier);
-    final multiController = ref.read(multiTextControllerProvider.notifier);
+    final nameEditingController = ref.watch(textEditingControllersFamily('name'));
+    final descriptionEditingController = ref.watch(textEditingControllersFamily('description'));
+    final categoryEditingController = ref.watch(textEditingControllersFamily('category'));
+    final basePriceEditingController = ref.watch(textEditingControllersFamily('basePrice'));
+    final stockEditingController = ref.watch(textEditingControllersFamily('stock'));
+    final discountEditingController = ref.watch(textEditingControllersFamily('discount'));
+    final discountTypeEditingController = ref.watch(textEditingControllersFamily('discountType'));
     if (widget.productId.isNotEmpty) {
       // final productAsync = ref.watch(productsProvider);
       final product = [];
@@ -50,13 +56,13 @@ class _NewProductState extends ConsumerState<NewProduct> {
       //   loading: () => [],
       // );
 
-      multiController.updateText('name', product[0].title);
-      multiController.updateText('description', product.toList()[0].description);
-      multiController.updateText('category', product.toList()[0].category);
-      multiController.updateText('basePrice', product.toList()[0].price.toString());
-      multiController.updateText('stock', product.toList()[0].stock.toString());
-      multiController.updateText('discount', product.toList()[0].discountPercentage.toString());
-      multiController.updateText('discountType', 'Holiday Offer');
+      nameEditingController.text = product[0].title;
+      descriptionEditingController.text = product.toList()[0].description;
+      categoryEditingController.text = product.toList()[0].category;
+      basePriceEditingController.text = product.toList()[0].price;
+      stockEditingController.text = product.toList()[0].stock;
+      discountEditingController.text = product.toList()[0].discountPercentage;
+      discountTypeEditingController.text = 'Holiday Offer';
     }
 
     double width = MediaQuery.of(context).size.width;
@@ -113,25 +119,25 @@ class _NewProductState extends ConsumerState<NewProduct> {
                           onTap: () {
                             final productNew = Product(
                               id: uuid.v1(),
-                              title: multiController.getController('name').text,
+                              title: nameEditingController.text,
                               views: 0,
                               addedToCart: 0,
                               checkedOut: 0,
                               price: double.tryParse(
-                                  multiController.getController('basePrice').text) ??
+                                  basePriceEditingController.text) ??
                                   0.0,
-                              description: multiController.getController('description').text,
+                              description: descriptionEditingController.text,
                               discountPercentage: double.tryParse(
-                                  multiController.getController('discount').text) ??
+                                  discountEditingController.text) ??
                                   0.0,
                               rating: 0,
                               brand: 'Johny walker',
                               thumbnail: '',
                               images: [],
                               stock:
-                              int.tryParse(multiController.getController('stock').text) ??
+                              int.tryParse(stockEditingController.text) ??
                                   0,
-                              category: multiController.getController('category').text,);
+                              category: categoryEditingController.text,);
                             ref
                                 .read(productNotifierProvider.notifier)
                                 .addProduct(productNew, ref);
@@ -260,7 +266,8 @@ class _NewProductState extends ConsumerState<NewProduct> {
                       child: Text('Product Name'),
                     ),
                     CustomTextFormField(
-                      controller: multiController.getController('name'),
+                      validationKey: 'name',
+                      controller: nameEditingController,
                       hintText: '',
                       width: width,
                     ),
@@ -275,7 +282,8 @@ class _NewProductState extends ConsumerState<NewProduct> {
                           color: Colors.black12,
                         ),
                         child: TextField(
-                            controller: multiController.getController('description'),
+                            key: ValueKey('description'),
+                            controller: descriptionEditingController,
                             maxLines: null,
                             expands: true,
                             textAlignVertical: TextAlignVertical.top,
@@ -287,7 +295,8 @@ class _NewProductState extends ConsumerState<NewProduct> {
                       child: Text('Product Category'),
                     ),
                     CustomTextFormField(
-                      controller: multiController.getController('category'),
+                      validationKey: 'category',
+                      controller: categoryEditingController,
                       hintText: '',
                       width: width,
                     ),
@@ -330,7 +339,8 @@ class _NewProductState extends ConsumerState<NewProduct> {
                                     child: Text('Base Price'),
                                   ),
                                   CustomTextFormField(
-                                    controller: multiController.getController('basePrice'),
+                                    validationKey: 'basePrice',
+                                    controller: basePriceEditingController,
                                     hintText: '0',
                                   ),
                                 ],
@@ -347,7 +357,8 @@ class _NewProductState extends ConsumerState<NewProduct> {
                                     child: Text('Stock'),
                                   ),
                                   CustomTextFormField(
-                                    controller: multiController.getController('stock'),
+                                    validationKey: 'stock',
+                                    controller: stockEditingController,
                                     hintText: '0',
                                   ),
                                 ],
@@ -372,7 +383,8 @@ class _NewProductState extends ConsumerState<NewProduct> {
                                     child: Text('Discount'),
                                   ),
                                   CustomTextFormField(
-                                    controller: multiController.getController('discount'),
+                                    validationKey: 'discount',
+                                    controller: discountEditingController,
                                     hintText: 'e.g 10%',
                                   ),
                                 ],
@@ -389,7 +401,8 @@ class _NewProductState extends ConsumerState<NewProduct> {
                                     child: Text('Discount Type'),
                                   ),
                                   CustomTextFormField(
-                                    controller: multiController.getController('discountType'),
+                                    validationKey: 'discountType',
+                                    controller: discountTypeEditingController,
                                     hintText: '',
                                   ),
                                 ],

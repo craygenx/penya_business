@@ -17,20 +17,13 @@ class Store extends ConsumerStatefulWidget {
 }
 
 class _StoreState extends ConsumerState<Store> {
-  @override
-  void initState() {
-    super.initState();
-    Future.microtask(() {
-      final multiController = ref.read(multiTextControllerProvider.notifier);
-      multiController.initController('storeSearch');
-    });
-  }
+
   @override
   Widget build(BuildContext context) {
     final productsAsync = ref.watch(productsProvider);
     final stats = ref.watch(storeStatsProvider);
-    final multiController = ref.read(multiTextControllerProvider.notifier);
-    // final searchController = TextEditingController();
+    final textEditingController =
+          ref.watch(textEditingControllersFamily('storeSearch'));
     final overlayEntry = ref.watch(storeOverlayProvider);
     String currentProductsStatus = ref.watch(storeFilterProvider).value;
     final totalProducts = productsAsync.when(
@@ -153,7 +146,8 @@ class _StoreState extends ConsumerState<Store> {
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                     width: 240,
                     child: TextField(
-                        controller: multiController.getController('storeSearch'),
+                        key: ValueKey('storeSearch'),
+                        controller: textEditingController,
                         focusNode: focusNode,
                         decoration: InputDecoration(
                           border: InputBorder.none,
@@ -161,9 +155,7 @@ class _StoreState extends ConsumerState<Store> {
                           suffixIcon: isFocused
                               ? IconButton(
                             onPressed: () {
-                              multiController
-                                  .getController('storeSearch')
-                                  .clear();
+                              textEditingController.clear();
                               ref
                                   .read(searchQueryProvider.notifier)
                                   .state = '';

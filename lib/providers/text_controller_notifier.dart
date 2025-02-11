@@ -32,6 +32,11 @@ class MultiTextControllerNotifier
   }
 }
 
+final textEditingControllersFamily =
+    Provider.family<TextEditingController, String>((ref, id) {
+  return TextEditingController();
+});
+
 final multiTextControllerProvider = StateNotifierProvider<
     MultiTextControllerNotifier,
     Map<String, TextEditingController>>((ref) => MultiTextControllerNotifier());

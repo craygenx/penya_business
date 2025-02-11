@@ -12,6 +12,71 @@ class Dashboard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final stats = ref.watch(dashboardStatsProvider);
+    void showCustomDialog(BuildContext context) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                  child: SizedBox(
+                    width: 300,
+                    height: 100,
+                    child: Row(
+                      children: [
+                        Text('Tick Tock'),
+                        ElevatedButton(
+                            onPressed: (){},
+                            child: Text('Add Platform'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                  child: SizedBox(
+                    width: 300,
+                    height: 100,
+                    child: Row(
+                      children: [
+                        Text('Instagram'),
+                        ElevatedButton(
+                          onPressed: (){},
+                          child: Text('Add Platform'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                  child: SizedBox(
+                    width: 300,
+                    height: 100,
+                    child: Row(
+                      children: [
+                        Text('Facebook'),
+                        ElevatedButton(
+                          onPressed: (){},
+                          child: Text('Add Platform'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(),
@@ -117,22 +182,25 @@ class Dashboard extends ConsumerWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(right: 10.0),
-                          child: Container(
-                            alignment: Alignment.center,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: Colors.blueGrey,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 15.0,
-                                  right: 15.0,
-                                  top: 5.0,
-                                  bottom: 5.0),
-                              child: Text(
-                                textAlign: TextAlign.center,
-                                'Add platform',
+                          child: GestureDetector(
+                            onTap: () => showCustomDialog(context),
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: Colors.blueGrey,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 15.0,
+                                    right: 15.0,
+                                    top: 5.0,
+                                    bottom: 5.0),
+                                child: Text(
+                                  textAlign: TextAlign.center,
+                                  'Add platform',
+                                ),
                               ),
                             ),
                           ),

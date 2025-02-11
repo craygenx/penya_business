@@ -17,14 +17,6 @@ class OrdersDash extends ConsumerStatefulWidget {
 }
 
 class _OrdersDashState extends ConsumerState<OrdersDash> {
-  @override
-  void initState() {
-    super.initState();
-    Future.microtask(() {
-      final multiController = ref.read(multiTextControllerProvider.notifier);
-      multiController.initController('orderSearch');
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +24,10 @@ class _OrdersDashState extends ConsumerState<OrdersDash> {
     final orders = ref.watch(ordersProvider.notifier).getFilteredOrders();
     final stats = ref.watch(ordersStatsProvider);
     final overlayEntry = ref.watch(overlayProvider);
+    final textEditingController =
+        ref.watch(textEditingControllersFamily('orderSearch'));
     // final searchController = TextEditingController();
-    final multiController = ref.read(multiTextControllerProvider.notifier);
+    // final multiController = ref.read(multiTextControllerProvider.notifier);
     // final searchController = multiController.getController('orderSearch');
     // final filterState = ref.watch(orderFilterProvider);
     // final sortOrderState = ref.watch(sortOrderProvider);
@@ -231,8 +225,9 @@ class _OrdersDashState extends ConsumerState<OrdersDash> {
                                 BorderRadius.all(Radius.circular(10.0))),
                         width: width * .5,
                         child: TextField(
-                            controller:
-                                multiController.getController('orderSearch'),
+                            key: ValueKey('orderSearch'),
+                            controller: textEditingController,
+                            // multiController.getController('orderSearch'),
                             focusNode: focusNode,
                             decoration: InputDecoration(
                               border: InputBorder.none,
@@ -240,9 +235,10 @@ class _OrdersDashState extends ConsumerState<OrdersDash> {
                               suffixIcon: isFocused
                                   ? IconButton(
                                       onPressed: () {
-                                        multiController
-                                            .getController('orderSearch')
-                                            .clear();
+                                        textEditingController.clear();
+                                        // multiController
+                                        //     .getController('orderSearch')
+                                        //     .clear();
                                         ref
                                             .read(searchQueryProvider.notifier)
                                             .state = '';

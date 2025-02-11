@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 class CustomTextFormField extends StatefulWidget {
   final String hintText;
+  final String? validationKey;
   final Color backgroundColor;
   final double width;
   final String? Function(String?)? validator;
@@ -18,7 +19,8 @@ class CustomTextFormField extends StatefulWidget {
     this.width = 0.45, // Default to half the screen width
     this.validator,
     this.controller,
-    this.isPasswordField = false, // Default is not a password field
+    this.isPasswordField = false,
+    this.validationKey, // Default is not a password field
   });
 
   @override
@@ -39,6 +41,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         borderRadius: BorderRadius.circular(8),
       ),
       child: TextFormField(
+        key: widget.validationKey != null ? ValueKey(widget.validationKey) : null,
         controller: widget.controller,
         validator: widget.validator,
         obscureText: widget.isPasswordField ? _isObscured : false,
