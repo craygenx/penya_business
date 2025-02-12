@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
+// import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
@@ -121,21 +121,21 @@ class ShareService {
      }
       return files;
     }
-    Future<File?> convertImagesToVideo(List<File> images) async {
-      final directory = await getTemporaryDirectory();
-      final videoPath = '${directory.path}/video.mp4';
-      List<String> inputs = [];
-      for (File image in images) {
-        inputs.add("-loop 1 -t 3 -1 ${image.path}");
-      }
-      final String command = "${inputs.join(" ")} -filter_complex\"[0:v]scale=1080:1920[v0];"
-          "[1:v]scale=1080:1920[v1];"
-          "[2:v]scale=1080:1920[v2; [v0][v1]"
-          "[v2]concat=n=${images.length} : v=1 : a=0[out]\" -map\"[out]\" "
-          "-pix_fmt yuv420p -c:v libx264 $videoPath";
-      await FFmpegKit.execute(command);
-      return File(videoPath);
-    }
+    // Future<File?> convertImagesToVideo(List<File> images) async {
+    //   final directory = await getTemporaryDirectory();
+    //   final videoPath = '${directory.path}/video.mp4';
+    //   List<String> inputs = [];
+    //   for (File image in images) {
+    //     inputs.add("-loop 1 -t 3 -1 ${image.path}");
+    //   }
+    //   final String command = "${inputs.join(" ")} -filter_complex\"[0:v]scale=1080:1920[v0];"
+    //       "[1:v]scale=1080:1920[v1];"
+    //       "[2:v]scale=1080:1920[v2; [v0][v1]"
+    //       "[v2]concat=n=${images.length} : v=1 : a=0[out]\" -map\"[out]\" "
+    //       "-pix_fmt yuv420p -c:v libx264 $videoPath";
+    //   await FFmpegKit.execute(command);
+    //   return File(videoPath);
+    // }
 
     Future<void> postToTiktok(String accessToken, String description, String imageUrl) async {
       final url = 'https://open.tiktokapis.com/v2/post/publish/content/init/';
