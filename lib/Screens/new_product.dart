@@ -47,23 +47,27 @@ class _NewProductState extends ConsumerState<NewProduct> {
     final discountEditingController = ref.watch(textEditingControllersFamily('discount'));
     final discountTypeEditingController = ref.watch(textEditingControllersFamily('discountType'));
     if (widget.productId.isNotEmpty) {
-      // final productAsync = ref.watch(productsProvider);
-      final product = [];
-      // final product = productAsync.when(
-      //   data: (products) =>
-      //       products.where((product) => product.id == productId),
-      //   error: (error, stackTrace) => [],
-      //   loading: () => [],
-      // );
+  final productAsync = ref.watch(productsProvider);
 
-      nameEditingController.text = product[0].title;
-      descriptionEditingController.text = product.toList()[0].description;
-      categoryEditingController.text = product.toList()[0].category;
-      basePriceEditingController.text = product.toList()[0].price;
-      stockEditingController.text = product.toList()[0].stock;
-      discountEditingController.text = product.toList()[0].discountPercentage;
-      discountTypeEditingController.text = 'Holiday Offer';
-    }
+  final productList = productAsync.when(
+    data: (products) => products.where((product) => product.id == widget.productId).toList(), // Convert to List<Product>
+    error: (error, stackTrace) => [],
+    loading: () => [],
+  );
+
+  if (productList.isNotEmpty) {
+    final product = productList.first; // Get the first element safely
+
+    nameEditingController.text = product.title;
+    descriptionEditingController.text = product.description;
+    categoryEditingController.text = product.category;
+    basePriceEditingController.text = product.price.toString();
+    stockEditingController.text = product.stock.toString();
+    discountEditingController.text = product.discountPercentage.toString();
+    discountTypeEditingController.text = 'Holiday Offer';
+  }
+}
+
 
     double width = MediaQuery.of(context).size.width;
     return Scaffold(

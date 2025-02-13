@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:penya_business/providers/deep_link_provider.dart';
 
-import 'Screens/Store.dart';
+import 'Screens/store.dart';
 import 'Screens/homepage.dart';
 import 'Screens/new_product.dart';
 import 'Screens/order_details.dart';

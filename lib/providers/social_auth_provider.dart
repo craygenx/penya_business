@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
@@ -12,7 +12,7 @@ final socialAuthProvider = Provider((ref)=>SocialAuthService());
 
 class SocialAuthService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  // final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> authenticatePlatform(String platformName) async {
     String authUrl;
@@ -31,7 +31,7 @@ class SocialAuthService {
     String? code = uri.queryParameters['code'] ?? "";
     if (code.isEmpty) return;
     Map<String, String> tokens = await getTokens(code, platformName);
-    String userId = _auth.currentUser!.uid;
+    // String userId = _auth.currentUser!.uid;
     await _firestore.collection('users').doc('ztsrsyrsxrzste')
         .collection('platforms').doc(platformName).set({
       "access_token": tokens["access_token"],

@@ -1,20 +1,20 @@
 import 'dart:convert';
-import 'dart:io';
+// import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
+// import 'package:path_provider/path_provider.dart';
 
 final shareProvider = Provider((ref)=>ShareService());
 class ShareService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  // final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> shareProduct(String productId, String platformName) async {
-    String userId = _auth.currentUser!.uid;
+    // String userId = _auth.currentUser!.uid;
     DocumentSnapshot platformDoc = await _firestore.collection('users').doc('ztsrsyrsxrzste').collection('platforms').doc(platformName).get();
     if (platformDoc.exists) {
       return;
@@ -94,33 +94,33 @@ class ShareService {
       }
     }
 
-    Future<File?> downloadImage(String imageUrl, String fileName) async {
-      try{
-        final response = await http.get(Uri.parse(imageUrl));
-        if(response.statusCode == 200){
-          final directory = await getTemporaryDirectory();
-          final file = File('${directory.path}/$fileName');
-          await file.writeAsBytes(response.bodyBytes);
-          return file;
-        }else {
-          print('Failed to download image: ${response.statusCode}');
-          return null;
-        }
-      } catch(e){
-        print('Error downloading image: $e');
-        return null;
-      }
-    }
-    Future<List<File>> downloadImages(List<String> imageUrls) async {
-      List<File> files = [];
-      for (String imageUrl in imageUrls) {
-        File? file = await downloadImage(imageUrl, imageUrl.split('/').last);
-        if (file != null) {
-          files.add(file);
-        }
-     }
-      return files;
-    }
+    // Future<File?> downloadImage(String imageUrl, String fileName) async {
+    //   try{
+    //     final response = await http.get(Uri.parse(imageUrl));
+    //     if(response.statusCode == 200){
+    //       final directory = await getTemporaryDirectory();
+    //       final file = File('${directory.path}/$fileName');
+    //       await file.writeAsBytes(response.bodyBytes);
+    //       return file;
+    //     }else {
+    //       print('Failed to download image: ${response.statusCode}');
+    //       return null;
+    //     }
+    //   } catch(e){
+    //     print('Error downloading image: $e');
+    //     return null;
+    //   }
+    // }
+    // Future<List<File>> downloadImages(List<String> imageUrls) async {
+    //   List<File> files = [];
+    //   for (String imageUrl in imageUrls) {
+    //     File? file = await downloadImage(imageUrl, imageUrl.split('/').last);
+    //     if (file != null) {
+    //       files.add(file);
+    //     }
+    //  }
+    //   return files;
+    // }
     // Future<File?> convertImagesToVideo(List<File> images) async {
     //   final directory = await getTemporaryDirectory();
     //   final videoPath = '${directory.path}/video.mp4';
