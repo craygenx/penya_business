@@ -97,7 +97,9 @@ class _OrdersDashState extends ConsumerState<OrdersDash> {
     FocusNode focusNode = ref.watch(searchFocusNodeProvider);
     final isFocused = ref.watch(isSearchFocusedProvider);
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: IconButton(onPressed: ()=>context.pop(), icon: Icon(Icons.arrow_back)),
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

@@ -96,7 +96,9 @@ class _StoreState extends ConsumerState<Store> {
 
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: IconButton(onPressed: ()=>context.pop(), icon: Icon(Icons.arrow_back)),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [

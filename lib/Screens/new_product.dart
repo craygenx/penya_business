@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:penya_business/models/product.dart';
 import 'package:penya_business/providers/product_image_provider.dart';
 import 'package:penya_business/providers/product_provider.dart';
@@ -71,7 +72,12 @@ class _NewProductState extends ConsumerState<NewProduct> {
 
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: ()=> context.pop(),
+         icon: Icon(FontAwesomeIcons.arrowLeft),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -106,23 +112,37 @@ class _NewProductState extends ConsumerState<NewProduct> {
                     width: MediaQuery.of(context).size.width * 0.45,
                     child: Row(
                       children: [
-                        Container(
-                          width: 35,
-                          height: 35,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
+                        Visibility(
+                          visible: widget.productId.isNotEmpty,
+                          child: GestureDetector(
+                            onTap: (){
+                              ref
+                                  .read(productNotifierProvider.notifier)
+                                  .deleteProduct(widget.productId);
+                              context.pop();
+                            },
+                              child: Container(
+                                width: 35,
+                                height: 35,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                ),
+                                child: widget.productId.isNotEmpty
+                                    ? Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Icon(FontAwesomeIcons.trashCan),
+                                )
+                                    : null,
+                              ),
+                            )
                           ),
-                          child: widget.productId.isNotEmpty
-                              ? Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Icon(FontAwesomeIcons.trashCan),
-                          )
-                              : null,
-                        ),
+                        
                         GestureDetector(
                           onTap: () {
                             final productNew = Product(
-                              id: uuid.v1(),
+                              id: widget.productId.isNotEmpty
+                                  ? widget.productId
+                                  : uuid.v4(),
                               title: nameEditingController.text,
                               views: 0,
                               addedToCart: 0,
@@ -142,10 +162,17 @@ class _NewProductState extends ConsumerState<NewProduct> {
                               int.tryParse(stockEditingController.text) ??
                                   0,
                               category: categoryEditingController.text,);
-                            ref
-                                .read(productNotifierProvider.notifier)
-                                .addProduct(productNew, ref);
-                            Navigator.pop(context);
+                            if (widget.productId.isNotEmpty) {
+                              ref
+                                  .read(productNotifierProvider.notifier)
+                                  .updateProduct(widget.productId, productNew);
+                              context.pop();
+                            } else{
+                              ref
+                                  .read(productNotifierProvider.notifier)
+                                  .addProduct(productNew, ref);
+                              context.pop();
+                            }
                           },
                           child: Container(
                             width: 130,
