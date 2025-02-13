@@ -39,7 +39,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     ref.read(deepLinkProvider).handleDeepLinks((String link) {
       final productId = extractProductId(link);
       if (productId != null) {
-        GoRouter.of(context).push('/product_details/$productId');
+        GoRouter.of(context).go('/product_details/$productId');
       }
     });
   }
