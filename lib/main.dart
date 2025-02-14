@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:penya_business/Screens/business_registration.dart';
 import 'package:penya_business/providers/deep_link_provider.dart';
 
 import 'Screens/store.dart';
@@ -51,6 +52,10 @@ class _MyAppState extends ConsumerState<MyApp> {
     GoRoute(
       path: '/',
       builder: (context, state) => Dashboard(),
+    ),
+    GoRoute(
+      path: '/business_registration',
+      builder: (context, state) => BusinessRegistration(),
     ),
     GoRoute(
       path: '/store',

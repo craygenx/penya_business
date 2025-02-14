@@ -1,81 +1,233 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:penya_business/colors.dart';
+import 'package:penya_business/providers/text_controller_notifier.dart';
+import 'package:penya_business/widgets/customComponents.dart';
 
-class BusinessRegistration extends StatefulWidget {
+class BusinessRegistration extends ConsumerStatefulWidget {
   const BusinessRegistration({super.key});
 
   @override
-  State<BusinessRegistration> createState() => _BusinessRegistrationState();
+  ConsumerState<BusinessRegistration> createState() => _BusinessRegistrationState();
 }
 
-class _BusinessRegistrationState extends State<BusinessRegistration> {
+class _BusinessRegistrationState extends ConsumerState<BusinessRegistration> {
   @override
   Widget build(BuildContext context) {
+    final ownerNameController = ref.watch(textEditingControllersFamily('businessOwnerName'));
+    final ownerEmailController = ref.watch(textEditingControllersFamily('businessOwnerEmail'));
+    final businessNameController = ref.watch(textEditingControllersFamily('businessName'));
+    final businessEmailController = ref.watch(textEditingControllersFamily('businessEmail'));
+    final businessLocationController = ref.watch(textEditingControllersFamily('businessLocation'));
+    final businessPhoneController = ref.watch(textEditingControllersFamily('businessPhone'));
+
+    ownerNameController.text = 'John Doe';
+    ownerEmailController.text = 'johnDoe@gmail.com';
+
     double width = MediaQuery.of(context).size.width;
     // double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      body: Column(
-        children: [
-          Container(
-            width: width,
-            height: 200,
-            decoration: BoxDecoration(
-              color: Colors.blue,
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
+      appBar: AppBar(),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: width *.95,
+              child: Text('owner\'s info',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-            child: Column(
-              children: [
-                SizedBox(
-                  width: width,
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.person_2_outlined,
-                      ),
-                      SizedBox(
-                        width: width * .9,
-                        child: TextField(
-                          decoration: InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                            ),
-                            disabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.black,
-                                width: 1.5,
-                                ),
-                            )
-                          ),
-                        ),
-                      ),
-                    ],
-                    ),
+            Padding(padding: EdgeInsets.only(bottom: 10)),
+            Container(
+              width: width *.95,
+              height: 120,
+              decoration: BoxDecoration(
+  // Suggested code may be subject to a license. Learn more: ~LicenseLog:111305327.
+                border: Border.all(
+                  color: Colors.black,
+                  width: 1.5,
                 ),
-                SizedBox(
-                  width: width,
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.person_2_outlined,
-                      ),
-                      SizedBox(
-                        width: width * .9,
-                        child: TextField(
-                          decoration: InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide.none,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                ),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: width *.95,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: 10),
+                          child: Icon(
+                              Icons.person_2_outlined,
                             ),
                           ),
+                        SizedBox(
+                          width: width * .8,
+                          child: TextField(
+                            controller: ownerNameController,
+                            readOnly: true,
+                            decoration: InputDecoration(
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black, width: 1.5),
+                              ),
+                              disabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black,
+                                  width: 1.5,
+                                  ),
+                              )
+                            ),
+                          ),
                         ),
+                      ],
                       ),
-                    ],
-                    ),
-                ),
-              ]
+                  ),
+                  SizedBox(
+                    width: width *.95,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: 5),
+                          child: Icon(
+                              Icons.mail_outlined,
+                            ),
+                          ),
+                        SizedBox(
+                          width: width * .8,
+                          child: TextField(
+                            controller: ownerEmailController,
+                            readOnly: true,
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide.none
+                              )
+                            ),
+                          ),
+                        ),
+                      ],
+                      ),
+                  ),
+                ]
+              ),
             ),
-          ),
-        ],
+            Padding(padding: EdgeInsets.only(bottom: 10)),
+            SizedBox(
+              width: width *.95,
+              child: Text('Bussiness info',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Padding(padding: EdgeInsets.only(bottom: 10)),
+            Container(
+              width: width,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: width *.95,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Bussiness name'),
+                        Padding(padding: EdgeInsets.only(bottom: 10)),
+                        SizedBox(
+                          width: width * .95,
+                          child: CustomTextFormField(hintText: "Enter bussiness name",
+                          backgroundColor: Colors.white, border: true, controller: businessNameController,)
+                        ),
+                        Padding(padding: EdgeInsets.only(bottom: 10)),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: width *.95,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Bussiness email'),
+                        Padding(padding: EdgeInsets.only(bottom: 10)),
+                        SizedBox(
+                          width: width *.95,
+                          child: CustomTextFormField(hintText: "bussiness@gmail.com",
+                          backgroundColor: Colors.white, border: true, controller: businessEmailController,)
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: width *.95,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Bussiness location'),
+                        Padding(padding: EdgeInsets.only(bottom: 10)),
+                        SizedBox(
+                          width: width,
+                          child: CustomTextFormField(hintText: "Eg Kahawa west, Nairobi",
+                          backgroundColor: Colors.white, border: true, controller: businessLocationController,)
+                        ),
+                        Padding(padding: EdgeInsets.only(bottom: 10)),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: width *.95,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Bussiness phone number'),
+                        Padding(padding: EdgeInsets.only(bottom: 10)),
+                        SizedBox(
+                          width: width,
+                          child: CustomTextFormField(hintText: "+254712345678",
+                          controller: businessPhoneController, backgroundColor: Colors.white, border: true,)
+                        ),
+                        Padding(padding: EdgeInsets.only(bottom: 10)),
+                      ],
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.only(bottom: 10)),
+                  SizedBox(
+                    width: 200,
+                    child: ElevatedButton(onPressed: (){},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.accentColor,
+                        foregroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: Text('Register'),
+                      ),
+                  ),
+                  Padding(padding: EdgeInsets.only(bottom: 10)),
+                ],
+              ),
+            ),
+          ],
+        ),
       )
     );
   }

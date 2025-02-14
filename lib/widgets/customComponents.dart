@@ -7,6 +7,7 @@ class CustomTextFormField extends StatefulWidget {
   final String hintText;
   final String? validationKey;
   final Color backgroundColor;
+  final bool border;
   final double width;
   final String? Function(String?)? validator;
   final TextEditingController? controller;
@@ -16,6 +17,7 @@ class CustomTextFormField extends StatefulWidget {
     super.key,
     required this.hintText,
     this.backgroundColor = Colors.grey,
+    this.border = false,
     this.width = 0.45, // Default to half the screen width
     this.validator,
     this.controller,
@@ -53,7 +55,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide.none,
+            borderSide: widget.border ? const BorderSide(color: Colors.black, width: 2) : BorderSide.none,
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),

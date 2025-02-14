@@ -105,13 +105,16 @@ class Dashboard extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  SizedBox(
-                    width: 200,
-                    child: Row(
-                      children: [
-                        Icon(Icons.calendar_month_outlined),
-                        Text('Aug 16, 2024-Sep 16, 2024'),
-                      ],
+                  GestureDetector(
+                    onTap: () => context.go('/business_registration'),
+                    child: SizedBox(
+                      width: 200,
+                      child: Row(
+                        children: [
+                          Icon(Icons.calendar_month_outlined),
+                          Text('Aug 16, 2024-Sep 16, 2024'),
+                        ],
+                      ),
                     ),
                   ),
                 ],
