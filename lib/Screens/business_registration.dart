@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:penya_business/colors.dart';
+import 'package:penya_business/models/business_model.dart';
+import 'package:penya_business/providers/business_provider.dart';
 import 'package:penya_business/providers/text_controller_notifier.dart';
 import 'package:penya_business/widgets/customComponents.dart';
+import 'package:uuid/uuid.dart';
 
 class BusinessRegistration extends ConsumerStatefulWidget {
   const BusinessRegistration({super.key});
@@ -14,6 +17,7 @@ class BusinessRegistration extends ConsumerStatefulWidget {
 class _BusinessRegistrationState extends ConsumerState<BusinessRegistration> {
   @override
   Widget build(BuildContext context) {
+    final businessNotifier = ref.read(businessProvider.notifier);
     final ownerNameController = ref.watch(textEditingControllersFamily('businessOwnerName'));
     final ownerEmailController = ref.watch(textEditingControllersFamily('businessOwnerEmail'));
     final businessNameController = ref.watch(textEditingControllersFamily('businessName'));
@@ -24,6 +28,8 @@ class _BusinessRegistrationState extends ConsumerState<BusinessRegistration> {
     ownerNameController.text = 'John Doe';
     ownerEmailController.text = 'johnDoe@gmail.com';
 
+    var uuid = Uuid();
+    
     double width = MediaQuery.of(context).size.width;
     // double height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -211,7 +217,12 @@ class _BusinessRegistrationState extends ConsumerState<BusinessRegistration> {
                   Padding(padding: EdgeInsets.only(bottom: 10)),
                   SizedBox(
                     width: 200,
-                    child: ElevatedButton(onPressed: (){},
+                    child: ElevatedButton(onPressed: (){
+                      Business business = Business(id: uuid.v4(), name: businessNameController.text, ownerId: '', isSingleEntity: true,
+                      marketplaceEnabled: true, totalIncome: 0.0,
+                      totalProfit: 0.0);
+                      businessNotifier.createBusiness(business);
+                    },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.accentColor,
                         foregroundColor: Colors.black,
