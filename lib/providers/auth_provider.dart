@@ -6,7 +6,18 @@ class AuthNotifier extends StateNotifier<AsyncValue<UserModel?>> {
   final AuthRepository _authRepository;
 
   AuthNotifier(this._authRepository) : super(const AsyncValue.loading()) {
-    _loadUser();
+    _checkAutoLogin();
+  }
+
+  /// **Check if session is still valid (Auto-login)**
+  Future<void> _checkAutoLogin() async {
+    state = const AsyncLoading();
+    try {
+      final user = await _authRepository.autoLogin(); // Implement this in AuthRepository
+      state = AsyncData(user);
+    } catch (e) {
+      state = AsyncData(null);
+    }
   }
 
   /// **Load user from Firestore if logged in**

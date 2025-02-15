@@ -41,6 +41,15 @@ class AuthRepository {
     await _auth.signOut();
   }
 
+  Future<UserModel?> autoLogin() async {
+  final user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    return getCurrentUser(); // Fetch user data from Firestore
+  }
+  return null;
+}
+
+
   /// **Check if user is logged in**
   Future<UserModel?> getCurrentUser() async {
     final user = _auth.currentUser;
