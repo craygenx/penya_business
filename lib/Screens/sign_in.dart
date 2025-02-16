@@ -1,27 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:penya_business/colors.dart';
+import 'package:penya_business/providers/auth_provider.dart';
+import 'package:penya_business/providers/text_controller_notifier.dart';
 import 'package:penya_business/widgets/customComponents.dart';
 import 'package:penya_business/widgets/main_appbar.dart';
 
-class Signin extends StatefulWidget {
+class Signin extends ConsumerStatefulWidget {
   const Signin({super.key});
 
   @override
-  State<Signin> createState() => _SigninState();
+  ConsumerState<Signin> createState() => _SigninState();
 }
 
-class _SigninState extends State<Signin> {
+class _SigninState extends ConsumerState<Signin> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _email = TextEditingController();
-  final TextEditingController _pass = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authProvider);
+    final authNotifier = ref.read(authProvider.notifier);
+    final emailEditingController = ref.watch(textEditingControllersFamily('name'));
+    final passEditingController = ref.watch(textEditingControllersFamily('description'));
+
     return Scaffold(
       appBar: MainAppbar(),
       body: SizedBox(
-        height: MediaQuery.of(context).size.height,
+        // height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        child: Form(
+        child: SingleChildScrollView(
+          child: Form(
           key: _formKey,
           child: Column(
             children: [
@@ -30,8 +37,8 @@ class _SigninState extends State<Signin> {
                 child: Column(
                   children: [
                     Placeholder(),
-                    CustomTextFormField(hintText: 'Enter your email', width: 1.0, controller: _email,),
-                    CustomTextFormField(hintText: 'Enter password', width: 1.0,controller: _pass, isPasswordField: true,),
+                    CustomTextFormField(hintText: 'Enter your email', width: 1.0, controller: emailEditingController,),
+                    CustomTextFormField(hintText: 'Enter password', width: 1.0,controller: passEditingController, isPasswordField: true,),
                     SizedBox(
                       height: 50,
                       width: MediaQuery.of(context).size.width,
@@ -61,6 +68,7 @@ class _SigninState extends State<Signin> {
             ],
           ),
         ),
+        ), 
       ),
     );
   }

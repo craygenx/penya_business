@@ -21,14 +21,14 @@ class AuthNotifier extends StateNotifier<AsyncValue<UserModel?>> {
   }
 
   /// **Load user from Firestore if logged in**
-  Future<void> _loadUser() async {
-    try {
-      final user = await _authRepository.getCurrentUser();
-      state = AsyncValue.data(user);
-    } catch (e) {
-      state = AsyncValue.error(e, StackTrace.current);
-    }
-  }
+  // Future<void> _loadUser() async {
+  //   try {
+  //     final user = await _authRepository.getCurrentUser();
+  //     state = AsyncValue.data(user);
+  //   } catch (e) {
+  //     state = AsyncValue.error(e, StackTrace.current);
+  //   }
+  // }
 
   /// **Sign in user**
   Future<void> signIn(String email, String password) async {
