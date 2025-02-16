@@ -1,24 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:penya_business/providers/auth_provider.dart';
+import 'package:penya_business/providers/text_controller_notifier.dart';
 import 'package:penya_business/widgets/customComponents.dart';
 
 import '../colors.dart';
 import '../widgets/main_appbar.dart';
 
-class Signup extends StatefulWidget {
+class Signup extends ConsumerStatefulWidget {
   const Signup({super.key});
 
   @override
-  State<Signup> createState() => _SignupState();
+  ConsumerState<Signup> createState() => _SignupState();
 }
 
-class _SignupState extends State<Signup> {
+class _SignupState extends ConsumerState<Signup> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _fName = TextEditingController();
-  final TextEditingController _lName = TextEditingController();
-  final TextEditingController _email = TextEditingController();
-  final TextEditingController _pass = TextEditingController();
+  
   @override
   Widget build(BuildContext context) {
+    final authNotifier = ref.read(authProvider.notifier);
+    final TextEditingController fName = ref.watch(textEditingControllersFamily('signupFname'));
+    final TextEditingController lName = ref.watch(textEditingControllersFamily('signupLname'));
+    final TextEditingController email = ref.watch(textEditingControllersFamily('signupEmail'));
+    final TextEditingController pass = ref.watch(textEditingControllersFamily('signupPass'));
     return Scaffold(
       appBar: MainAppbar(),
       body: SizedBox(
@@ -41,24 +47,29 @@ class _SignupState extends State<Signup> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CustomTextFormField(hintText: 'First name', controller: _fName),
-                        CustomTextFormField(hintText: 'Last Name', controller: _lName),
+                        CustomTextFormField(hintText: 'First name', controller: fName),
+                        CustomTextFormField(hintText: 'Last Name', controller: lName),
                       ],
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10.0, top: 10.0),
-                    child: CustomTextFormField(hintText: 'Enter your email', controller: _email, width: 0.95),
+                    child: CustomTextFormField(hintText: 'Enter your email', controller: email, width: 0.95, validator: emailValidator,),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10.0),
-                    child: CustomTextFormField(hintText: 'New password', controller: _pass, isPasswordField: true, width: 0.95),
+                    child: CustomTextFormField(hintText: 'New password', controller: pass, isPasswordField: true, width: 0.95, validator: strongPasswordValidator,),
                   ),
                   Center(
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.95,
                       child: ElevatedButton(
-                        onPressed: (){},
+                        onPressed: (){
+                          authNotifier.signUp(email.text.trim(), pass.text.trim(), '${fName.text} ${lName.text}');
+                            if(ref.read(authProvider).value != null){
+                              context.go('/');
+                            }
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.accentColor,
                           shape: RoundedRectangleBorder(

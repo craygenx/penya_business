@@ -20,8 +20,8 @@ class _SigninState extends ConsumerState<Signin> {
   Widget build(BuildContext context) {
     // final authState = ref.watch(authProvider);
     final authNotifier = ref.read(authProvider.notifier);
-    final emailEditingController = ref.watch(textEditingControllersFamily('name'));
-    final passEditingController = ref.watch(textEditingControllersFamily('description'));
+    final emailEditingController = ref.watch(textEditingControllersFamily('loginEmail'));
+    final passEditingController = ref.watch(textEditingControllersFamily('loginPass'));
 
     return Scaffold(
       appBar: MainAppbar(),

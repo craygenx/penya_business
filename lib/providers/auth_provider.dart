@@ -41,6 +41,16 @@ class AuthNotifier extends StateNotifier<AsyncValue<UserModel?>> {
     }
   }
 
+  Future<void> signUp(String email, String password, String displayName) async {
+    state = const AsyncValue.loading();
+    try {
+      final user = await _authRepository.signUp(email: email, password: password, displayName: displayName);
+      state = AsyncValue.data(user);
+    } catch (e) {
+      state = AsyncValue.error(e, StackTrace.current);
+    }
+  }
+
   /// **Sign out user**
   Future<void> signOut() async {
     await _authRepository.signOut();
