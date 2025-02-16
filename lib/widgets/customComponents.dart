@@ -731,3 +731,31 @@ class ProductStoreCard extends StatelessWidget {
   }
 
 }
+String? emailValidator(String? value) {
+  if (value == null || value.isEmpty) {
+    return "Enter your email";
+  }
+  // Regular expression for email validation
+  final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+  if (!emailRegex.hasMatch(value)) {
+    return "Enter a valid email address";
+  }
+  return null; // Valid email
+}
+String? strongPasswordValidator(String? value) {
+  if (value == null || value.isEmpty) {
+    return "Enter your password";
+  }
+  if (value.length < 8) {
+    return "Password must be at least 8 characters";
+  }
+  final hasUppercase = RegExp(r'[A-Z]').hasMatch(value);
+  final hasDigit = RegExp(r'[0-9]').hasMatch(value);
+  final hasSpecialChar = RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value);
+
+  if (!hasUppercase || !hasDigit || !hasSpecialChar) {
+    return "Password must include an uppercase letter, number, and special character";
+  }
+
+  return null; // Valid password
+}

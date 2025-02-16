@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:penya_business/colors.dart';
 import 'package:penya_business/providers/auth_provider.dart';
 import 'package:penya_business/providers/text_controller_notifier.dart';
@@ -17,7 +18,7 @@ class _SigninState extends ConsumerState<Signin> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authProvider);
+    // final authState = ref.watch(authProvider);
     final authNotifier = ref.read(authProvider.notifier);
     final emailEditingController = ref.watch(textEditingControllersFamily('name'));
     final passEditingController = ref.watch(textEditingControllersFamily('description'));
@@ -37,7 +38,8 @@ class _SigninState extends ConsumerState<Signin> {
                 child: Column(
                   children: [
                     Placeholder(),
-                    CustomTextFormField(hintText: 'Enter your email', width: 1.0, controller: emailEditingController,),
+                    CustomTextFormField(hintText: 'Enter your email', width: 1.0, controller: emailEditingController,
+                     validator: emailValidator),
                     CustomTextFormField(hintText: 'Enter password', width: 1.0,controller: passEditingController, isPasswordField: true,),
                     SizedBox(
                       height: 50,
@@ -51,7 +53,12 @@ class _SigninState extends ConsumerState<Signin> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
                       child: ElevatedButton(
-                          onPressed: (){},
+                          onPressed: (){
+                            authNotifier.signIn(emailEditingController.text.trim(), passEditingController.text.trim());
+                            if(ref.read(authProvider).value != null){
+                              context.go('/');
+                            }
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.accentColor,
                             shape: RoundedRectangleBorder(
