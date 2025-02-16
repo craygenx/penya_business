@@ -67,7 +67,7 @@ class _SignupState extends ConsumerState<Signup> {
                         onPressed: (){
                           authNotifier.signUp(email.text.trim(), pass.text.trim(), '${fName.text} ${lName.text}');
                             if(ref.read(authProvider).value != null){
-                              context.go('/');
+                              context.go('/store');
                             }
                         },
                         style: ElevatedButton.styleFrom(

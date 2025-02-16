@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:penya_business/colors.dart';
 
 class MainAppbar extends StatefulWidget implements PreferredSizeWidget {
@@ -25,6 +26,7 @@ class _MainAppbarState extends State<MainAppbar> {
         actions: [
           Text('Already have an account?'),
           GestureDetector(
+            onTap: ()=> context.go('/signup'),
             child: Text(
               'Sign In',
               style: TextStyle(

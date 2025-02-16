@@ -64,7 +64,7 @@ class _SigninState extends ConsumerState<Signin> {
                             print('here');
                             authNotifier.signIn(emailEditingController.text.trim(), passEditingController.text.trim());
                             if(ref.read(authProvider).value != null){
-                              context.go('/');
+                              context.go('/store');
                             }
                           },
                           style: ElevatedButton.styleFrom(
