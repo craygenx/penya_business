@@ -32,6 +32,8 @@ class _SigninState extends ConsumerState<Signin> {
           child: Form(
           key: _formKey,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.5,
@@ -41,8 +43,10 @@ class _SigninState extends ConsumerState<Signin> {
                       fallbackHeight: 50,
                       fallbackWidth: 50,
                     ),
+                    Padding(padding: EdgeInsets.all(10)),
                     CustomTextFormField(hintText: 'Enter your email', width: 1.0, controller: emailEditingController,
                      validator: emailValidator),
+                    Padding(padding: EdgeInsets.all(10)),
                     CustomTextFormField(hintText: 'Enter password', width: 1.0,controller: passEditingController, isPasswordField: true,),
                     SizedBox(
                       height: 50,
@@ -57,6 +61,7 @@ class _SigninState extends ConsumerState<Signin> {
                       width: MediaQuery.of(context).size.width,
                       child: ElevatedButton(
                           onPressed: (){
+                            print('here');
                             authNotifier.signIn(emailEditingController.text.trim(), passEditingController.text.trim());
                             if(ref.read(authProvider).value != null){
                               context.go('/');
