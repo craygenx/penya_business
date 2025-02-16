@@ -37,7 +37,10 @@ class _SigninState extends ConsumerState<Signin> {
                 height: MediaQuery.of(context).size.height * 0.5,
                 child: Column(
                   children: [
-                    Placeholder(),
+                    Placeholder(
+                      fallbackHeight: 50,
+                      fallbackWidth: 50,
+                    ),
                     CustomTextFormField(hintText: 'Enter your email', width: 1.0, controller: emailEditingController,
                      validator: emailValidator),
                     CustomTextFormField(hintText: 'Enter password', width: 1.0,controller: passEditingController, isPasswordField: true,),
