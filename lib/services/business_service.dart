@@ -54,6 +54,10 @@ class BusinessRepository {
         .collection('businesses')
         .doc(business.id)
         .set(business.toFirestore());
+    await _firestore
+        .collection('users')
+        .doc(business.ownerId)
+        .update({'business_id': business.id});
   }
 
   /// Update business details (Only for Owners)
