@@ -304,6 +304,9 @@ class ProductNotifier extends StateNotifier<List<Product>> {
       ...product.toMap(),
       'images': [], // Store image URLs
     });
+    await firestore.collection('businesses').doc(product.businessId).update({
+      'products': FieldValue.arrayUnion([product.id])
+    });
 
     //replace hapo juu
     // 'images': imageUrls,

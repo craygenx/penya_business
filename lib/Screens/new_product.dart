@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:penya_business/models/product.dart';
+import 'package:penya_business/providers/auth_provider.dart';
 import 'package:penya_business/providers/product_image_provider.dart';
 import 'package:penya_business/providers/product_provider.dart';
 import 'package:uuid/uuid.dart';
@@ -47,27 +48,30 @@ class _NewProductState extends ConsumerState<NewProduct> {
     final stockEditingController = ref.watch(textEditingControllersFamily('stock'));
     final discountEditingController = ref.watch(textEditingControllersFamily('discount'));
     final discountTypeEditingController = ref.watch(textEditingControllersFamily('discountType'));
+    final authState = ref.watch(authProvider);
     if (widget.productId.isNotEmpty) {
-  final productAsync = ref.watch(productsProvider);
+      final productAsync = ref.watch(productsProvider);
+      
+      // final String userId = authState.value?.id ?? '';
 
-  final productList = productAsync.when(
-    data: (products) => products.where((product) => product.id == widget.productId).toList(), // Convert to List<Product>
-    error: (error, stackTrace) => [],
-    loading: () => [],
-  );
+      final productList = productAsync.when(
+        data: (products) => products.where((product) => product.id == widget.productId).toList(), // Convert to List<Product>
+        error: (error, stackTrace) => [],
+        loading: () => [],
+      );
 
-  if (productList.isNotEmpty) {
-    final product = productList.first; // Get the first element safely
+      if (productList.isNotEmpty) {
+        final product = productList.first; // Get the first element safely
 
-    nameEditingController.text = product.title;
-    descriptionEditingController.text = product.description;
-    categoryEditingController.text = product.category;
-    basePriceEditingController.text = product.price.toString();
-    stockEditingController.text = product.stock.toString();
-    discountEditingController.text = product.discountPercentage.toString();
-    discountTypeEditingController.text = 'Holiday Offer';
-  }
-}
+        nameEditingController.text = product.title;
+        descriptionEditingController.text = product.description;
+        categoryEditingController.text = product.category;
+        basePriceEditingController.text = product.price.toString();
+        stockEditingController.text = product.stock.toString();
+        discountEditingController.text = product.discountPercentage.toString();
+        discountTypeEditingController.text = 'Holiday Offer';
+      }
+    }
 
 
     double width = MediaQuery.of(context).size.width;
@@ -143,6 +147,7 @@ class _NewProductState extends ConsumerState<NewProduct> {
                               id: widget.productId.isNotEmpty
                                   ? widget.productId
                                   : uuid.v4(),
+                              businessId: authState.value?.businessId ?? '',
                               title: nameEditingController.text,
                               views: 0,
                               addedToCart: 0,

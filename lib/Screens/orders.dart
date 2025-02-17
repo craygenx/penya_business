@@ -321,22 +321,28 @@ class _OrdersDashState extends ConsumerState<OrdersDash> {
               child: ListView.builder(
                 itemCount: orders.length,
                 itemBuilder: (context, index) {
-                  final order = orders[index];
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 10.0, bottom: 10),
-                    child: GestureDetector(
-                        onTap: () {
-                          context.go('/orders/${order.orderId}');
-                        },
-                        child: OrderCard(
-                          orderId: order.orderId,
-                          status: order.status,
-                          destination: 'Nakuru, KE',
-                          siteLocation: 'Nakuru, KE',
-                          amount: order.totalAmount,
-                          totalItems: order.products.length.toString(),
-                        )),
-                  );
+                  if (orders.isEmpty){
+                    return Center(child: Text('No orders found'));
+                  } else {
+                    final order = orders[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 10.0, bottom: 10),
+                      child: GestureDetector(
+                          onTap: () {
+                            context.go('/orders/${order.orderId}');
+                          },
+                          child: OrderCard(
+                            orderId: order.orderId,
+                            status: order.status,
+                            destination: 'Nakuru, KE',
+                            siteLocation: 'Nakuru, KE',
+                            amount: order.totalAmount,
+                            totalItems: order.products.length.toString(),
+                          ),
+                        ),
+                    );
+                  }
+                  
                 },
               ),
             ),

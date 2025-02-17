@@ -2,6 +2,7 @@ import 'package:penya_business/models/product.dart';
 
 class ProductPerformance {
   final String id;
+  final String businessId;
   final String title;
   final int views;
   final int addedToCart;
@@ -21,6 +22,7 @@ class ProductPerformance {
 
   ProductPerformance({
     required this.id,
+    required this.businessId,
     required this.title,
     required this.views,
     required this.addedToCart,
@@ -40,6 +42,7 @@ class ProductPerformance {
   factory ProductPerformance.fromProduct(Product product, double score) {
     return ProductPerformance(
         id: product.id,
+        businessId: product.businessId,
         title: product.title,
         views: product.views,
         addedToCart: product.addedToCart,
@@ -58,6 +61,7 @@ class ProductPerformance {
   Product toProduct() {
     return Product(
         id: id,
+        businessId: businessId,
         title: title,
         views: views,
         addedToCart: addedToCart,

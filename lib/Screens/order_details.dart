@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -12,9 +13,17 @@ class OrderDetails extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final firestore = FirebaseFirestore.instance;
+
     final order = ref.watch(ordersProvider).firstWhere((order) => order.orderId == orderId);
+    
     double width = MediaQuery.of(context).size.width;
 
+    Future<void> getProducts() async{
+      List<Product> products = await order.fetchProducts(firestore);
+      order.copyWith(products: products);
+    }
+    getProducts();
     String totalPriceCalculator( List<Product> products){
       double total = 0.0;
       for(var product in products){

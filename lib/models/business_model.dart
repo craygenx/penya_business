@@ -9,6 +9,7 @@ class Business {
   final bool marketplaceEnabled;
   final double totalIncome;
   final double totalProfit;
+  final List<String> products;
   final List<Branch>? branches; // Only fetched for owners
 
   Business({
@@ -19,6 +20,7 @@ class Business {
     required this.marketplaceEnabled,
     required this.totalIncome,
     required this.totalProfit,
+    this.products = const [],
     this.branches,
   });
 
@@ -27,6 +29,7 @@ class Business {
     return Business(
       id: doc.id,
       name: data['name'] ?? '',
+      products: data['products'] ?? [],
       ownerId: data['owner_id'] ?? '',
       isSingleEntity: data['is_single_entity'] ?? true,
       marketplaceEnabled: data['marketplace_enabled'] ?? false,
@@ -44,6 +47,7 @@ class Business {
       'marketplace_enabled': marketplaceEnabled,
       'total_income': totalIncome,
       'total_profit': totalProfit,
+      'products': products,
     };
   }
 }
