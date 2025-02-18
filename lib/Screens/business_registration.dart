@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:penya_business/colors.dart';
 import 'package:penya_business/models/business_model.dart';
+import 'package:penya_business/providers/auth_provider.dart';
 import 'package:penya_business/providers/business_provider.dart';
 import 'package:penya_business/providers/text_controller_notifier.dart';
 import 'package:penya_business/widgets/customComponents.dart';
@@ -25,8 +26,10 @@ class _BusinessRegistrationState extends ConsumerState<BusinessRegistration> {
     final businessLocationController = ref.watch(textEditingControllersFamily('businessLocation'));
     final businessPhoneController = ref.watch(textEditingControllersFamily('businessPhone'));
 
-    ownerNameController.text = 'John Doe';
-    ownerEmailController.text = 'johnDoe@gmail.com';
+    final authState = ref.watch(authProvider);
+
+    ownerNameController.text = authState.value?.displayName ?? '';
+    ownerEmailController.text = authState.value?.email ?? '';
 
     var uuid = Uuid();
     
@@ -218,8 +221,8 @@ class _BusinessRegistrationState extends ConsumerState<BusinessRegistration> {
                   SizedBox(
                     width: 200,
                     child: ElevatedButton(onPressed: (){
-                      Business business = Business(id: uuid.v4(), name: businessNameController.text, ownerId: '', isSingleEntity: true,
-                      marketplaceEnabled: true, totalIncome: 0.0,
+                      Business business = Business(id: uuid.v4(), name: businessNameController.text, ownerId: authState.value?.id ?? '', isSingleEntity: true,
+                      marketplaceEnabled: true, totalIncome: 0.0, businessEmail: businessEmailController.text, businessPhone: businessPhoneController.text,
                       totalProfit: 0.0);
                       businessNotifier.createBusiness(business);
                     },
