@@ -29,7 +29,19 @@ void main() async {
   FirebaseFirestore.instance.settings = const Settings(
     persistenceEnabled: true,
   );
-  runApp(ProviderScope(child: MyApp()));
+  runApp(
+    ProviderScope(
+      child: ToastListener(
+        child: Overlay(
+            initialEntries: [
+              OverlayEntry(
+                builder: (context)=>MyApp())
+            ],
+          ),
+        )
+      // MyApp(),
+      ),
+    );
 }
 
 class MyApp extends ConsumerStatefulWidget {
@@ -179,17 +191,17 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
 
     final authState = ref.watch(authProvider);
-    return ToastListener(
-      child: LoadingOverlay(
-        child: MaterialApp.router(
-            routerConfig: _router(authState),
-            debugShowCheckedModeBanner: false,
-          ),
-        ),
-    );
-    // return MaterialApp.router(
-    //   routerConfig: _router(authState),
-    //   debugShowCheckedModeBanner: false,
+    // return ToastListener(
+    //   child: LoadingOverlay(
+    //     child: MaterialApp.router(
+    //         routerConfig: _router(authState),
+    //         debugShowCheckedModeBanner: false,
+    //       ),
+    //     ),
     // );
+    return MaterialApp.router(
+      routerConfig: _router(authState),
+      debugShowCheckedModeBanner: false,
+    );
   }
 }
