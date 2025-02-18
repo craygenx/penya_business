@@ -48,7 +48,9 @@ class Dashboard extends ConsumerWidget {
                       children: [
                         Text('Instagram'),
                         ElevatedButton(
-                          onPressed: (){},
+                          onPressed: (){
+                            context.go('/business_registration');
+                          },
                           child: Text('Add Platform'),
                         ),
                       ],
@@ -64,7 +66,9 @@ class Dashboard extends ConsumerWidget {
                       children: [
                         Text('Facebook'),
                         ElevatedButton(
-                          onPressed: (){},
+                          onPressed: (){
+                            context.go('/');
+                          },
                           child: Text('Add Platform'),
                         ),
                       ],
