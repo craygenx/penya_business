@@ -10,7 +10,7 @@ final dashboardStatsProvider = Provider<DashboardStats>((ref) {
   final orders = ref.watch(ordersProvider);
   double totalIncome = productsAsync.when(
     data: (products) => products.fold(
-        0, (sum, product) => sum + (product.price * product.stock)),
+        0, (sum, product) => sum + (product.price * product.checkedOut)),
     error: (error, stackTrace) => 0,
     loading: () => 0,
   );
@@ -31,6 +31,7 @@ final dashboardStatsProvider = Provider<DashboardStats>((ref) {
     );
     // productsAsync.value!
     //     .fold(0.0, (sum, product) => sum + product.conversionRate);
+    if (productsAsync.value!.isEmpty) return 0.0;
     return totalConversionRate / productsAsync.value!.length;
     // if (productz.isEmpty) return 0.0;
     // double totalConversionRate =

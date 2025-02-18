@@ -226,7 +226,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:penya_business/models/product.dart';
 import 'package:penya_business/models/product_performance.dart';
+import 'package:penya_business/providers/loading_overlay_provider.dart';
 import 'package:penya_business/providers/product_image_provider.dart';
+import 'package:penya_business/providers/toast_provider.dart';
 
 enum StoreProductsStatus {
   outOfStock,
@@ -294,6 +296,7 @@ class ProductNotifier extends StateNotifier<List<Product>> {
 
   Future<void> addProduct(Product product, WidgetRef ref) async {
     final firestore = FirebaseFirestore.instance;
+    ref.read(loadingOverlayProvider.notifier).show();
     // final imageNotifier = ref.read(imageSelectionProvider.notifier);
 
     // Upload images and get URLs
@@ -313,6 +316,10 @@ class ProductNotifier extends StateNotifier<List<Product>> {
 
     // Clear selected images after upload
     ref.read(imageSelectionProvider.notifier).state = [];
+    ref.read(toastProvider.notifier).showToast(
+        message: 'Product added successfully',
+        icon: CupertinoIcons.check_mark_circled_solid);
+    ref.read(loadingOverlayProvider.notifier).hide();
   }
 
   Future<void> updateProduct(String id, Product updatedProduct) async {
@@ -320,9 +327,11 @@ class ProductNotifier extends StateNotifier<List<Product>> {
         .collection('products')
         .doc(id)
         .update(updatedProduct.toMap());
+
   }
 
   Future<void> deleteProduct(String id) async {
+    
     await _firestore.collection('products').doc(id).delete();
   }
 

@@ -10,6 +10,8 @@ import 'package:penya_business/Screens/sign_up.dart';
 import 'package:penya_business/models/user_model.dart';
 import 'package:penya_business/providers/auth_provider.dart';
 import 'package:penya_business/providers/deep_link_provider.dart';
+import 'package:penya_business/providers/loading_overlay_provider.dart';
+import 'package:penya_business/providers/toast_provider.dart';
 
 import 'Screens/store.dart';
 import 'Screens/homepage.dart';
@@ -177,9 +179,17 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
 
     final authState = ref.watch(authProvider);
-    return MaterialApp.router(
-      routerConfig: _router(authState),
-      debugShowCheckedModeBanner: false,
+    return ToastListener(
+      child: LoadingOverlay(
+        child: MaterialApp.router(
+            routerConfig: _router(authState),
+            debugShowCheckedModeBanner: false,
+          ),
+        ),
     );
+    // return MaterialApp.router(
+    //   routerConfig: _router(authState),
+    //   debugShowCheckedModeBanner: false,
+    // );
   }
 }
