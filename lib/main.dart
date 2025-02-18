@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:penya_business/Screens/business_registration.dart';
+import 'package:penya_business/Screens/flash_screen.dart';
 import 'package:penya_business/Screens/sign_in.dart';
 import 'package:penya_business/Screens/sign_up.dart';
 import 'package:penya_business/models/user_model.dart';
@@ -62,8 +63,12 @@ class _MyAppState extends ConsumerState<MyApp> {
         if(authState.value == null){
           return '/signin';
         }
-        return '/store';
+        return '/dashboard';
       }
+    ),
+    GoRoute(
+      path: '/',
+      builder: (context, state) => Splash(),
     ),
     GoRoute(
       path: '/signin',
@@ -78,7 +83,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       builder: (context, state) => BusinessRegistration(),
     ),
     GoRoute(
-      path: '/',
+      path: '/dashboard',
       builder: (context, state) => Dashboard(),
     ),
     GoRoute(
