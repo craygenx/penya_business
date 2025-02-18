@@ -32,13 +32,9 @@ void main() async {
   runApp(
     ProviderScope(
       child: ToastListener(
-        child: Overlay(
-            initialEntries: [
-              OverlayEntry(
-                builder: (context)=>MyApp())
-            ],
-          ),
-        )
+        child: LoadingOverlay(
+          child: MyApp(),
+          ))
       // MyApp(),
       ),
     );
@@ -139,52 +135,6 @@ class _MyAppState extends ConsumerState<MyApp> {
 
     );
   }
-  // final GoRouter _router = GoRouter(
-  //   routes: [
-  //   GoRoute(
-  //     path: '/',
-  //     builder: (context, state) => Dashboard(),
-  //   ),
-  //   GoRoute(
-  //     path: '/business_registration',
-  //     builder: (context, state) => BusinessRegistration(),
-  //   ),
-  //   GoRoute(
-  //     path: '/store',
-  //     builder: (context, state) => Store(),
-  //   ),
-  //   GoRoute(
-  //     path: '/orders',
-  //     builder: (context, state) => OrdersDash(),
-  //   ),
-  //   GoRoute(
-  //     path: '/orders/:id',
-  //     builder: (context, state) {
-  //       final String orderId = state.pathParameters['id']!;
-  //       return OrderDetails(orderId: orderId);
-  //     },
-  //   ),
-  //   GoRoute(
-  //     path: '/product',
-  //     builder: (context, state) => NewProduct(productId: ''),
-  //   ),
-  //   GoRoute(
-  //     path: '/product_details/:id',
-  //     builder: (context, state) {
-  //       final String productId = state.pathParameters['id']!;
-  //       return ProductDetails(productId: productId);
-  //     },
-  //   ),
-  //   GoRoute(
-  //     path: '/product/:id',
-  //     builder: (context, state) {
-  //       final String productId = state.pathParameters['id']!;
-  //       return NewProduct(
-  //         productId: productId,
-  //       );
-  //     },
-  //   ),
-  // ]);
 
   // This widget is the root of your application.
   @override
