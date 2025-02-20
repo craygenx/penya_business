@@ -364,7 +364,8 @@ class OrderCard extends StatelessWidget{
   }
 }
 class LineChartImplementation extends StatelessWidget {
-  const LineChartImplementation({super.key});
+  final List<FlSpot> spots;
+  const LineChartImplementation({super.key, required this.spots});
 
 
   @override
@@ -492,7 +493,7 @@ class LineChartImplementation extends StatelessWidget {
                     verticalInterval: 1,
                     drawHorizontalLine: false,
                     getDrawingVerticalLine: (value) => FlLine(
-                      color: Colors.grey.withOpacity(0.5),
+                      color: Colors.grey.withValues(alpha: .5),
                       strokeWidth: 0.5 ,
                     )
                 ),
@@ -543,24 +544,17 @@ class LineChartImplementation extends StatelessWidget {
                 ),
                 lineBarsData: [
                   LineChartBarData(
-                      spots: const [
-                        FlSpot(0, 1800),
-                        FlSpot(1, 2500),
-                        FlSpot(3, 2200),
-                        FlSpot(4, 3000),
-                        FlSpot(5, 2700),
-                        FlSpot(6, 3200),
-                      ],
+                      spots: spots,
                       isCurved: false,
                       color: Colors.blue,
                       dotData: FlDotData(show: false),
                       belowBarData: BarAreaData(
                         show: true,
-                        color: Colors.blue.withOpacity(0.4),
+                        color: Colors.blue.withValues(alpha: .4),
                         gradient: LinearGradient(
                             colors: [
-                              Colors.blue.withOpacity(0.4),
-                              Colors.blue.withOpacity(0.0),
+                              Colors.blue.withValues(alpha: .4),
+                              Colors.blue.withValues(alpha: .0),
                             ],
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter
