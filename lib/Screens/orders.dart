@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:penya_business/main.dart';
+import 'package:penya_business/models/orders_model.dart';
 import 'package:penya_business/providers/order_provider.dart';
+import 'package:uuid/uuid.dart';
 
 import '../providers/orders_dash_provider.dart';
 import '../providers/text_controller_notifier.dart';
@@ -20,8 +22,10 @@ class _OrdersDashState extends ConsumerState<OrdersDash> {
 
   @override
   Widget build(BuildContext context) {
+    var uuid = Uuid();
     double width = MediaQuery.of(context).size.width;
-    final orders = ref.watch(ordersProvider.notifier).getFilteredOrders();
+    final orderProvider = ref.watch(ordersProvider.notifier);
+    final orders = orderProvider.getFilteredOrders();
     final stats = ref.watch(ordersStatsProvider);
     final overlayEntry = ref.watch(overlayProvider);
     final textEditingController =
@@ -119,12 +123,18 @@ class _OrdersDashState extends ConsumerState<OrdersDash> {
                             FontAwesomeIcons.basketShopping,
                           ),
                         ),
-                        Text(
-                          'Orders',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
+                        GestureDetector(
+                          onTap: () {
+                            OrdersModel order = OrdersModel(orderId: uuid.v4(), customerId: uuid.v6(), products: [], totalAmount: '', createdAt: DateTime.now(), status: 'pending');
+                            orderProvider.addOrder(order);
+                            },
+                            child: Text(
+                            'Orders',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),

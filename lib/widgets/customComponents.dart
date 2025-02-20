@@ -365,7 +365,9 @@ class OrderCard extends StatelessWidget{
 }
 class LineChartImplementation extends StatelessWidget {
   final List<FlSpot> spots;
-  const LineChartImplementation({super.key, required this.spots});
+  final String collectionUnit;
+  final String amount;
+  const LineChartImplementation({super.key, required this.spots, required this.collectionUnit, required this.amount});
 
 
   @override
@@ -398,7 +400,7 @@ class LineChartImplementation extends StatelessWidget {
                                   FontAwesomeIcons.chartBar
                               ),
                             ),
-                            Text('Revenue Breakdown'),
+                            Text('$collectionUnit Breakdown'),
                           ],
                         ),
                       ),
@@ -439,7 +441,7 @@ class LineChartImplementation extends StatelessWidget {
                               ),
                               children: [
                                 TextSpan(
-                                  text: '4,650,300',
+                                  text: amount,
                                   style: TextStyle(
                                     fontSize: 18,
                                     color: Colors.black,
@@ -485,7 +487,7 @@ class LineChartImplementation extends StatelessWidget {
           SizedBox(
             height: 230,
             width: MediaQuery.of(context).size.width * .95,
-            child: LineChart(
+            child: spots.isEmpty ? Center(child: Text('No data available')) : LineChart(
               LineChartData(
                 gridData: FlGridData(
                     show: true,

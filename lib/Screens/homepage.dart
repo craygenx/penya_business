@@ -187,7 +187,7 @@ class Dashboard extends ConsumerWidget {
                 ),
               ),
             ),
-            LineChartImplementation(spots: stats.incomeChartData,),
+            LineChartImplementation(spots: stats.incomeChartData, collectionUnit: 'Revenue', amount: stats.totalIncome.toStringAsFixed(2),),
             SizedBox(
               width: MediaQuery.of(context).size.width,
               child: Column(
@@ -341,7 +341,7 @@ class Dashboard extends ConsumerWidget {
                 ],
               ),
             ),
-            LineChartImplementation(spots: [],),
+            LineChartImplementation(spots: [], collectionUnit: '', amount: '',),
             Padding(
               padding: const EdgeInsets.only(bottom: 20.0),
               child: SizedBox(
