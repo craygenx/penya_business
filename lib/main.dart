@@ -61,12 +61,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   late FirebaseMessaging messaging;
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
   FlutterLocalNotificationsPlugin();
-  @override
-  void initState(){
-    super.initState();
-    messaging = FirebaseMessaging.instance;
-    messaging.requestPermission(alert: true, badge: true, sound: true);
-    Future<void> showNotification(RemoteMessage message) async {
+  Future<void> showNotification(RemoteMessage message) async {
       const AndroidNotificationDetails androidPlatformChannelSpecifics =
       AndroidNotificationDetails(
         'a1b2c3d4-e5f6-7890-1234-567890abcdef',
@@ -74,6 +69,21 @@ class _MyAppState extends ConsumerState<MyApp> {
         importance: Importance.max,
         priority: Priority.high,
       );
+      final NotificationDetails platformChannelSpecifics =
+      NotificationDetails(android: androidPlatformChannelSpecifics);
+      await flutterLocalNotificationsPlugin.show(
+        0,
+        message.notification!.title,
+        message.notification!.body,
+        platformChannelSpecifics,
+        );
+    }
+  @override
+  void initState(){
+    super.initState();
+    messaging = FirebaseMessaging.instance;
+    messaging.requestPermission(alert: true, badge: true, sound: true);
+    
     FirebaseMessaging.onMessage.listen((RemoteMessage message){
       ref.read(notificationProvider.notifier).addNotification(message);
     });
@@ -90,15 +100,7 @@ class _MyAppState extends ConsumerState<MyApp> {
 
     
       
-      final NotificationDetails platformChannelSpecifics =
-      NotificationDetails(android: androidPlatformChannelSpecifics);
-      await flutterLocalNotificationsPlugin.show(
-        0,
-        message.notification!.title,
-        message.notification!.body,
-        platformChannelSpecifics,
-        );
-    }
+      
 
     ref.read(deepLinkProvider).handleDeepLinks((String link) {
       final productId = extractProductId(link);

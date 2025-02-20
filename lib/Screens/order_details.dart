@@ -2,9 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:penya_business/models/orders_model.dart';
 import 'package:penya_business/providers/order_provider.dart';
-
-import '../models/product.dart';
 
 class OrderDetails extends ConsumerWidget {
   final String orderId;
@@ -18,16 +17,22 @@ class OrderDetails extends ConsumerWidget {
     final order = ref.watch(ordersProvider).firstWhere((order) => order.orderId == orderId);
     
     double width = MediaQuery.of(context).size.width;
+    List<ProductWithQuantity> productsWithQuantity = [];
 
-    Future<void> getProducts() async{
-      List<Product> products = await order.fetchProducts(firestore);
-      order.copyWith(products: products);
+    Future<void> getProductsWithQuantity() async{
+      // List<Product> products = await order.fetchProducts(firestore);
+      // order.copyWith(products: products);
+      productsWithQuantity = await order.fetchProducts(firestore);
+      
+      // for(var product in productWithQuantity){
+      //   products.add(product.product);
+      // }
     }
-    getProducts();
-    String totalPriceCalculator( List<Product> products){
+    getProductsWithQuantity();
+    String totalPriceCalculator( List<ProductWithQuantity> productsWithQuantity){
       double total = 0.0;
-      for(var product in products){
-        total += product.price * 2;
+      for(var productWithQuantity in productsWithQuantity){
+        total += productWithQuantity.product.retailPrice * productWithQuantity.quantity;
       }
       return total.toString();
     }
@@ -208,9 +213,9 @@ class OrderDetails extends ConsumerWidget {
                   maxHeight: MediaQuery.of(context).size.height * .4
               ),
               child: ListView.builder(
-                itemCount: order.products.length,
+                itemCount: productsWithQuantity.length,
                 itemBuilder: (context, index) {
-                  final product = order.products[index];
+                  final product = productsWithQuantity[index].product;
                   return Padding(
                     padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 10.0),
                     child: SizedBox(
@@ -232,13 +237,13 @@ class OrderDetails extends ConsumerWidget {
                                   Text(product.title),
                                   Text.rich(
                                     TextSpan(
-                                        text: 'Kes ${product.price}',
+                                        text: 'Kes ${product.retailPrice}',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                         ),
                                         children: [
                                           TextSpan(
-                                            text: ' x2',
+                                            text: ' ${productsWithQuantity[index].quantity}',
                                             style: TextStyle(
                                               color: Colors.black12,
                                             ),
@@ -305,9 +310,9 @@ class OrderDetails extends ConsumerWidget {
                       maxHeight: 200,
                     ),
                     child: ListView.builder(
-                      itemCount: order.products.length,
+                      itemCount: productsWithQuantity.length,
                         itemBuilder: (context, index) {
-                          final product = order.products[index];
+                          final product = productsWithQuantity[index].product;
                           return SizedBox(
                             width: width * .95,
                             child: Row(
@@ -318,7 +323,7 @@ class OrderDetails extends ConsumerWidget {
                                       fontStyle: FontStyle.italic
                                   ),
                                 ),
-                                Text('Kes ${product.price}',
+                                Text('Kes ${product.retailPrice}',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold
                                   ),
@@ -342,7 +347,7 @@ class OrderDetails extends ConsumerWidget {
                                 fontWeight: FontWeight.bold
                             ),
                           ),
-                          Text('kes ${totalPriceCalculator(order.products)}',
+                          Text('kes ${totalPriceCalculator(productsWithQuantity)}',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold
                             ),

@@ -397,7 +397,7 @@ class _StoreState extends ConsumerState<Store> {
                               child: ProductStoreCard(
                                 title: product.title,
                                 description: product.description,
-                                price: product.price,
+                                price: product.basePrice,
                                 stock: product.stock,
                               )),
                         );

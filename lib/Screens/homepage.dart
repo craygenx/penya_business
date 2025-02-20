@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:penya_business/providers/dashboard_provider.dart';
+import 'package:penya_business/providers/orders_dash_provider.dart';
 
 import '../widgets/customComponents.dart';
 
@@ -11,7 +12,26 @@ class Dashboard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final stats = ref.watch(dashboardStatsProvider);
+    final statsProvider = ref.watch(dashboardStatsProvider);
+    final statsOrders = ref.watch(ordersStatsProvider);
+
+    final stats = statsProvider.when(
+      data: (data) => data,
+      error: (error, stackTrace) => DashboardStats(
+        totalIncome: 0.0,
+        totalProfit: 0.0,
+        incomeChartData: [],
+        profitChartData: [],
+      ),
+      loading: () => DashboardStats(
+        totalIncome: 0.0,
+        totalProfit: 0.0,
+        incomeChartData: [],
+        profitChartData: [],
+      ),
+    );
+
+
     void showCustomDialog(BuildContext context) {
       showDialog(
         context: context,
@@ -145,7 +165,7 @@ class Dashboard extends ConsumerWidget {
                       child: IncomeCards(
                           text1: 'Profit',
                           text2: 'Compared to last month.',
-                          text3: '765,573'),
+                          text3: stats.totalProfit.toStringAsFixed(2)),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
@@ -153,7 +173,7 @@ class Dashboard extends ConsumerWidget {
                       child: IncomeCards(
                           text1: 'Pending Orders',
                           text2: 'Compared to last month.',
-                          text3: '${stats.pendingOrders}'),
+                          text3: '${statsOrders.pendingOrders}'),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
@@ -161,7 +181,7 @@ class Dashboard extends ConsumerWidget {
                       child: IncomeCards(
                           text1: 'Conversion Rate',
                           text2: 'Compared to last month.',
-                          text3: '${stats.conversionRate.toStringAsFixed(2)}%'),
+                          text3: '0.0%'),
                     ),
                   ],
                 ),

@@ -23,7 +23,7 @@ final storeStatsProvider = Provider<StoreStats>((ref) {
                 thumbnail: product.thumbnail,
                 images: product.images,
                 title: product.title,
-                price: product.price,
+                price: product.basePrice,
                 stock: product.stock,
                 category: product.category,
                 id: product.id);

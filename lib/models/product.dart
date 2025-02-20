@@ -7,7 +7,8 @@ class Product {
   final int views;
   final int addedToCart;
   final int checkedOut;
-  final double price;
+  final double basePrice;
+  final double retailPrice;
   final String description;
   final double discountPercentage;
   final double rating;
@@ -26,7 +27,8 @@ class Product {
     required this.views,
     required this.addedToCart,
     required this.checkedOut,
-    required this.price,
+    required this.basePrice,
+    required this.retailPrice,
     required this.description,
     required this.discountPercentage,
     required this.rating,
@@ -46,7 +48,7 @@ class Product {
       'views': views,
       'addedToCart': addedToCart,
       'checkedOut': checkedOut,
-      'price': price,
+      'price': basePrice,
       'description': description,
       'discountPercentage': discountPercentage,
       'rating': rating,
@@ -69,7 +71,8 @@ class Product {
       views: data['views'] ?? 0,
       addedToCart: data['addedToCart'] ?? 0,
       checkedOut: data['checkedOut'] ?? 0,
-      price: data['price']?.toDouble() ?? 0.0,
+      basePrice: data['basePrice']?.toDouble() ?? 0.0,
+      retailPrice: data['retailPrice']?.toDouble() ?? 0.0,
       description: data['description'] ?? '',
       discountPercentage: data['discountPercentage']?.toDouble() ?? 0.0,
       rating: data['rating']?.toDouble() ?? 0.0,
@@ -89,7 +92,8 @@ class Product {
     int? views,
     int? addedToCart,
     int? checkedOut,
-    double? price,
+    double? basePrice,
+    double? retailPrice,
     String? description,
     double? discountPercentage,
     double? rating,
@@ -106,7 +110,8 @@ class Product {
       views: views ?? this.views,
       addedToCart: addedToCart ?? this.addedToCart,
       checkedOut: checkedOut ?? this.checkedOut,
-      price: price ?? this.price,
+      basePrice: basePrice ?? this.basePrice,
+      retailPrice: retailPrice ?? this.retailPrice,
       description: description ?? this.description,
       discountPercentage: discountPercentage ?? this.discountPercentage,
       rating: rating ?? this.rating,

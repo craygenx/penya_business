@@ -152,9 +152,10 @@ class _NewProductState extends ConsumerState<NewProduct> {
                               views: 0,
                               addedToCart: 0,
                               checkedOut: 0,
-                              price: double.tryParse(
+                              basePrice: double.tryParse(
                                   basePriceEditingController.text) ??
                                   0.0,
+                              retailPrice: 0.0,
                               description: descriptionEditingController.text,
                               discountPercentage: double.tryParse(
                                   discountEditingController.text) ??
