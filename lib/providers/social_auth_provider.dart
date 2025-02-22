@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
@@ -107,8 +105,8 @@ class SocialAuthService {
       body = {
         'grant_type': 'authorization_code',
         'code': code,
-        'client_id': dotenv.env['TIK_TOK_API_KEY'] ?? '',
-        'client_secret': dotenv.env['TIK_TOK_SECRET_KEY'] ?? '',
+        'client_id':'',
+        'client_secret': '',
       };
     } else if (platformName == 'Instagram') {
       tokenUrl = 'https://api.instagram.com/oauth/access_token';
