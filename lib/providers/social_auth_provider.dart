@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -55,14 +56,14 @@ class SocialAuthService {
       return null;
     }
   }
-  Future<String?> authenticateWithTiktok() async {
-    final clientId = 'CLIENT_ID';
-    final redirectUri = 'https://example.com/callback';
+  Future<String?> authenticateWithTiktok(String uid) async {
+    final clientId = dotenv.env['TIK_TOK_API_KEY'] ?? '';
+    final redirectUri = 'intent://penya.com/callback#Intent;scheme=penya;package=com.example.penya;end;';
     final scopes = 'video_upload';
     final authUrl = 'https://www.tiktok.com/auth/authorize/?client_key=$clientId&scope=$scopes&response_type=code&redirect_uri=$redirectUri';
     final result = await FlutterWebAuth2.authenticate(
       url: authUrl,
-      callbackUrlScheme: 'http',
+      callbackUrlScheme: 'penya',
     );
     final code = Uri.parse(result).queryParameters['code'];
     if (code != null) {
@@ -70,13 +71,19 @@ class SocialAuthService {
       final response = await http.post(
         Uri.parse(tokenUrl),
         body: {
-          'client_key': '',
-          'client_secret': '',
+          'client_key': dotenv.env['TIK_TOK_API_KEY'] ?? '',
+          'client_secret': dotenv.env['TIK_TOK_SECRET_KEY'] ?? '',
           'grant_type': 'authorization_code',
           'code': code,
-          'redirect_uri': 'https://example.com/callback'
+          'redirect_uri': redirectUri
         });
       final data = jsonDecode(response.body);
+      await _firestore.collection('users').doc(uid)
+        .collection('platforms').doc('Tiktok').set({
+        "access_token": data["access_token"],
+        "refresh_token": data["refresh_token"],
+        "expires_at": DateTime.now().add(Duration(hours: 1)).toIso8601String(),
+      });
       return data['data']['access_token'];
     }
     return null;
@@ -90,8 +97,8 @@ class SocialAuthService {
       body = {
         'grant_type': 'authorization_code',
         'code': code,
-        'client_id': 'CLIENT_ID',
-        'client_secret': 'CLIENT_SECRET',
+        'client_id': dotenv.env['TIK_TOK_API_KEY'] ?? '',
+        'client_secret': dotenv.env['TIK_TOK_SECRET_KEY'] ?? '',
       };
     } else if (platformName == 'Instagram') {
       tokenUrl = 'https://api.instagram.com/oauth/access_token';

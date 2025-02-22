@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:penya_business/providers/auth_provider.dart';
 import 'package:penya_business/providers/dashboard_provider.dart';
 import 'package:penya_business/providers/orders_dash_provider.dart';
+import 'package:penya_business/providers/social_auth_provider.dart';
 
 import '../widgets/customComponents.dart';
 
@@ -14,6 +16,9 @@ class Dashboard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final statsProvider = ref.watch(dashboardStatsProvider);
     final statsOrders = ref.watch(ordersStatsProvider);
+    final socialAuthService = ref.read(socialAuthProvider);
+    final authState = ref.watch(authProvider);
+    String uid = authState.value?.id ?? '';
 
     final stats = statsProvider.when(
       data: (data) => data,
@@ -52,7 +57,9 @@ class Dashboard extends ConsumerWidget {
                       children: [
                         Text('Tick Tock'),
                         ElevatedButton(
-                            onPressed: (){},
+                            onPressed: (){
+                              socialAuthService.authenticateWithTiktok(uid);
+                            },
                             child: Text('Add Platform'),
                         ),
                       ],

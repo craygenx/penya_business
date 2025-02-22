@@ -28,6 +28,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data android:scheme="penya" android:host="penya.com" android:pathPrefix="/product_details"/>
+                <data android:scheme="penya" android:host="penya.com" android:pathPrefix="/callback"/>
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.
