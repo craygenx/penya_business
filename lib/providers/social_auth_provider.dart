@@ -15,6 +15,15 @@ class SocialAuthService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   // final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  Future<Map<String, dynamic>> getApiKeys() async{
+    try{
+      DocumentSnapshot snapshot = await _firestore.collection('API_KEYS').doc('tik-tok').get();
+      return snapshot.data() as Map<String, dynamic>;
+    }catch(e){
+      return {};
+    }
+  }
+
   Future<void> authenticatePlatform(String platformName) async {
     String authUrl;
 
@@ -57,7 +66,8 @@ class SocialAuthService {
     }
   }
   Future<String?> authenticateWithTiktok(String uid) async {
-    final clientId = dotenv.env['TIK_TOK_API_KEY'] ?? '';
+    final credentials = await getApiKeys();
+    final clientId = credentials['Client_id'] ?? '';
     final redirectUri = 'intent://penya.com/callback#Intent;scheme=penya;package=com.example.penya;end;';
     final scopes = 'video_upload';
     final authUrl = 'https://www.tiktok.com/auth/authorize/?client_key=$clientId&scope=$scopes&response_type=code&redirect_uri=$redirectUri';
@@ -71,8 +81,8 @@ class SocialAuthService {
       final response = await http.post(
         Uri.parse(tokenUrl),
         body: {
-          'client_key': dotenv.env['TIK_TOK_API_KEY'] ?? '',
-          'client_secret': dotenv.env['TIK_TOK_SECRET_KEY'] ?? '',
+          'client_key': credentials['Client_id'] ?? '',
+          'client_secret': credentials['Client_secret'] ?? '',
           'grant_type': 'authorization_code',
           'code': code,
           'redirect_uri': redirectUri
