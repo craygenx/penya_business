@@ -87,7 +87,7 @@ final ordersStatsProvider = Provider<OrdersStats>((ref) {
     pendingVsDelivered: calculateRatio(currentStats['pending']!, currentStats['delivered']!),
     pendingVsCanceled: calculateRatio(currentStats['pending']!, currentStats['canceled']!),
 
-    pendingPercentageChange: calculatePercentageChange(currentStats['pending']! as double, previousStats['pending']! as double),
+    pendingPercentageChange: calculatePercentageChange(currentStats['pending']!.toDouble() , previousStats['pending']!.toDouble()),
     pendingVsTotalChange: calculatePercentageChange(
         calculateRatio(currentStats['pending']!, currentStats['total']!),
         calculateRatio(previousStats['pending']!, previousStats['total']!)

@@ -14,6 +14,7 @@ class Dashboard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    String today = formatDate(DateTime.now());
     final statsProvider = ref.watch(dashboardStatsProvider);
     final statsOrders = ref.watch(ordersStatsProvider);
     final socialAuthService = ref.read(socialAuthProvider);
@@ -142,7 +143,7 @@ class Dashboard extends ConsumerWidget {
                                 fontSize: 18.0, fontWeight: FontWeight.bold),
                           ),
                         ),
-                        Text('Nov 3, 2025')
+                        Text(today)
                       ],
                     ),
                   ),
