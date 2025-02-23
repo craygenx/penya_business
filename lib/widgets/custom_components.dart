@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 class CustomTextFormField extends StatefulWidget {
   final String hintText;
@@ -82,6 +83,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
 
 class IncomeCards extends StatelessWidget {
   final String text1;
+  final double currentValue;
+  final double previousValue;
   final String text2;
   final String text3;
   final double width;
@@ -90,6 +93,8 @@ class IncomeCards extends StatelessWidget {
   const IncomeCards({
     super.key,
     required this.text1,
+    required this.currentValue,
+    required this.previousValue,
     required this.text2,
     required this.text3,
     this.width = 0.6,
@@ -116,7 +121,12 @@ class IncomeCards extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.arrow_downward_outlined),
+                Icon(currentValue > previousValue ?
+                  Icons.arrow_upward_outlined : Icons.
+                    arrow_downward_outlined,
+                    color:currentValue > previousValue ? Colors.green : Colors.red,
+                  ),
+                // RichText(),
                 Text(text2),
               ],
             ),
@@ -367,7 +377,17 @@ class LineChartImplementation extends StatelessWidget {
   final List<FlSpot> spots;
   final String collectionUnit;
   final String amount;
-  const LineChartImplementation({super.key, required this.spots, required this.collectionUnit, required this.amount});
+  final String percentageDiff;
+  final double previousAmount;
+  final double currentAmount;
+  const LineChartImplementation({
+    super.key,
+    required this.spots,
+    required this.percentageDiff,
+    required this.currentAmount,
+    required this.previousAmount,
+    required this.collectionUnit,
+    required this.amount});
 
 
   @override
@@ -454,21 +474,21 @@ class LineChartImplementation extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(left: 20.0),
                           child: Icon(
-                            color: Colors.red,
+                            color:currentAmount > previousAmount ? Colors.green : Colors.red,
                             size: 12.0,
-                            FontAwesomeIcons.arrowDown,
+                            currentAmount > previousAmount ? FontAwesomeIcons.arrowUp : FontAwesomeIcons.arrowDown,
                           ),
                         ),
                         Text.rich(
                             TextSpan(
-                              text: '39%',
+                              text: percentageDiff,
                               style: TextStyle(
                                 fontSize: 12.0,
                                 color: Colors.red,
                               ),
                               children: [
                                 TextSpan(
-                                    text: ' decrease vs last month',
+                                    text:currentAmount > previousAmount ? 'increase vs last month': ' decrease vs last month',
                                     style: TextStyle(
                                       fontSize: 12.0,
                                       color: Colors.black12,
@@ -754,4 +774,8 @@ String? strongPasswordValidator(String? value) {
   }
 
   return null; // Valid password
+}
+
+String formatDate(DateTime date){
+  return DateFormat('MMM d,yyyy').format(date);
 }

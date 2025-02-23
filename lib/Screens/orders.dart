@@ -9,7 +9,7 @@ import 'package:uuid/uuid.dart';
 
 import '../providers/orders_dash_provider.dart';
 import '../providers/text_controller_notifier.dart';
-import '../widgets/customComponents.dart';
+import '../widgets/custom_components.dart';
 
 class OrdersDash extends ConsumerStatefulWidget {
   const OrdersDash({super.key});
@@ -23,6 +23,7 @@ class _OrdersDashState extends ConsumerState<OrdersDash> {
   @override
   Widget build(BuildContext context) {
     var uuid = Uuid();
+    String today = formatDate(DateTime.now());
     double width = MediaQuery.of(context).size.width;
     final orderProvider = ref.watch(ordersProvider.notifier);
     final orders = orderProvider.getFilteredOrders();
@@ -115,26 +116,35 @@ class _OrdersDashState extends ConsumerState<OrdersDash> {
                 children: [
                   SizedBox(
                     width: width * .45,
-                    child: Row(
+                    child: Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 10.0),
-                          child: Icon(
-                            FontAwesomeIcons.basketShopping,
+                        SizedBox(
+                          width: width * .45,
+                          child: Row(
+                            children: [
+                              // SizedBox()
+                              Padding(
+                                padding: const EdgeInsets.only(right: 10.0),
+                                child: Icon(
+                                  FontAwesomeIcons.basketShopping,
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  OrdersModel order = OrdersModel(orderId: uuid.v4(), customerId: uuid.v6(), products: [], totalAmount: '', createdAt: DateTime.now(), status: 'pending');
+                                  orderProvider.addOrder(order);
+                                  },
+                                  child: Text(
+                                  'Orders',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            OrdersModel order = OrdersModel(orderId: uuid.v4(), customerId: uuid.v6(), products: [], totalAmount: '', createdAt: DateTime.now(), status: 'pending');
-                            orderProvider.addOrder(order);
-                            },
-                            child: Text(
-                            'Orders',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
+                        Text(today)
                       ],
                     ),
                   ),
@@ -158,25 +168,25 @@ class _OrdersDashState extends ConsumerState<OrdersDash> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
-              child: SizedBox(
-                width: width * .95,
-                child: SizedBox(
-                  width: width * .45,
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            right: 10.0, top: 10.0, bottom: 15.0),
-                        child: Icon(FontAwesomeIcons.calendar),
-                      ),
-                      Text('Jan 1 - Jan 30, 2024')
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(bottom: 10.0),
+            //   child: SizedBox(
+            //     width: width * .95,
+            //     child: SizedBox(
+            //       width: width * .45,
+            //       child: Row(
+            //         children: [
+            //           Padding(
+            //             padding: const EdgeInsets.only(
+            //                 right: 10.0, top: 10.0, bottom: 15.0),
+            //             child: Icon(FontAwesomeIcons.calendar),
+            //           ),
+            //           Text('Jan 1 - Jan 30, 2024')
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Padding(
               padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
               child: SizedBox(
@@ -191,7 +201,7 @@ class _OrdersDashState extends ConsumerState<OrdersDash> {
                         child: SocialAnalyticsCard(
                           text1: 'Total Orders',
                           text2: '${stats.totalOrders}',
-                          text3: '30.5K',
+                          text3: '${stats.previousMonthTotal}',
                         ),
                       ),
                       Padding(
@@ -199,7 +209,7 @@ class _OrdersDashState extends ConsumerState<OrdersDash> {
                         child: SocialAnalyticsCard(
                           text1: 'Pending Orders',
                           text2: '${stats.pendingOrders}',
-                          text3: '3K',
+                          text3: '${stats.previousMonthPending}',
                         ),
                       ),
                       Padding(
@@ -207,7 +217,7 @@ class _OrdersDashState extends ConsumerState<OrdersDash> {
                         child: SocialAnalyticsCard(
                           text1: 'Cancelled Orders',
                           text2: '${stats.canceledOrders}',
-                          text3: '3K',
+                          text3: '${stats.previousMonthCanceled}',
                         ),
                       ),
                       Padding(
@@ -215,7 +225,7 @@ class _OrdersDashState extends ConsumerState<OrdersDash> {
                         child: SocialAnalyticsCard(
                           text1: 'Delivered Orders',
                           text2: '${stats.deliveredOrders}',
-                          text3: '400.4K',
+                          text3: '${stats.previousMonthDelivered}',
                         ),
                       )
                     ],

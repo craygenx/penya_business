@@ -10,7 +10,7 @@ import 'package:uuid/uuid.dart';
 
 // import '../providers/product_provider.dart';
 import '../providers/text_controller_notifier.dart';
-import '../widgets/customComponents.dart';
+import '../widgets/custom_components.dart';
 
 class NewProduct extends ConsumerStatefulWidget {
   final String productId;

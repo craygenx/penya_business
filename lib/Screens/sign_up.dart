@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:penya_business/providers/auth_provider.dart';
 import 'package:penya_business/providers/text_controller_notifier.dart';
-import 'package:penya_business/widgets/customComponents.dart';
+import 'package:penya_business/widgets/custom_components.dart';
 
 import '../colors.dart';
 import '../widgets/main_appbar.dart';

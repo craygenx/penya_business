@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:penya_business/colors.dart';
 import 'package:penya_business/providers/auth_provider.dart';
 import 'package:penya_business/providers/text_controller_notifier.dart';
-import 'package:penya_business/widgets/customComponents.dart';
+import 'package:penya_business/widgets/custom_components.dart';
 import 'package:penya_business/widgets/main_appbar.dart';
 
 class Signin extends ConsumerStatefulWidget {

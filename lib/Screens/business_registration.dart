@@ -5,7 +5,7 @@ import 'package:penya_business/models/business_model.dart';
 import 'package:penya_business/providers/auth_provider.dart';
 import 'package:penya_business/providers/business_provider.dart';
 import 'package:penya_business/providers/text_controller_notifier.dart';
-import 'package:penya_business/widgets/customComponents.dart';
+import 'package:penya_business/widgets/custom_components.dart';
 import 'package:uuid/uuid.dart';
 
 class BusinessRegistration extends ConsumerStatefulWidget {

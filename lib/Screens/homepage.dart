@@ -7,7 +7,7 @@ import 'package:penya_business/providers/dashboard_provider.dart';
 import 'package:penya_business/providers/orders_dash_provider.dart';
 import 'package:penya_business/providers/social_auth_provider.dart';
 
-import '../widgets/customComponents.dart';
+import '../widgets/custom_components.dart';
 
 class Dashboard extends ConsumerWidget {
   const Dashboard({super.key});
@@ -27,12 +27,22 @@ class Dashboard extends ConsumerWidget {
         totalProfit: 0.0,
         incomeChartData: [],
         profitChartData: [],
+        previousIncome: 0.0,
+        previousProfit: 0.0,
+        incomeChangePercentage: 0.0,
+        profitChangePercentage: 0.0,
+        timeFrameLabel: 'Today',
       ),
       loading: () => DashboardStats(
         totalIncome: 0.0,
         totalProfit: 0.0,
         incomeChartData: [],
         profitChartData: [],
+        previousIncome: 0.0,
+        previousProfit: 0.0,
+        incomeChangePercentage: 0.0,
+        profitChangePercentage: 0.0,
+        timeFrameLabel: 'Today',
       ),
     );
 
@@ -141,9 +151,10 @@ class Dashboard extends ConsumerWidget {
                     child: SizedBox(
                       width: 200,
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Icon(Icons.calendar_month_outlined),
-                          Text('Aug 16, 2024-Sep 16, 2024'),
+                          Text(stats.timeFrameLabel),
                         ],
                       ),
                     ),
@@ -164,7 +175,10 @@ class Dashboard extends ConsumerWidget {
                       child: IncomeCards(
                           text1: 'Total Income',
                           text2: 'Compared to last month.',
-                          text3: stats.totalIncome.toStringAsFixed(2)),
+                          text3: stats.totalIncome.toStringAsFixed(2),
+                          currentValue: 0.0,
+                          previousValue: 0.0,
+                          ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
@@ -172,6 +186,8 @@ class Dashboard extends ConsumerWidget {
                       child: IncomeCards(
                           text1: 'Profit',
                           text2: 'Compared to last month.',
+                          currentValue: 0.0,
+                          previousValue: 0.0,
                           text3: stats.totalProfit.toStringAsFixed(2)),
                     ),
                     Padding(
@@ -180,6 +196,8 @@ class Dashboard extends ConsumerWidget {
                       child: IncomeCards(
                           text1: 'Pending Orders',
                           text2: 'Compared to last month.',
+                          currentValue: 0.0,
+                          previousValue: 0.0,
                           text3: '${statsOrders.pendingOrders}'),
                     ),
                     Padding(
@@ -188,13 +206,21 @@ class Dashboard extends ConsumerWidget {
                       child: IncomeCards(
                           text1: 'Conversion Rate',
                           text2: 'Compared to last month.',
+                          currentValue: 0.0,
+                          previousValue: 0.0,
                           text3: '0.0%'),
                     ),
                   ],
                 ),
               ),
             ),
-            LineChartImplementation(spots: stats.incomeChartData, collectionUnit: 'Revenue', amount: stats.totalIncome.toStringAsFixed(2),),
+            LineChartImplementation(
+              spots: stats.incomeChartData,
+              collectionUnit: 'Revenue',
+              currentAmount: stats.totalIncome,
+              previousAmount: stats.previousIncome,
+              percentageDiff: stats.incomeChangePercentage.toStringAsFixed(1),
+              amount: stats.totalIncome.toStringAsFixed(2),),
             SizedBox(
               width: MediaQuery.of(context).size.width,
               child: Column(
@@ -348,7 +374,13 @@ class Dashboard extends ConsumerWidget {
                 ],
               ),
             ),
-            LineChartImplementation(spots: [], collectionUnit: '', amount: '',),
+            LineChartImplementation(
+              spots: [],
+              currentAmount: 0.0,
+              previousAmount: 0.0,
+              percentageDiff: '0.0',
+              collectionUnit: 'Socials',
+              amount: '',),
             Padding(
               padding: const EdgeInsets.only(bottom: 20.0),
               child: SizedBox(

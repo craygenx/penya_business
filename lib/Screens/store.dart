@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:penya_business/main.dart';
 import 'package:penya_business/providers/product_provider.dart';
-import 'package:penya_business/widgets/customComponents.dart';
+import 'package:penya_business/widgets/custom_components.dart';
 
 import '../providers/store_dash_provider.dart';
 import '../providers/text_controller_notifier.dart';
