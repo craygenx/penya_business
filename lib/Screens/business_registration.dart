@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:penya_business/colors.dart';
 import 'package:penya_business/models/business_model.dart';
 import 'package:penya_business/providers/auth_provider.dart';
@@ -36,7 +37,16 @@ class _BusinessRegistrationState extends ConsumerState<BusinessRegistration> {
     double width = MediaQuery.of(context).size.width;
     // double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: IconButton(onPressed: ()=>context.go('/'), icon: Icon(Icons.arrow_back)),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 5, left: 5),
+            child: IconButton(onPressed: () => context.push('/orders'), icon: Icon(Icons.shopping_basket)),
+            ),
+          IconButton(onPressed: (){}, icon: Icon(Icons.notifications)),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

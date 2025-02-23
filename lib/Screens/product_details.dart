@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ProductDetails extends StatefulWidget {
   final String productId;
@@ -26,6 +27,16 @@ class _ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(onPressed: ()=>context.pop(), icon: Icon(Icons.arrow_back)),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 5, left: 5),
+            child: IconButton(onPressed: () => context.push('/orders'), icon: Icon(Icons.shopping_basket)),
+            ),
+          IconButton(onPressed: (){}, icon: Icon(Icons.notifications)),
+        ],
+      ),
       body: Stack(
         children: [
           Visibility(

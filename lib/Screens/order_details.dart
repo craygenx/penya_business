@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:penya_business/models/orders_model.dart';
 import 'package:penya_business/providers/order_provider.dart';
 
@@ -38,12 +39,14 @@ class OrderDetails extends ConsumerWidget {
     }
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.arrow_back),
-        ),
+        leading: IconButton(onPressed: ()=> context.pop(), icon: Icon(Icons.arrow_back)),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 5, left: 5),
+            child: IconButton(onPressed: () => context.push('/orders'), icon: Icon(Icons.shopping_basket)),
+            ),
+          IconButton(onPressed: (){}, icon: Icon(Icons.notifications)),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(

@@ -103,7 +103,14 @@ class _OrdersDashState extends ConsumerState<OrdersDash> {
     final isFocused = ref.watch(isSearchFocusedProvider);
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: ()=>context.go('/'), icon: Icon(Icons.arrow_back)),
+        leading: IconButton(onPressed: ()=>context.pop(), icon: Icon(Icons.arrow_back)),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 5, left: 5),
+            child: IconButton(onPressed: () => context.push('/orders'), icon: Icon(Icons.shopping_basket)),
+            ),
+          IconButton(onPressed: (){}, icon: Icon(Icons.notifications)),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(

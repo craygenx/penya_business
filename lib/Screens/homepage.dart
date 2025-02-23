@@ -121,7 +121,61 @@ class Dashboard extends ConsumerWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: Row(
+          children: [
+            IconButton(
+              onPressed: (){}, icon: Icon(Icons.menu),
+              ),
+          ],
+        ),
+        title: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 35,
+              decoration: BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.all(Radius.circular(10))
+              ),
+            ),
+            SizedBox(
+              height: 35,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('  Hi, ${authState.value?.displayName ?? ''}',
+                    style: TextStyle(
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.normal
+                    ),
+                  ),
+                  Text('  Dashboard',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.black12
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+        actions: [
+          SizedBox(
+            child: Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(right: 5, left: 5),
+                  child: IconButton(onPressed: () => context.push('/orders'), icon: Icon(Icons.shopping_basket)),
+                  ),
+                IconButton(onPressed: (){}, icon: Icon(Icons.notifications)),
+              ],
+              ),
+          ),
+          
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -155,7 +209,7 @@ class Dashboard extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Icon(Icons.calendar_month_outlined),
-                          Text(stats.timeFrameLabel),
+                          Text(stats.timeFrameLabel == 'Today' ? today : stats.timeFrameLabel),
                         ],
                       ),
                     ),

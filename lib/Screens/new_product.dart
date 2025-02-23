@@ -81,6 +81,13 @@ class _NewProductState extends ConsumerState<NewProduct> {
           onPressed: ()=> context.pop(),
          icon: Icon(FontAwesomeIcons.arrowLeft),
         ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 5, left: 5),
+            child: IconButton(onPressed: () => context.push('/orders'), icon: Icon(Icons.shopping_basket)),
+            ),
+          IconButton(onPressed: (){}, icon: Icon(Icons.notifications)),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(

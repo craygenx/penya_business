@@ -98,6 +98,21 @@ class _StoreState extends ConsumerState<Store> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(onPressed: ()=>context.pop(), icon: Icon(Icons.arrow_back)),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 5, left: 5),
+            child: IconButton(onPressed: () => context.push('/orders'), icon: Icon(Icons.shopping_basket)),
+            ),
+          IconButton(onPressed: (){}, icon: Icon(Icons.notifications)),
+          SizedBox(
+            child: Row(children: [
+              Padding(padding: EdgeInsets.only(right: 8),
+              child: Icon(Icons.add),
+              ),
+              Text('New product'),
+            ],),
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
