@@ -252,7 +252,7 @@ class _BusinessRegistrationState extends ConsumerState<BusinessRegistration> {
             ),
           ],
         ),
-      )
+      ),
     );
   }
 }

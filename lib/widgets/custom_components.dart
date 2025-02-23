@@ -81,6 +81,78 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   }
 }
 
+class BranchCard extends StatelessWidget {
+  const BranchCard({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    return Container(
+      height: 200,
+      width: width * .3,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10))
+      ),
+      child: Row(
+        children: [
+          Container(
+            height: 190,
+            width: 20,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+            ),
+            child: Center(
+              child: Text('1'),
+            ),
+          ),
+          SizedBox(
+            width: width * .28,
+            child: Column(
+              children: [
+                SizedBox(
+                  width: width * .28,
+                  child: Row(
+                    children: [
+                      Text('Business id: seststeseaears'),
+                      Text('Est. Jan 24, 2024'),
+                    ],
+                  ),
+                  
+                ),
+                SizedBox(
+                  width: width * .28,
+                  child: Row(children: [
+                    SizedBox(
+                      width: width * .20,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        child: Text('Manager: John Doe'),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 50,
+                      width: 50,
+                    ),
+                  ],),
+                ),
+                SizedBox(
+                  child: Text('Business Name',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  
+}
 class IncomeCards extends StatelessWidget {
   final String text1;
   final double currentValue;
