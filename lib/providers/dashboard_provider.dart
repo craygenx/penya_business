@@ -300,11 +300,16 @@ Future<DashboardStats> calculateDashboardStats(
     DateTime orderDate = DateTime.parse(order.createdAt.toString());
     return orderDate.isAfter(startDate);
   }).toList();
+  print('current period orders');
+  print(currentPeriodOrders);
 
   List<OrdersModel> previousPeriodOrders = orders.where((order) {
     DateTime orderDate = DateTime.parse(order.createdAt.toString());
     return orderDate.isAfter(previousStartDate) && orderDate.isBefore(startDate);
   }).toList();
+
+  print('previous period orders');
+  print(previousPeriodOrders);
 
   Future<Map<String, dynamic>> calculateTotals(List<OrdersModel> orderList) async {
     double totalIncome = 0;
@@ -324,6 +329,8 @@ Future<DashboardStats> calculateDashboardStats(
       int index = getTimeFrameIndex(orderDate, now, filter);
 
       List<ProductWithQuantity> productList = await order.fetchProducts(firestore);
+      print('product list');
+      print(productList);
 
       for (var productWithQuantity in productList) {
         double income = productWithQuantity.product.retailPrice * productWithQuantity.quantity;
@@ -336,6 +343,10 @@ Future<DashboardStats> calculateDashboardStats(
         totalProfit += profit;
       }
     }
+    print('total income: $totalIncome');
+    print('total profit: $totalProfit');
+    print('income data: $incomeData');
+    print('profit: $profitData');
     
     return {
       "totalIncome": totalIncome,
@@ -348,23 +359,34 @@ Future<DashboardStats> calculateDashboardStats(
   var currentStats = await calculateTotals(currentPeriodOrders);
   var previousStats = await calculateTotals(previousPeriodOrders);
 
+  print('current stats');
+  print(currentStats);
+  print('previous stats');
+  print(previousStats);
+
   double incomeChangePercentage = previousStats["totalIncome"] == 0
       ? 0
       : ((currentStats["totalIncome"] - previousStats["totalIncome"]) / previousStats["totalIncome"]) * 100;
 
+  print('incomechange: $incomeChangePercentage');
   double profitChangePercentage = previousStats["totalProfit"] == 0
       ? 0
       : ((currentStats["totalProfit"] - previousStats["totalProfit"]) / previousStats["totalProfit"]) * 100;
 
+  print('profitchange: $profitChangePercentage');
   List<FlSpot> incomeChartData = (currentStats["incomeData"] as Map<int, double>)
       .entries
       .map((e) => FlSpot(e.key.toDouble(), e.value))
       .toList();
-
+  print('income chart data');
+  print(incomeChartData);
   List<FlSpot> profitChartData = (currentStats["profitData"] as Map<int, double>)
       .entries
       .map((e) => FlSpot(e.key.toDouble(), e.value))
       .toList();
+  
+  print('profit chart data');
+  print(profitChartData);
 
   return DashboardStats(
     totalIncome: currentStats["totalIncome"],
