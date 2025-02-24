@@ -71,7 +71,7 @@ class Product {
       views: data['views'] ?? 0,
       addedToCart: data['addedToCart'] ?? 0,
       checkedOut: data['checkedOut'] ?? 0,
-      basePrice: data['basePrice']?.toDouble() ?? 0.0,
+      basePrice: data['price']?.toDouble() ?? 0.0,
       retailPrice: data['retailPrice']?.toDouble() ?? 0.0,
       description: data['description'] ?? '',
       discountPercentage: data['discountPercentage']?.toDouble() ?? 0.0,

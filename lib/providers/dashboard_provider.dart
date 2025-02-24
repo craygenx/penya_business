@@ -333,7 +333,7 @@ Future<DashboardStats> calculateDashboardStats(
       print(productList);
 
       for (var productWithQuantity in productList) {
-        double income = productWithQuantity.product.retailPrice * productWithQuantity.quantity;
+        double income = (productWithQuantity.product.retailPrice * productWithQuantity.quantity);
         double profit = (productWithQuantity.product.retailPrice - productWithQuantity.product.basePrice) * productWithQuantity.quantity;
 
         incomeData[index] = (incomeData[index] ?? 0) + income;
