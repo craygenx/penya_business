@@ -29,7 +29,11 @@ class Dashboard extends ConsumerWidget {
     double width = MediaQuery.of(context).size.width;
 
     final stats = statsProvider.when(
-      data: (data) => data,
+      data: (data){
+        print(data);
+        print('wehave data');
+        return data;
+      },
       error: (error, stackTrace) => DashboardStats(
         totalIncome: 0.0,
         totalProfit: 0.0,
@@ -184,6 +188,115 @@ class Dashboard extends ConsumerWidget {
           ),
           
         ],
+      ),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            Container(
+              width: 200,
+              height: 120,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.black,
+                  width: 1.5,
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                ),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: width *.95,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: 10),
+                          child: Icon(
+                              Icons.person_2_outlined,
+                            ),
+                          ),
+                        SizedBox(
+                          width: width * .8,
+                          child: TextField(
+                            controller: ownerNameController,
+                            readOnly: true,
+                            decoration: InputDecoration(
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black, width: 1.5),
+                              ),
+                              disabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black,
+                                  width: 1.5,
+                                  ),
+                              )
+                            ),
+                          ),
+                        ),
+                      ],
+                      ),
+                  ),
+                  SizedBox(
+                    width: width *.95,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: 5),
+                          child: Icon(
+                              Icons.mail_outlined,
+                            ),
+                          ),
+                        SizedBox(
+                          width: width * .8,
+                          child: TextField(
+                            controller: ownerEmailController,
+                            readOnly: true,
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide.none
+                              )
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ]
+              ),
+            ),
+            SizedBox(
+              width: width *.28,
+              child: Text('Registered Branches',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            BranchCard(),
+            SizedBox(
+              width: width * .28,
+              child: Row(children: [
+                SizedBox(
+                  child: Row(
+                    children: [
+                      Icon(Icons.add),
+                      Text('Register Branch')
+                    ]
+                  ),
+                  )
+              ],),
+            )
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -491,115 +604,7 @@ class Dashboard extends ConsumerWidget {
           ],
         ),
       ),
-      drawer: Drawer(
-        child: Column(
-          children: [
-            Container(
-              width: 200,
-              height: 120,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.black,
-                  width: 1.5,
-                ),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10),
-                ),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: width *.95,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(right: 10),
-                          child: Icon(
-                              Icons.person_2_outlined,
-                            ),
-                          ),
-                        SizedBox(
-                          width: width * .8,
-                          child: TextField(
-                            controller: ownerNameController,
-                            readOnly: true,
-                            decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black, width: 1.5),
-                              ),
-                              disabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.black,
-                                  width: 1.5,
-                                  ),
-                              )
-                            ),
-                          ),
-                        ),
-                      ],
-                      ),
-                  ),
-                  SizedBox(
-                    width: width *.95,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(right: 5),
-                          child: Icon(
-                              Icons.mail_outlined,
-                            ),
-                          ),
-                        SizedBox(
-                          width: width * .8,
-                          child: TextField(
-                            controller: ownerEmailController,
-                            readOnly: true,
-                            decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide.none
-                              )
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ]
-              ),
-            ),
-            SizedBox(
-              width: width *.28,
-              child: Text('Registered Branches',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            BranchCard(),
-            SizedBox(
-              width: width * .28,
-              child: Row(children: [
-                SizedBox(
-                  child: Row(
-                    children: [
-                      Icon(Icons.add),
-                      Text('Register Branch')
-                    ]
-                  ),
-                  )
-              ],),
-            )
-          ],
-        ),
-      ),
+      
     );
   }
 }

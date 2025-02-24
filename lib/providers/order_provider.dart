@@ -175,8 +175,10 @@ class OrderNotifier extends StateNotifier<List<OrdersModel>> {
     loadOrders();
   }
   void loadOrders() async {
-    final orders = await _orderService.fetchOrders();
-    state = orders.map((orderData) => OrdersModel.fromMap(orderData)).toList();
+    // final orders = await _orderService.fetchOrders();
+    // state = orders.map((orderData) => OrdersModel.fromMap(orderData)).toList();
+    final orders = generateFakeOrders();
+    state = orders;
   }
   void addOrder(OrdersModel order) async {
     final orderData = order.toMap();

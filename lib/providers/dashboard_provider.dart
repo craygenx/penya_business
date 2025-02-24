@@ -213,6 +213,7 @@ final dashboardFilterProvider =
 final dashboardStatsProvider = FutureProvider<DashboardStats>((ref) async {
   final orders = ref.watch(ordersProvider);
   final filter = ref.watch(dashboardFilterProvider);
+  print(orders);
 
   return calculateDashboardStats(orders, filter);
 });
@@ -242,7 +243,8 @@ class DashboardStats {
 }
 
 Future<DashboardStats> calculateDashboardStats(
-    List<OrdersModel> orders, DashboardFilter filter) async {
+  
+  List<OrdersModel> orders, DashboardFilter filter) async {
   DateTime now = DateTime.now();
   DateTime startDate, previousStartDate;
   int totalIntervals;
@@ -334,7 +336,7 @@ Future<DashboardStats> calculateDashboardStats(
         totalProfit += profit;
       }
     }
-
+    
     return {
       "totalIncome": totalIncome,
       "totalProfit": totalProfit,
