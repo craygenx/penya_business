@@ -1,3 +1,4 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -28,12 +29,18 @@ class Dashboard extends ConsumerWidget {
     ownerEmailController.text = authState.value?.email ?? '';
     double width = MediaQuery.of(context).size.width;
 
+    List<String> getXLabels(String timeFrame, List<FlSpot> spots) {
+      if (timeFrame == "daily") {
+        return spots.map((e) => "${(e.x).toInt()}:00 AM").toList(); 
+      } else if (timeFrame == "weekly") {
+        return List.generate(spots.length, (index) => "Wk${index + 1}");
+      } else {
+        return ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
+      }
+    }
+
     final stats = statsProvider.when(
-      data: (data){
-        print(data);
-        print('wehave data');
-        return data;
-      },
+      data: (data) => data,
       error: (error, stackTrace) => DashboardStats(
         totalIncome: 0.0,
         totalProfit: 0.0,
@@ -391,13 +398,23 @@ class Dashboard extends ConsumerWidget {
                 ),
               ),
             ),
-            LineChartImplementation(
-              spots: stats.incomeChartData,
-              collectionUnit: 'Revenue',
-              currentAmount: stats.totalIncome,
-              previousAmount: stats.previousIncome,
-              percentageDiff: stats.incomeChangePercentage.toStringAsFixed(1),
-              amount: stats.totalIncome.toStringAsFixed(2),),
+            // LineChartImplementation(
+            //   spots: stats.incomeChartData,
+            //   collectionUnit: 'Revenue',
+            //   currentAmount: stats.totalIncome,
+            //   previousAmount: stats.previousIncome,
+            //   percentageDiff: stats.incomeChangePercentage.toStringAsFixed(1),
+            //   amount: stats.totalIncome.toStringAsFixed(2),),
+              LineChartImplementation(
+                spots: stats.incomeChartData,
+                collectionUnit: 'Revenue',
+                currentAmount: stats.totalIncome,
+                previousAmount: stats.previousIncome,
+                percentageDiff: stats.incomeChangePercentage.toStringAsFixed(1),
+                amount: stats.totalIncome.toStringAsFixed(2),
+                timeFrame: "daily",  // Pass "weekly" or "monthly" as needed
+                xLabels: getXLabels("daily", stats.incomeChartData),
+              ),
             SizedBox(
               width: MediaQuery.of(context).size.width,
               child: Column(
@@ -551,13 +568,23 @@ class Dashboard extends ConsumerWidget {
                 ],
               ),
             ),
+            // LineChartImplementation(
+            //   spots: [],
+            //   currentAmount: 0.0,
+            //   previousAmount: 0.0,
+            //   percentageDiff: '0.0',
+            //   collectionUnit: 'Socials',
+            //   amount: '',),
             LineChartImplementation(
-              spots: [],
-              currentAmount: 0.0,
-              previousAmount: 0.0,
-              percentageDiff: '0.0',
-              collectionUnit: 'Socials',
-              amount: '',),
+                spots: [],
+                collectionUnit: 'Socials',
+                currentAmount: 0.0,
+                previousAmount: 0.0,
+                percentageDiff: '0.0',
+                amount: '0.0',
+                timeFrame: "daily",  // Pass "weekly" or "monthly" as needed
+                xLabels: [],
+              ),
             Padding(
               padding: const EdgeInsets.only(bottom: 20.0),
               child: SizedBox(

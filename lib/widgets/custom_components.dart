@@ -445,226 +445,226 @@ class OrderCard extends StatelessWidget{
     );
   }
 }
-class LineChartImplementation extends StatelessWidget {
-  final List<FlSpot> spots;
-  final String collectionUnit;
-  final String amount;
-  final String percentageDiff;
-  final double previousAmount;
-  final double currentAmount;
-  const LineChartImplementation({
-    super.key,
-    required this.spots,
-    required this.percentageDiff,
-    required this.currentAmount,
-    required this.previousAmount,
-    required this.collectionUnit,
-    required this.amount});
+// class LineChartImplementation extends StatelessWidget {
+//   final List<FlSpot> spots;
+//   final String collectionUnit;
+//   final String amount;
+//   final String percentageDiff;
+//   final double previousAmount;
+//   final double currentAmount;
+//   const LineChartImplementation({
+//     super.key,
+//     required this.spots,
+//     required this.percentageDiff,
+//     required this.currentAmount,
+//     required this.previousAmount,
+//     required this.collectionUnit,
+//     required this.amount});
 
 
-  @override
-  Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * .95,
-      height: 360,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: width,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: width,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: width * .45,
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(right: 10.0),
-                              child: Icon(
-                                  size: 16,
-                                  FontAwesomeIcons.chartBar
-                              ),
-                            ),
-                            Text('$collectionUnit Breakdown'),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        width: 100,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 0.5,
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(right: 10.0, top: 8, bottom: 8),
-                              child: Icon(size: 16, FontAwesomeIcons.filter),
-                            ),
-                            Text('Filter'),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0, bottom: 20.0),
-                  child: SizedBox(
-                    width: width,
-                    child: Row(
-                      children: [
-                        Text.rich(
-                          TextSpan(
-                              text: 'Kes ',
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.black12
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: amount,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ]
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20.0),
-                          child: Icon(
-                            color:currentAmount > previousAmount ? Colors.green : Colors.red,
-                            size: 12.0,
-                            currentAmount > previousAmount ? FontAwesomeIcons.arrowUp : FontAwesomeIcons.arrowDown,
-                          ),
-                        ),
-                        Text.rich(
-                            TextSpan(
-                              text: percentageDiff,
-                              style: TextStyle(
-                                fontSize: 12.0,
-                                color: Colors.red,
-                              ),
-                              children: [
-                                TextSpan(
-                                    text:currentAmount > previousAmount ? 'increase vs last month': ' decrease vs last month',
-                                    style: TextStyle(
-                                      fontSize: 12.0,
-                                      color: Colors.black12,
-                                    )
-                                )
-                              ],
-                            )
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 230,
-            width: MediaQuery.of(context).size.width * .95,
-            child: spots.isEmpty ? Center(child: Text('No data available')) : LineChart(
-              LineChartData(
-                gridData: FlGridData(
-                    show: true,
-                    drawVerticalLine: true,
-                    verticalInterval: 1,
-                    drawHorizontalLine: false,
-                    getDrawingVerticalLine: (value) => FlLine(
-                      color: Colors.grey.withValues(alpha: .5),
-                      strokeWidth: 0.5 ,
-                    )
-                ),
-                titlesData: FlTitlesData(
-                  leftTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: true, interval: 500, reservedSize: 40),
-                  ),
-                  bottomTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        getTitlesWidget: (value, meta) {
-                          const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                          return Text(
-                            months[value.toInt()],
-                            style: TextStyle(
-                              fontSize: 12.0,
-                            ),
-                          );
-                        },
-                        interval: 1,
-                      )
-                  ),
-                  rightTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: false,
-                    ),
-                  ),
-                  topTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: false,
-                    ),
-                  ),
-                ),
-                borderData: FlBorderData(
-                    show: true,
-                    border: Border(
-                      left: BorderSide(
-                        color: Colors.black,
-                        width: 1,
-                      ),
-                      bottom: BorderSide(
-                        color: Colors.black,
-                        width: 1,
-                      ),
-                      right: BorderSide.none,
-                      top: BorderSide.none,
-                    )
-                ),
-                lineBarsData: [
-                  LineChartBarData(
-                      spots: spots,
-                      isCurved: false,
-                      color: Colors.blue,
-                      dotData: FlDotData(show: false),
-                      belowBarData: BarAreaData(
-                        show: true,
-                        color: Colors.blue.withValues(alpha: .4),
-                        gradient: LinearGradient(
-                            colors: [
-                              Colors.blue.withValues(alpha: .4),
-                              Colors.blue.withValues(alpha: .0),
-                            ],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter
-                        ),
-                      )
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+//   @override
+//   Widget build(BuildContext context) {
+//     double width = MediaQuery.of(context).size.width;
+//     return SizedBox(
+//       width: MediaQuery.of(context).size.width * .95,
+//       height: 360,
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.center,
+//         children: [
+//           SizedBox(
+//             width: width,
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.center,
+//               children: [
+//                 SizedBox(
+//                   width: width,
+//                   child: Row(
+//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                     children: [
+//                       SizedBox(
+//                         width: width * .45,
+//                         child: Row(
+//                           children: [
+//                             Padding(
+//                               padding: const EdgeInsets.only(right: 10.0),
+//                               child: Icon(
+//                                   size: 16,
+//                                   FontAwesomeIcons.chartBar
+//                               ),
+//                             ),
+//                             Text('$collectionUnit Breakdown'),
+//                           ],
+//                         ),
+//                       ),
+//                       Container(
+//                         width: 100,
+//                         decoration: BoxDecoration(
+//                           border: Border.all(
+//                             width: 0.5,
+//                           ),
+//                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
+//                         ),
+//                         child: Row(
+//                           mainAxisAlignment: MainAxisAlignment.center,
+//                           children: [
+//                             Padding(
+//                               padding: const EdgeInsets.only(right: 10.0, top: 8, bottom: 8),
+//                               child: Icon(size: 16, FontAwesomeIcons.filter),
+//                             ),
+//                             Text('Filter'),
+//                           ],
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//                 Padding(
+//                   padding: const EdgeInsets.only(top: 10.0, bottom: 20.0),
+//                   child: SizedBox(
+//                     width: width,
+//                     child: Row(
+//                       children: [
+//                         Text.rich(
+//                           TextSpan(
+//                               text: 'Kes ',
+//                               style: TextStyle(
+//                                   fontSize: 12,
+//                                   color: Colors.black12
+//                               ),
+//                               children: [
+//                                 TextSpan(
+//                                   text: amount,
+//                                   style: TextStyle(
+//                                     fontSize: 18,
+//                                     color: Colors.black,
+//                                     fontWeight: FontWeight.bold,
+//                                   ),
+//                                 ),
+//                               ]
+//                           ),
+//                         ),
+//                         Padding(
+//                           padding: const EdgeInsets.only(left: 20.0),
+//                           child: Icon(
+//                             color:currentAmount > previousAmount ? Colors.green : Colors.red,
+//                             size: 12.0,
+//                             currentAmount > previousAmount ? FontAwesomeIcons.arrowUp : FontAwesomeIcons.arrowDown,
+//                           ),
+//                         ),
+//                         Text.rich(
+//                             TextSpan(
+//                               text: percentageDiff,
+//                               style: TextStyle(
+//                                 fontSize: 12.0,
+//                                 color: Colors.red,
+//                               ),
+//                               children: [
+//                                 TextSpan(
+//                                     text:currentAmount > previousAmount ? 'increase vs last month': ' decrease vs last month',
+//                                     style: TextStyle(
+//                                       fontSize: 12.0,
+//                                       color: Colors.black12,
+//                                     )
+//                                 )
+//                               ],
+//                             )
+//                         )
+//                       ],
+//                     ),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//           SizedBox(
+//             height: 230,
+//             width: MediaQuery.of(context).size.width * .95,
+//             child: spots.isEmpty ? Center(child: Text('No data available')) : LineChart(
+//               LineChartData(
+//                 gridData: FlGridData(
+//                     show: true,
+//                     drawVerticalLine: true,
+//                     verticalInterval: 1,
+//                     drawHorizontalLine: false,
+//                     getDrawingVerticalLine: (value) => FlLine(
+//                       color: Colors.grey.withValues(alpha: .5),
+//                       strokeWidth: 0.5 ,
+//                     )
+//                 ),
+//                 titlesData: FlTitlesData(
+//                   leftTitles: AxisTitles(
+//                     sideTitles: SideTitles(showTitles: true, interval: 500, reservedSize: 40),
+//                   ),
+//                   bottomTitles: AxisTitles(
+//                       sideTitles: SideTitles(
+//                         showTitles: true,
+//                         getTitlesWidget: (value, meta) {
+//                           const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+//                           return Text(
+//                             months[value.toInt()],
+//                             style: TextStyle(
+//                               fontSize: 12.0,
+//                             ),
+//                           );
+//                         },
+//                         interval: 1,
+//                       )
+//                   ),
+//                   rightTitles: AxisTitles(
+//                     sideTitles: SideTitles(
+//                       showTitles: false,
+//                     ),
+//                   ),
+//                   topTitles: AxisTitles(
+//                     sideTitles: SideTitles(
+//                       showTitles: false,
+//                     ),
+//                   ),
+//                 ),
+//                 borderData: FlBorderData(
+//                     show: true,
+//                     border: Border(
+//                       left: BorderSide(
+//                         color: Colors.black,
+//                         width: 1,
+//                       ),
+//                       bottom: BorderSide(
+//                         color: Colors.black,
+//                         width: 1,
+//                       ),
+//                       right: BorderSide.none,
+//                       top: BorderSide.none,
+//                     )
+//                 ),
+//                 lineBarsData: [
+//                   LineChartBarData(
+//                       spots: spots,
+//                       isCurved: false,
+//                       color: Colors.blue,
+//                       dotData: FlDotData(show: false),
+//                       belowBarData: BarAreaData(
+//                         show: true,
+//                         color: Colors.blue.withValues(alpha: .4),
+//                         gradient: LinearGradient(
+//                             colors: [
+//                               Colors.blue.withValues(alpha: .4),
+//                               Colors.blue.withValues(alpha: .0),
+//                             ],
+//                             begin: Alignment.topCenter,
+//                             end: Alignment.bottomCenter
+//                         ),
+//                       )
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
 
-}
+// }
 class ProductStoreCard extends StatelessWidget {
   final String title;
   final String description;
@@ -850,4 +850,211 @@ String? strongPasswordValidator(String? value) {
 
 String formatDate(DateTime date){
   return DateFormat('MMM d,yyyy').format(date);
+}
+
+class LineChartImplementation extends StatelessWidget {
+  final List<FlSpot> spots;
+  final String collectionUnit;
+  final String amount;
+  final String percentageDiff;
+  final double previousAmount;
+  final double currentAmount;
+  final String timeFrame;
+  final List<String> xLabels;
+
+  const LineChartImplementation({
+    super.key,
+    required this.spots,
+    required this.percentageDiff,
+    required this.currentAmount,
+    required this.previousAmount,
+    required this.collectionUnit,
+    required this.amount,
+    required this.timeFrame,
+    required this.xLabels,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
+    // Determine min & max Y values
+    double minY = spots.isNotEmpty ? spots.map((e) => e.y).reduce((a, b) => a < b ? a : b) : 0;
+    double maxY = spots.isNotEmpty ? spots.map((e) => e.y).reduce((a, b) => a > b ? a : b) : 1;
+
+    // Generate 6 Y-axis labels dynamically
+    List<double> yAxisLabels = List.generate(
+      6,
+      (index) => minY + ((maxY - minY) / 5) * index,
+    );
+
+    return SizedBox(
+      width: width * .95,
+      height: 360,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: width,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: width,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: width * .45,
+                        child: Row(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(right: 10.0),
+                              child: Icon(size: 16, FontAwesomeIcons.chartBar),
+                            ),
+                            Text('$collectionUnit Breakdown'),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: 100,
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 0.5),
+                          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(right: 10.0, top: 8, bottom: 8),
+                              child: Icon(size: 16, FontAwesomeIcons.filter),
+                            ),
+                            const Text('Filter'),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0, bottom: 20.0),
+                  child: SizedBox(
+                    width: width,
+                    child: Row(
+                      children: [
+                        Text.rich(
+                          TextSpan(
+                            text: 'Kes ',
+                            style: const TextStyle(fontSize: 12, color: Colors.black12),
+                            children: [
+                              TextSpan(
+                                text: amount,
+                                style: const TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20.0),
+                          child: Icon(
+                            color: currentAmount > previousAmount ? Colors.green : Colors.red,
+                            size: 12.0,
+                            currentAmount > previousAmount ? FontAwesomeIcons.arrowUp : FontAwesomeIcons.arrowDown,
+                          ),
+                        ),
+                        Text.rich(
+                          TextSpan(
+                            text: percentageDiff,
+                            style: const TextStyle(fontSize: 12.0, color: Colors.red),
+                            children: [
+                              TextSpan(
+                                text: currentAmount > previousAmount ? ' increase vs last month' : ' decrease vs last month',
+                                style: const TextStyle(fontSize: 12.0, color: Colors.black12),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 230,
+            width: width * .95,
+            child: spots.isEmpty
+                ? const Center(child: Text('No data available'))
+                : LineChart(
+                    LineChartData(
+                      gridData: FlGridData(show: true, drawVerticalLine: false),
+                      titlesData: FlTitlesData(
+                        leftTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            getTitlesWidget: (value, meta) {
+                              if (yAxisLabels.contains(value)) {
+                                return Text(getFormattedValue(value), style: const TextStyle(fontSize: 12));
+                              }
+                              return const SizedBox.shrink();
+                            },
+                            reservedSize: 50,
+                          ),
+                        ),
+                        bottomTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            getTitlesWidget: (value, meta) {
+                              int index = value.toInt();
+                              if (index >= 0 && index < xLabels.length) {
+                                return Text(xLabels[index], style: const TextStyle(fontSize: 12));
+                              }
+                              return const SizedBox.shrink();
+                            },
+                            interval: (xLabels.length / 6).ceil().toDouble(), // Ensure max 6 labels
+                          ),
+                        ),
+                        rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                        topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      ),
+                      borderData: FlBorderData(
+                        show: true,
+                        border: const Border(
+                          left: BorderSide(color: Colors.black, width: 1),
+                          bottom: BorderSide(color: Colors.black, width: 1),
+                        ),
+                      ),
+                      lineBarsData: [
+                        LineChartBarData(
+                          spots: spots,
+                          isCurved: false,
+                          color: Colors.blue,
+                          dotData: FlDotData(show: false),
+                          belowBarData: BarAreaData(
+                            show: true,
+                            color: Colors.blue.withValues(alpha: .4),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Format numbers with K, M, B notation
+  String getFormattedValue(double value) {
+    if (value >= 1000000000) {
+      return '${(value / 1000000000).toStringAsFixed(1)}B'; // 1.2B
+    } else if (value >= 1000000) {
+      return '${(value / 1000000).toStringAsFixed(1)}M'; // 1.5M
+    } else if (value >= 1000) {
+      return '${(value / 1000).toStringAsFixed(1)}K'; // 2.4K
+    } else {
+      return value.toStringAsFixed(0); // 500
+    }
+  }
 }

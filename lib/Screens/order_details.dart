@@ -216,7 +216,7 @@ class OrderDetails extends ConsumerWidget {
                   maxHeight: MediaQuery.of(context).size.height * .4
               ),
               child: ListView.builder(
-                itemCount: productsWithQuantity.length,
+                itemCount: order.products.length,
                 itemBuilder: (context, index) {
                   final product = productsWithQuantity[index].product;
                   return Padding(
