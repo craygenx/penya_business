@@ -87,69 +87,85 @@ class BranchCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    return Container(
-      height: 200,
-      width: width * .3,
+    return Padding(
+      padding: EdgeInsets.all(5),
+      child: Container(
+      height: 150,
+      width: width * .65,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10))
       ),
       child: Row(
         children: [
-          Container(
-            height: 190,
-            width: 20,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-            ),
-            child: Center(
-              child: Text('1'),
-            ),
-          ),
-          SizedBox(
-            width: width * .28,
-            child: Column(
-              children: [
-                SizedBox(
-                  width: width * .28,
-                  child: Row(
-                    children: [
-                      Text('Business id: seststeseaears'),
-                      Text('Est. Jan 24, 2024'),
-                    ],
-                  ),
-                  
-                ),
-                SizedBox(
-                  width: width * .28,
-                  child: Row(children: [
+            // Container(
+            //   height: 150,
+            //   width: 20,
+            //   decoration: BoxDecoration(
+            //     color: Colors.blueGrey,
+            //     borderRadius: BorderRadius.all(Radius.circular(20)),
+            //   ),
+            //   child: Center(
+            //     child: Text('1',
+            //       textAlign: TextAlign.center,
+            //       style: TextStyle(
+            //         fontSize: 20.0,
+            //         fontWeight: FontWeight.bold,
+            //       ),
+            //     ),
+            //   ),
+            // ),
+              SizedBox(
+                width: width * .65,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     SizedBox(
-                      width: width * .20,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                        child: Text('Manager: John Doe'),
+                      width: width * .65,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('B.id: sest'),
+                          Text('Est. Jan 24, 2024'),
+                        ],
                       ),
+                      
                     ),
                     SizedBox(
-                      height: 50,
-                      width: 50,
+                      width: width * .65,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                        SizedBox(
+                          width: width * .4,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                            ),
+                            child: Text('Manager: John Doe'),
+                          ),
+                        ),
+                        Container(
+                          color: Colors.blue,
+                          height: 50,
+                          width: 50,
+                        ),
+                      ],),
                     ),
-                  ],),
+                    SizedBox(
+                      child: Text('Business Name',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-                SizedBox(
-                  child: Text('Business Name',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                )
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        ),
+      );
+    
   }
   
 }

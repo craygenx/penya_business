@@ -15,6 +15,9 @@ class Dashboard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    bool switchValue = false;
+
     String today = formatDate(DateTime.now());
     final statsProvider = ref.watch(dashboardStatsProvider);
     final statsOrders = ref.watch(ordersStatsProvider);
@@ -138,13 +141,184 @@ class Dashboard extends ConsumerWidget {
       );
     }
 
+    void showBottomSheet(BuildContext context){
+      showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10),
+            topRight: Radius.circular(10),
+          ),
+        ),
+        builder: (BuildContext context) {
+          return Container(
+            height: 300,
+            width: width,
+            child: Column(
+              children: [
+                SizedBox(
+                    width: width *.95,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Bussiness name'),
+                        Padding(padding: EdgeInsets.only(bottom: 10)),
+                        SizedBox(
+                          width: width * .95,
+                          child: CustomTextFormField(hintText: "Enter bussiness name",
+                          backgroundColor: Colors.white, border: true,)
+                        ),
+                        Padding(padding: EdgeInsets.only(bottom: 10)),
+                        Text('Bussiness name'),
+                        Padding(padding: EdgeInsets.only(bottom: 10)),
+                        SizedBox(
+                          width: width * .95,
+                          child: CustomTextFormField(hintText: "Enter bussiness name",
+                          backgroundColor: Colors.white, border: true,)
+                        ),
+                        Padding(padding: EdgeInsets.only(bottom: 10)),
+                        Text('Bussiness name'),
+                        Padding(padding: EdgeInsets.only(bottom: 10)),
+                        SizedBox(
+                          width: width * .95,
+                          child: CustomTextFormField(hintText: "Enter bussiness name",
+                          backgroundColor: Colors.white, border: true,)
+                        ),
+                        Padding(padding: EdgeInsets.only(bottom: 10)),
+                        SizedBox(
+                          child: Column(children: [
+                            Text('Branch management'),
+                            Container(
+                              width: width,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.lightBlueAccent,
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 35,
+                                    height: 35,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Icon(Icons.web_outlined),
+                                  ),
+                                  SizedBox(
+                                    width: width * .5,
+                                    child: Column(
+                                      children: [
+                                        Text('Manager'),
+                                        Text('Assign branch manager'),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    child: Switch(
+                                      value: switchValue,
+                                      onChanged: (bool newValue){
+                                        switchValue = newValue;
+                                      },
+                                      activeColor: Colors.blue,
+                                      inactiveThumbColor: Colors.grey,
+                                      inactiveTrackColor: Colors.grey[300],
+                                      activeTrackColor: Colors.blue[200],
+                                    ),
+                                  )
+                                ],
+                              )
+                            ),
+                          Visibility(
+                            visible: switchValue,
+                            child: SizedBox(
+                              width: width,
+                              child: Column(
+                                children: [
+                                  Text('Invite'),
+                                  Container(
+                                    width: width,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Row(children: [
+                                      Icon(Icons.person_add_alt_1_outlined),
+                                      SizedBox(
+                                          width: width * .8,
+                                          child: CustomTextFormField(hintText: "Enter bussiness name",
+                                          backgroundColor: Colors.white, border: true,)
+                                        ),
+                                        ElevatedButton(
+                                        onPressed: (){},
+                                        child: Row(
+                                          children: [
+                                            Icon(Icons.send),
+                                            Text('Invite'),
+                                          ],
+                                        ),
+                                      ),
+                                    ],),
+                                  ),
+                                  Padding(padding: EdgeInsets.only(bottom: 10)),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(width: 1.0, color: Colors.black),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          width: 35,
+                                          height: 35,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: width * .5,
+                                          child: Column(
+                                            children: [
+                                              Text('John Doe'),
+                                              Text('Johndoe@gmail.com'),
+                                            ],
+                                          ),
+                                        ),
+                                      SizedBox(
+                                        child: GestureDetector(
+                                          onTap: (){},
+                                          child: Text('Remove',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.bold,
+                                          )
+                                          ),
+                                        ),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            )
+                          ],),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+          );
+        });
+    }
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         leading: Row(
           children: [
             IconButton(
               onPressed: (){
-                Scaffold.of(context).openDrawer();
+                _scaffoldKey.currentState?.openDrawer();
               }, icon: Icon(Icons.menu),
             ),
           ],
@@ -198,110 +372,180 @@ class Dashboard extends ConsumerWidget {
       ),
       drawer: Drawer(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              width: 200,
-              height: 120,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.black,
-                  width: 1.5,
-                ),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10),
-                ),
-              ),
+            SizedBox(
+              width: width * .7,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: width *.95,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(right: 10),
-                          child: Icon(
-                              Icons.person_2_outlined,
-                            ),
-                          ),
-                        SizedBox(
-                          width: width * .8,
-                          child: TextField(
-                            controller: ownerNameController,
-                            readOnly: true,
-                            decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black, width: 1.5),
-                              ),
-                              disabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.black,
-                                  width: 1.5,
-                                  ),
-                              )
-                            ),
-                          ),
-                        ),
-                      ],
-                      ),
-                  ),
-                  SizedBox(
-                    width: width *.95,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(right: 5),
-                          child: Icon(
-                              Icons.mail_outlined,
-                            ),
-                          ),
-                        SizedBox(
-                          width: width * .8,
-                          child: TextField(
-                            controller: ownerEmailController,
-                            readOnly: true,
-                            decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide.none
-                              )
-                            ),
-                          ),
-                        ),
-                      ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      height: 120,
                     ),
-                  ),
-                ]
-              ),
-            ),
-            SizedBox(
-              width: width *.28,
-              child: Text('Registered Branches',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+                    Container(
+                      width: width *.7,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 1.5,
+                        ),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                      ),
+                      child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: width *.7,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(right: 10),
+                            child: Icon(
+                                Icons.person_2_outlined,
+                              ),
+                            ),
+                          SizedBox(
+                            width: width * .55,
+                            child: TextField(
+                              controller: ownerNameController,
+                              readOnly: true,
+                              decoration: InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black, width: 1.5),
+                                ),
+                                disabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.black,
+                                    width: 1.5,
+                                    ),
+                                )
+                              ),
+                            ),
+                          ),
+                        ],
+                        ),
+                    ),
+                    SizedBox(
+                      width: width *.7,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(right: 5),
+                            child: Icon(
+                                Icons.mail_outlined,
+                              ),
+                            ),
+                          SizedBox(
+                            width: width * .55,
+                            child: TextField(
+                              controller: ownerEmailController,
+                              readOnly: true,
+                              decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide.none
+                                )
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ]
+                ),
+                    ),
+                    Padding(padding: EdgeInsets.all(10)),
+                    SizedBox(
+                      width: width *.7,
+                      child: Text('Registered Branches',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.all(10)),
+                    SizedBox(
+                      width: width * .7,
+                      height: 160,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          BranchCard(),
+                          BranchCard(),
+                          BranchCard(),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: width * .7,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          GestureDetector(
+                            onTap: ()=> showBottomSheet(context),
+                            child: Container(
+                              decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
+                                width: 1.5,
+                              ),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(5),
+                                  child: Icon(Icons.add),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(5),
+                                  child: Text('Register Branch'),
+                                  ),
+                              ]
+                            ),
+                            ),
+                          ),
+                        
+                      ],),
+                    ),
+                    Padding(padding: EdgeInsets.all(10)),
+                    SizedBox(
+                      child: Row(
+                        children: [
+                          Icon(Icons.settings),
+                          Text('  Settings'),
+                        ],
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.all(10)),
+                    SizedBox(
+                      child: Row(
+                        children: [
+                          Icon(Icons.logout_outlined),
+                          Text('  Log out',
+                            style: TextStyle(
+                              color: Colors.red,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            BranchCard(),
-            SizedBox(
-              width: width * .28,
-              child: Row(children: [
-                SizedBox(
-                  child: Row(
-                    children: [
-                      Icon(Icons.add),
-                      Text('Register Branch')
-                    ]
-                  ),
-                  )
-              ],),
-            )
+              Text('App Version 1.0.0'),
           ],
         ),
       ),
