@@ -151,8 +151,9 @@ class Dashboard extends ConsumerWidget {
           ),
         ),
         builder: (BuildContext context) {
-          return SizedBox(
-            height: MediaQuery.of(context).size.height * 7,
+          return ListView(
+            children: [
+              SizedBox(
             width: width,
             child: Column(
               children: [
@@ -161,7 +162,7 @@ class Dashboard extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Bussiness name'),
+                        Text('Branch name'),
                         Padding(padding: EdgeInsets.only(bottom: 10)),
                         SizedBox(
                           width: width * .95,
@@ -169,7 +170,7 @@ class Dashboard extends ConsumerWidget {
                           backgroundColor: Colors.white, border: true,)
                         ),
                         Padding(padding: EdgeInsets.only(bottom: 10)),
-                        Text('Bussiness name'),
+                        Text('Branch email'),
                         Padding(padding: EdgeInsets.only(bottom: 10)),
                         SizedBox(
                           width: width * .95,
@@ -177,7 +178,7 @@ class Dashboard extends ConsumerWidget {
                           backgroundColor: Colors.white, border: true,)
                         ),
                         Padding(padding: EdgeInsets.only(bottom: 10)),
-                        Text('Bussiness name'),
+                        Text('Branch phone number'),
                         Padding(padding: EdgeInsets.only(bottom: 10)),
                         SizedBox(
                           width: width * .95,
@@ -195,7 +196,7 @@ class Dashboard extends ConsumerWidget {
                               width: width,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                color: Colors.lightBlueAccent,
+                                // color: Colors.lightBlueAccent,
                               ),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -239,50 +240,61 @@ class Dashboard extends ConsumerWidget {
                             child: SizedBox(
                               width: width,
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text('Invite'),
                                   Container(
                                     width: width,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
+                                      border: Border.all()
                                     ),
-                                    child: Row(children: [
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
                                       Icon(Icons.person_add_alt_1_outlined),
                                       SizedBox(
-                                          width: width * .8,
+                                          width: width * .59,
                                           child: CustomTextFormField(hintText: "Enter bussiness name",
-                                          backgroundColor: Colors.white, border: true,)
+                                          backgroundColor: Colors.white, border: false,)
                                         ),
                                         ElevatedButton(
                                         onPressed: (){},
                                         child: Row(
                                           children: [
                                             Icon(Icons.send),
-                                            Text('Invite'),
+                                            Text(' Invite',
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),
                                     ],),
                                   ),
-                                  Padding(padding: EdgeInsets.only(bottom: 10)),
+                                  Padding(padding: EdgeInsets.only(bottom: 20)),
                                   Container(
                                     decoration: BoxDecoration(
                                       border: Border.all(width: 1.0, color: Colors.black),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Container(
                                           width: 35,
                                           height: 35,
                                           decoration: BoxDecoration(
+                                            color: Colors.blueGrey,
                                             shape: BoxShape.circle
                                           ),
                                         ),
                                         SizedBox(
                                           width: width * .5,
                                           child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Text('John Doe'),
                                               Text('Johndoe@gmail.com'),
@@ -314,7 +326,10 @@ class Dashboard extends ConsumerWidget {
                   ),
               ],
             ),
+          )
+            ],
           );
+          
         });
     }
     return Scaffold(
@@ -498,7 +513,10 @@ class Dashboard extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           GestureDetector(
-                            onTap: ()=> showBottomSheet(context),
+                            onTap: (){
+                              Navigator.pop(context);
+                              showBottomSheet(context);
+                              },
                             child: Container(
                               decoration: BoxDecoration(
                               border: Border.all(
