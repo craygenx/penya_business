@@ -16,7 +16,7 @@ class Dashboard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-    bool switchValue = false;
+    bool switchValue = true;
 
     String today = formatDate(DateTime.now());
     final statsProvider = ref.watch(dashboardStatsProvider);
@@ -151,8 +151,8 @@ class Dashboard extends ConsumerWidget {
           ),
         ),
         builder: (BuildContext context) {
-          return Container(
-            height: 300,
+          return SizedBox(
+            height: MediaQuery.of(context).size.height * 7,
             width: width,
             child: Column(
               children: [
@@ -186,7 +186,10 @@ class Dashboard extends ConsumerWidget {
                         ),
                         Padding(padding: EdgeInsets.only(bottom: 10)),
                         SizedBox(
-                          child: Column(children: [
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
                             Text('Branch management'),
                             Container(
                               width: width,
@@ -195,6 +198,7 @@ class Dashboard extends ConsumerWidget {
                                 color: Colors.lightBlueAccent,
                               ),
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
                                     width: 35,
@@ -208,6 +212,7 @@ class Dashboard extends ConsumerWidget {
                                   SizedBox(
                                     width: width * .5,
                                     child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text('Manager'),
                                         Text('Assign branch manager'),
@@ -234,6 +239,7 @@ class Dashboard extends ConsumerWidget {
                             child: SizedBox(
                               width: width,
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text('Invite'),
                                   Container(
