@@ -226,6 +226,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:penya_business/models/product.dart';
 import 'package:penya_business/models/product_performance.dart';
+import 'package:penya_business/providers/auth_provider.dart';
 import 'package:penya_business/providers/loading_overlay_provider.dart';
 import 'package:penya_business/providers/product_image_provider.dart';
 import 'package:penya_business/providers/toast_provider.dart';
@@ -265,6 +266,7 @@ extension StoreProductsStatusExtension on StoreProductsStatus {
 final firestoreProvider = Provider((ref) => FirebaseFirestore.instance);
 final storeFilterProvider =
     StateProvider<StoreProductsStatus>((ref) => StoreProductsStatus.all);
+
 final searchQueryProvider = StateProvider<String>((ref) => '');
 final searchFocusNodeProvider = Provider((ref) {
   final focusNode = FocusNode();
@@ -284,14 +286,21 @@ final productsProvider = StreamProvider<List<Product>>((ref) {
 // Notifier for handling Firestore CRUD operations
 class ProductNotifier extends StateNotifier<List<Product>> {
   final FirebaseFirestore _firestore;
-  ProductNotifier(this._firestore) : super([]) {
+  final Ref ref;
+  ProductNotifier(this._firestore, this.ref) : super([]) {
     loadProducts();
   }
 
   void loadProducts() {
-    _firestore.collection('products').snapshots().listen((snapshot) {
+    final businessId = ref.watch(businessIdProvider);
+    if(businessId.isNotEmpty){
+      _firestore.collection('products').where('businessId', isEqualTo: businessId).snapshots().listen((snapshot) {
       state = snapshot.docs.map((doc) => Product.fromFirestore(doc)).toList();
     });
+    }else{
+      state = [];
+    }
+    
   }
 
   Future<void> addProduct(Product product, WidgetRef ref) async {
@@ -389,5 +398,5 @@ class ProductNotifier extends StateNotifier<List<Product>> {
 final productNotifierProvider =
     StateNotifierProvider<ProductNotifier, List<Product>>((ref) {
   final firestore = ref.watch(firestoreProvider);
-  return ProductNotifier(firestore);
+  return ProductNotifier(firestore, ref);
 });

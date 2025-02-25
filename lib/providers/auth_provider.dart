@@ -4,8 +4,9 @@ import '../models/user_model.dart';
 
 class AuthNotifier extends StateNotifier<AsyncValue<UserModel?>> {
   final AuthRepository _authRepository;
+  final Ref ref;
 
-  AuthNotifier(this._authRepository) : super(const AsyncValue.loading()) {
+  AuthNotifier(this._authRepository, this.ref) : super(const AsyncValue.loading()) {
     _checkAutoLogin();
   }
 
@@ -15,6 +16,11 @@ class AuthNotifier extends StateNotifier<AsyncValue<UserModel?>> {
     try {
       final user = await _authRepository.autoLogin(); // Implement this in AuthRepository
       state = AsyncData(user);
+
+      if (user != null) {
+      ref.read(businessIdProvider.notifier).state = user.businessId ?? "";
+    }
+
     } catch (e) {
       state = AsyncData(null);
     }
@@ -36,6 +42,11 @@ class AuthNotifier extends StateNotifier<AsyncValue<UserModel?>> {
     try {
       final user = await _authRepository.signIn(email, password);
       state = AsyncValue.data(user);
+
+      if (user != null) {
+        ref.read(businessIdProvider.notifier).state = user.businessId ?? "";
+      }
+
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
     }
@@ -46,6 +57,11 @@ class AuthNotifier extends StateNotifier<AsyncValue<UserModel?>> {
     try {
       final user = await _authRepository.signUp(email: email, password: password, displayName: displayName);
       state = AsyncValue.data(user);
+
+      if (user != null) {
+        ref.read(businessIdProvider.notifier).state = user.businessId ?? "";
+      }
+
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
     }
@@ -55,11 +71,14 @@ class AuthNotifier extends StateNotifier<AsyncValue<UserModel?>> {
   Future<void> signOut() async {
     await _authRepository.signOut();
     state = const AsyncValue.data(null);
+    ref.read(businessIdProvider.notifier).state = "";
   }
 }
 
 /// **Auth Provider**
 final authProvider =
     StateNotifierProvider<AuthNotifier, AsyncValue<UserModel?>>((ref) {
-  return AuthNotifier(ref.watch(authRepositoryProvider));
+  return AuthNotifier(ref.watch(authRepositoryProvider), ref);
 });
+
+final businessIdProvider = StateProvider<String>((ref) => "");

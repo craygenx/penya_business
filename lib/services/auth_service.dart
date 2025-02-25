@@ -102,3 +102,5 @@ class AuthRepository {
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return AuthRepository(FirebaseAuth.instance, FirebaseFirestore.instance);
 });
+
+

@@ -25,9 +25,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class OrderService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  Future<List<Map<String, dynamic>>> fetchOrders() async {
+  Future<List<Map<String, dynamic>>> fetchOrders(String businessId) async {
     try {
-      QuerySnapshot querySnapshot = await _firestore.collection('orders').get();
+      QuerySnapshot querySnapshot = await _firestore.collection('orders').where('businessId', isEqualTo: businessId).get();
       return querySnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
   }
     catch (e) {

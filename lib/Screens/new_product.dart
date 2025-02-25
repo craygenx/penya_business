@@ -48,6 +48,7 @@ class _NewProductState extends ConsumerState<NewProduct> {
     final stockEditingController = ref.watch(textEditingControllersFamily('stock'));
     final discountEditingController = ref.watch(textEditingControllersFamily('discount'));
     final discountTypeEditingController = ref.watch(textEditingControllersFamily('discountType'));
+    final businessId = ref.watch(businessIdProvider);
     final authState = ref.watch(authProvider);
     if (widget.productId.isNotEmpty) {
       final productAsync = ref.watch(productsProvider);
@@ -154,7 +155,7 @@ class _NewProductState extends ConsumerState<NewProduct> {
                               id: widget.productId.isNotEmpty
                                   ? widget.productId
                                   : uuid.v4(),
-                              businessId: authState.value?.businessId ?? '',
+                              businessId: businessId,
                               title: nameEditingController.text,
                               views: 0,
                               addedToCart: 0,
@@ -217,6 +218,17 @@ class _NewProductState extends ConsumerState<NewProduct> {
                 ],
               ),
             ),
+            Visibility(
+              visible: businessId != authState.value?.id,
+              child: SizedBox(
+                width: width *.95,
+                child: Text('* The following product will be added to your branch bussiness ID: $businessId if you wish to switch click Here',
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                ),
+              ),
+              ),
             Padding(
               padding: const EdgeInsets.only(top: 10.0),
               child: Container(

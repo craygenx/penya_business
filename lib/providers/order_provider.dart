@@ -165,18 +165,24 @@ final searchFocusNodeProvider = Provider<FocusNode>((ref) {
 final isSearchFocusedProvider = StateProvider<bool>((ref) => false);
 final ordersProvider = StateNotifierProvider<OrderNotifier, List<OrdersModel>>((ref){
   final orderService = ref.read(orderServiceProvider);
-  return OrderNotifier(orderService, ref.read);
+  return OrderNotifier(orderService, ref);
 });
 
 class OrderNotifier extends StateNotifier<List<OrdersModel>> {
   final OrderService _orderService;
-  final read;
-  OrderNotifier(this._orderService, this.read) : super([]) {
+  // final read;
+  final Ref ref;
+  OrderNotifier(this._orderService, this.ref) : super([]) {
     loadOrders();
   }
   void loadOrders() async {
-    // final orders = await _orderService.fetchOrders();
-    // state = orders.map((orderData) => OrdersModel.fromMap(orderData)).toList();
+    // final businessId = ref.watch(businessIdProvider);
+    // if (businessId.isNotEmpty){
+    //   final orders = await _orderService.fetchOrders(businessId);
+    //   state = orders.map((orderData) => OrdersModel.fromMap(orderData)).toList();
+    // }else{
+    //   state=[];
+    // }
     // final orders = generateFakeOrders();
     // state = orders;
     state = [];
@@ -196,8 +202,8 @@ class OrderNotifier extends StateNotifier<List<OrdersModel>> {
     loadOrders();
   }
   List<OrdersModel> getFilteredOrders() {
-    final orderStatus = read(orderFilterProvider);
-    final searchQuery = read(searchQueryProvider)
+    final orderStatus = ref.read(orderFilterProvider);
+    final searchQuery = ref.read(searchQueryProvider)
         .toString()
         .split('.')
         .last

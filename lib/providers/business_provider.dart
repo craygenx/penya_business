@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:penya_business/models/branch_model.dart';
 import 'package:penya_business/models/business_model.dart';
+import 'package:penya_business/providers/auth_provider.dart';
 import 'package:penya_business/services/business_service.dart';
 
 class BusinessNotifier extends StateNotifier<AsyncValue<Business?>> {
@@ -80,11 +81,13 @@ class BusinessNotifier extends StateNotifier<AsyncValue<Business?>> {
 
 final businessRepositoryProvider = Provider((ref) => BusinessRepository());
 
+
 // Provider to get user details
 final userRoleProvider = Provider<Map<String, String>>((ref) {
+  final authState = ref.watch(authProvider);
   return {
-    'userId': 'example_user_id',  // Replace with actual FirebaseAuth UID
-    'role': 'owner', // Fetch from Firestore user collection
+    'userId': authState.value?.id ?? '',  // Replace with actual FirebaseAuth UID
+    'role': authState.value!.roles.contains('owner') ? 'owner': '', // Fetch from Firestore user collection
   };
 });
 
