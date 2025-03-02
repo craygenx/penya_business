@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:penya_business/models/branch_model.dart';
+// import 'package:penya_business/models/branch_model.dart';
 import 'package:penya_business/providers/auth_provider.dart';
 import 'package:penya_business/providers/business_provider.dart';
 import 'package:penya_business/providers/dashboard_provider.dart';
@@ -31,7 +31,7 @@ class Dashboard extends ConsumerWidget {
     TextEditingController ownerEmailController = TextEditingController();
     String uid = authState.value?.id ?? '';
 
-    Future<List<Branch>> branches = business.getBranches(businessState.value!.branches);
+    // Future<List<Branch>> branches = business.getBranches(businessState.value!.branches);
 
 
 
@@ -505,32 +505,32 @@ class Dashboard extends ConsumerWidget {
                         ),
                       ),
                       Padding(padding: EdgeInsets.all(10)),
-                      Visibility(
-                      visible: authState.value?.roles.contains('owner') ?? false,
-                      child: SizedBox(
-                          width: width * .7,
-                          height: 160,
-                          child:businessState.value?.branches.isNotEmpty?? false ? Text('No registered branches') : FutureBuilder<List<Branch>>(
-                            future: branches,
-                            builder: (context, snapshot){
-                              if(snapshot.connectionState == ConnectionState.waiting){
-                                return CircularProgressIndicator();
-                              }else if(snapshot.hasError){
-                                return Text('Error: ${snapshot.error}');
-                              }else{
-                                return ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: snapshot.data?.length ?? 0,
-                                  itemBuilder: (context, index){
-                                      // final branch = snapshot.data?[index];
-                                      return BranchCard();
-                                    }
-                                  );
-                              }
-                            }
-                          ),
-                        ),
-                      ),
+                      // Visibility(
+                      // visible: authState.value?.roles.contains('owner') ?? false,
+                      // child: SizedBox(
+                      //     width: width * .7,
+                      //     height: 160,
+                      //     child:businessState.value?.branches.isNotEmpty?? false ? Text('No registered branches') : FutureBuilder<List<Branch>>(
+                      //       future: branches,
+                      //       builder: (context, snapshot){
+                      //         if(snapshot.connectionState == ConnectionState.waiting){
+                      //           return CircularProgressIndicator();
+                      //         }else if(snapshot.hasError){
+                      //           return Text('Error: ${snapshot.error}');
+                      //         }else{
+                      //           return ListView.builder(
+                      //             scrollDirection: Axis.horizontal,
+                      //             itemCount: snapshot.data?.length ?? 0,
+                      //             itemBuilder: (context, index){
+                      //                 // final branch = snapshot.data?[index];
+                      //                 return BranchCard();
+                      //               }
+                      //             );
+                      //         }
+                      //       }
+                      //     ),
+                      //   ),
+                      // ),
                     Visibility(
                       visible: authState.value?.roles.contains('owner') ?? false,
                       child: SizedBox(
