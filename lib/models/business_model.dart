@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:penya_business/models/branch_model.dart';
 
 class Business {
   final String id;
@@ -12,7 +11,7 @@ class Business {
   final double totalIncome;
   final double totalProfit;
   final List<String> products;
-  final List<String> branches; // Only fetched for owners
+  final List<dynamic> branches; // Only fetched for owners
 
   Business({
     required this.id,
@@ -28,7 +27,7 @@ class Business {
     this.branches = const [],
   });
 
-  factory Business.fromFirestore(DocumentSnapshot doc, {List<Branch>? branches}) {
+  factory Business.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return Business(
       id: doc.id,

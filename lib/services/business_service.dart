@@ -18,20 +18,27 @@ class BusinessRepository {
       if (querySnapshot.docs.isEmpty) return null;
 
       final businessDoc = querySnapshot.docs.first;
-      final businessId = businessDoc.id;
+      // final businessId = businessDoc.id;
 
       // Fetch branches for this business
-      final branchesSnapshot = await _firestore
-          .collection('businesses')
-          .doc(businessId)
-          .collection('branches')
-          .get();
+      // final branchesSnapshot = await _firestore
+      //     .collection('businesses')
+      //     .doc(businessId)
+      //     .collection('branches')
+      //     .get();
 
-      List<Branch> branches = branchesSnapshot.docs
-          .map((branchDoc) => Branch.fromFirestore(branchDoc))
-          .toList();
+      // if(branchesSnapshot.docs.isEmpty){
+      //   List<Branch> branches = [];
+      //   return Business.fromFirestore(businessDoc);
+      // } else{
+      //     List<Branch> branches = branchesSnapshot.docs
+      //       .map((branchDoc) => Branch.fromFirestore(branchDoc))
+      //       .toList();
 
-      return Business.fromFirestore(businessDoc, branches: branches);
+      //   return Business.fromFirestore(businessDoc, branches: branches);
+      // }
+      return Business.fromFirestore(businessDoc);
+      
     } else {
       // Fetch business assigned to branch manager from user collection
       final userDoc = await _firestore.collection('users').doc(userId).get();
@@ -57,7 +64,7 @@ class BusinessRepository {
     await _firestore
         .collection('users')
         .doc(business.ownerId)
-        .update({'business_id': business.id});
+        .update({'business_id': business.id, 'roles': FieldValue.arrayUnion(['owner'])});
   }
 
   /// Update business details (Only for Owners)
@@ -73,7 +80,7 @@ class BusinessRepository {
     await _firestore.collection('businesses').doc(businessId).delete();
   }
 
-  Future<List<Branch>> getBranches(List<String> branchIds) async {
+  Future<List<Branch>> getBranches(List<dynamic> branchIds) async {
     if (branchIds.isEmpty) return [];
     final branchSnapshots = await Future.wait(branchIds.map((branchId) =>
         _firestore.collection('branches').doc(branchId).get()));
