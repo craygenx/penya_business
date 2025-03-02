@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:penya_business/providers/business_provider.dart';
 import 'package:penya_business/services/auth_service.dart';
 import '../models/user_model.dart';
 
@@ -18,7 +19,8 @@ class AuthNotifier extends StateNotifier<AsyncValue<UserModel?>> {
       state = AsyncData(user);
 
       if (user != null) {
-      ref.read(businessIdProvider.notifier).state = user.businessId ?? "";
+        ref.read(businessProvider.notifier).fetchBusiness();
+        ref.read(businessIdProvider.notifier).state = user.businessId ?? "";
     }
 
     } catch (e) {
@@ -44,7 +46,9 @@ class AuthNotifier extends StateNotifier<AsyncValue<UserModel?>> {
       state = AsyncValue.data(user);
 
       if (user != null) {
+        ref.read(businessProvider.notifier).fetchBusiness();
         ref.read(businessIdProvider.notifier).state = user.businessId ?? "";
+
       }
 
     } catch (e) {
@@ -59,6 +63,7 @@ class AuthNotifier extends StateNotifier<AsyncValue<UserModel?>> {
       state = AsyncValue.data(user);
 
       if (user != null) {
+        ref.read(businessProvider.notifier).fetchBusiness();
         ref.read(businessIdProvider.notifier).state = user.businessId ?? "";
       }
 
@@ -71,6 +76,7 @@ class AuthNotifier extends StateNotifier<AsyncValue<UserModel?>> {
   Future<void> signOut() async {
     await _authRepository.signOut();
     state = const AsyncValue.data(null);
+    ref.read(businessProvider.notifier).state = const AsyncValue.data(null);
     ref.read(businessIdProvider.notifier).state = "";
   }
 }

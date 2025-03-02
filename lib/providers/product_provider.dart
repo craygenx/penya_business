@@ -300,7 +300,6 @@ class ProductNotifier extends StateNotifier<List<Product>> {
     }else{
       state = [];
     }
-    
   }
 
   Future<void> addProduct(Product product, WidgetRef ref) async {

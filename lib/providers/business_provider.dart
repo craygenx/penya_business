@@ -24,6 +24,10 @@ class BusinessNotifier extends StateNotifier<AsyncValue<Business?>> {
     }
   }
 
+  Future<List<Branch>> getBranches(List<String> branchIds) async {
+    return _repository.getBranches(branchIds);
+  }
+
   Future<void> createBusiness(Business business) async {
     try {
       await _repository.createBusiness(business);

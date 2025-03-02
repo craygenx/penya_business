@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:penya_business/models/branch_model.dart';
 import 'package:penya_business/providers/auth_provider.dart';
+import 'package:penya_business/providers/business_provider.dart';
 import 'package:penya_business/providers/dashboard_provider.dart';
 import 'package:penya_business/providers/orders_dash_provider.dart';
 import 'package:penya_business/providers/social_auth_provider.dart';
@@ -15,7 +17,7 @@ class Dashboard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     bool switchValue = true;
 
     String today = formatDate(DateTime.now());
@@ -23,9 +25,14 @@ class Dashboard extends ConsumerWidget {
     final statsOrders = ref.watch(ordersStatsProvider);
     final socialAuthService = ref.read(socialAuthProvider);
     final authState = ref.watch(authProvider);
+    final businessState = ref.watch(businessProvider);
+    final business = ref.read(businessProvider.notifier);
     TextEditingController ownerNameController = TextEditingController();
     TextEditingController ownerEmailController = TextEditingController();
     String uid = authState.value?.id ?? '';
+
+    Future<List<Branch>> branches = business.getBranches(businessState.value!.branches);
+
 
 
     ownerNameController.text = authState.value?.displayName ?? '';
@@ -333,13 +340,13 @@ class Dashboard extends ConsumerWidget {
         });
     }
     return Scaffold(
-      key: _scaffoldKey,
+      key: scaffoldKey,
       appBar: AppBar(
         leading: Row(
           children: [
             IconButton(
               onPressed: (){
-                _scaffoldKey.currentState?.openDrawer();
+                scaffoldKey.currentState?.openDrawer();
               }, icon: Icon(Icons.menu),
             ),
           ],
@@ -485,65 +492,85 @@ class Dashboard extends ConsumerWidget {
                 ),
                     ),
                     Padding(padding: EdgeInsets.all(10)),
-                    SizedBox(
-                      width: width *.7,
-                      child: Text('Registered Branches',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Padding(padding: EdgeInsets.all(10)),
-                    SizedBox(
-                      width: width * .7,
-                      height: 160,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: [
-                          BranchCard(),
-                          BranchCard(),
-                          BranchCard(),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      width: width * .7,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          GestureDetector(
-                            onTap: (){
-                              Navigator.pop(context);
-                              showBottomSheet(context);
-                              },
-                            child: Container(
-                              decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.black,
-                                width: 1.5,
-                              ),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10),
-                              ),
-                            ),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.all(5),
-                                  child: Icon(Icons.add),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(5),
-                                  child: Text('Register Branch'),
-                                  ),
-                              ]
-                            ),
+                    Visibility(
+                      visible: authState.value?.roles.contains('owner') ?? false,
+                      child: SizedBox(
+                          width: width *.7,
+                          child: Text('Registered Branches',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                        
-                      ],),
-                    ),
+                        ),
+                      ),
+                      Padding(padding: EdgeInsets.all(10)),
+                      Visibility(
+                      visible: authState.value?.roles.contains('owner') ?? false,
+                      child: SizedBox(
+                          width: width * .7,
+                          height: 160,
+                          child:businessState.value?.branches.isNotEmpty?? false ? Text('No registered branches') : FutureBuilder<List<Branch>>(
+                            future: branches,
+                            builder: (context, snapshot){
+                              if(snapshot.connectionState == ConnectionState.waiting){
+                                return CircularProgressIndicator();
+                              }else if(snapshot.hasError){
+                                return Text('Error: ${snapshot.error}');
+                              }else{
+                                return ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: snapshot.data?.length ?? 0,
+                                  itemBuilder: (context, index){
+                                      // final branch = snapshot.data?[index];
+                                      return BranchCard();
+                                    }
+                                  );
+                              }
+                            }
+                          ),
+                        ),
+                      ),
+                    Visibility(
+                      visible: authState.value?.roles.contains('owner') ?? false,
+                      child: SizedBox(
+                          width: width * .7,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              GestureDetector(
+                                onTap: (){
+                                  Navigator.pop(context);
+                                  showBottomSheet(context);
+                                  },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.black,
+                                    width: 1.5,
+                                  ),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.all(5),
+                                      child: Icon(Icons.add),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(5),
+                                      child: Text('Register Branch'),
+                                      ),
+                                  ]
+                                ),
+                                ),
+                              ),
+                            
+                          ],),
+                        ),
+                      ),
                     Padding(padding: EdgeInsets.all(10)),
                     SizedBox(
                       child: Row(

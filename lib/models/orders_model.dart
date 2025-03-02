@@ -150,7 +150,7 @@ class OrdersModel {
     if (products.isEmpty) return [];
 
     List<ProductWithQuantity> productList = [];
-
+ 
     for (var productMap in products) {
       String productId = productMap['product_id'];
       int quantity = productMap['quantity'];
