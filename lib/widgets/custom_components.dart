@@ -1,8 +1,12 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:penya_business/main.dart';
+import 'package:penya_business/providers/dashboard_provider.dart';
+import 'package:penya_business/providers/order_provider.dart';
 
 class CustomTextFormField extends StatefulWidget {
   final String hintText;
@@ -868,7 +872,7 @@ String formatDate(DateTime date){
   return DateFormat('MMM d,yyyy').format(date);
 }
 
-class LineChartImplementation extends StatelessWidget {
+class LineChartImplementation extends ConsumerWidget {
   final List<FlSpot> spots;
   final String collectionUnit;
   final String amount;
@@ -891,8 +895,11 @@ class LineChartImplementation extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     double width = MediaQuery.of(context).size.width;
+    final overlayEntry = ref.watch(overlayProvider);
+    String currentFilter = ref.watch(orderFilterProvider).value;
+    final GlobalKey dropdownKey = GlobalKey();
 
     // Determine min & max Y values
     double minY = spots.isNotEmpty ? spots.map((e) => e.y).reduce((a, b) => a < b ? a : b) : 0;
@@ -903,6 +910,63 @@ class LineChartImplementation extends StatelessWidget {
       6,
       (index) => minY + ((maxY - minY) / 5) * index,
     );
+
+    void showDropdown(BuildContext context, GlobalKey key) {
+      final overlayNotifier = ref.watch(overlayProvider.notifier);
+      overlayNotifier.state?.remove();
+      overlayNotifier.state = null;
+      if (overlayEntry != null) {
+        return;
+      }
+      final renderBox = key.currentContext?.findRenderObject() as RenderBox;
+      final position = renderBox.localToGlobal(Offset.zero);
+      final screenWidth = MediaQuery.of(context).size.width;
+      final overlayWidth = 150.0;
+      double leftPosition = position.dx;
+      if (position.dx + overlayWidth > screenWidth) {
+        leftPosition = screenWidth - overlayWidth - 10.0;
+      }
+      final entry = OverlayEntry(
+        builder: (context) => Positioned(
+          left: leftPosition,
+          top: position.dy + renderBox.size.height,
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              width: 150,
+              padding: EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [BoxShadow(blurRadius: 5, color: Colors.black26)],
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Column(
+                children: DashboardFilter.values.map((filter) {
+                  String passedFilter = filter.toString().split('.').last;
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: Container(
+                      width: 145,
+                      color: currentFilter == passedFilter
+                          ? Colors.lightBlueAccent
+                          : Colors.black26,
+                      child: TextButton(
+                          onPressed: () {
+                            ref.read(dashboardFilterProvider.notifier).state =
+                                filter;
+                          },
+                          child: Text(filter.toString().split('.').last)),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
+        ),
+      );
+      Overlay.of(context).insert(entry);
+      overlayNotifier.state = entry;
+    }
 
     return SizedBox(
       width: width * .95,
@@ -932,23 +996,26 @@ class LineChartImplementation extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Container(
-                        width: 100,
-                        decoration: BoxDecoration(
-                          border: Border.all(width: 0.5),
-                          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                      GestureDetector(
+                        onTap: ()=>showDropdown(context, dropdownKey),
+                        child: Container(
+                          width: 100,
+                          decoration: BoxDecoration(
+                            border: Border.all(width: 0.5),
+                            borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.only(right: 10.0, top: 8, bottom: 8),
+                                child: Icon(size: 16, FontAwesomeIcons.filter),
+                              ),
+                              const Text('Filter'),
+                            ],
+                          ),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.only(right: 10.0, top: 8, bottom: 8),
-                              child: Icon(size: 16, FontAwesomeIcons.filter),
-                            ),
-                            const Text('Filter'),
-                          ],
-                        ),
-                      ),
+                      )
                     ],
                   ),
                 ),

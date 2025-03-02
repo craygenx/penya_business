@@ -131,7 +131,7 @@ import '../services/order_service.dart';
 
 enum OrderStatus { pending, cancelled, delivered, all }
 
-extension OrderStatusExtension on OrderStatus {
+extension OrderStatusExtension on OrderStatus { 
   String get value {
     switch (this) {
       case OrderStatus.pending:

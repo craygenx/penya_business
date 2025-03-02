@@ -5,7 +5,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:penya_business/models/branch_model.dart';
 import 'package:penya_business/providers/auth_provider.dart';
-import 'package:penya_business/providers/business_provider.dart';
 import 'package:penya_business/providers/dashboard_provider.dart';
 import 'package:penya_business/providers/orders_dash_provider.dart';
 import 'package:penya_business/providers/social_auth_provider.dart';
@@ -25,8 +24,8 @@ class Dashboard extends ConsumerWidget {
     final statsOrders = ref.watch(ordersStatsProvider);
     final socialAuthService = ref.read(socialAuthProvider);
     final authState = ref.watch(authProvider);
-    final businessState = ref.watch(businessProvider);
-    final business = ref.read(businessProvider.notifier);
+    // final businessState = ref.watch(businessProvider);
+    // final business = ref.read(businessProvider.notifier);
     TextEditingController ownerNameController = TextEditingController();
     TextEditingController ownerEmailController = TextEditingController();
     String uid = authState.value?.id ?? '';
@@ -38,6 +37,9 @@ class Dashboard extends ConsumerWidget {
     ownerNameController.text = authState.value?.displayName ?? '';
     ownerEmailController.text = authState.value?.email ?? '';
     double width = MediaQuery.of(context).size.width;
+    
+
+    
 
     List<String> getXLabels(String timeFrame, List<FlSpot> spots) {
       if (timeFrame == "daily") {

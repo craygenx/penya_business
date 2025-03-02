@@ -205,7 +205,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:penya_business/models/orders_model.dart';
 import 'package:penya_business/providers/order_provider.dart';
 
-enum DashboardFilter { daily, weekly, sixMonths, yearly }
+enum DashboardFilter { daily, weekly, sixMonths, yearly } 
 
 final dashboardFilterProvider =
     StateProvider<DashboardFilter>((ref) => DashboardFilter.daily);
