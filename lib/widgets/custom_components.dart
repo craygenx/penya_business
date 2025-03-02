@@ -969,6 +969,7 @@ class LineChartImplementation extends ConsumerWidget {
     }
 
     return SizedBox(
+      
       width: width * .95,
       height: 360,
       child: Column(
@@ -999,6 +1000,7 @@ class LineChartImplementation extends ConsumerWidget {
                       GestureDetector(
                         onTap: ()=>showDropdown(context, dropdownKey),
                         child: Container(
+                          key: dropdownKey,
                           width: 100,
                           decoration: BoxDecoration(
                             border: Border.all(width: 0.5),
