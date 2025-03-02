@@ -7,18 +7,18 @@ class BusinessRepository {
 
   /// Fetch Business Data Based on Role
   Future<Business?> getBusinessData(String userId, String role) async {
-    return null;
+    // return null;
     // if (role == 'owner') {
     //   // Fetch business where user is the owner
-    //   final querySnapshot = await _firestore
-    //       .collection('businesses')
-    //       .where('owner_id', isEqualTo: userId)
-    //       .limit(1)
-    //       .get();
+      final querySnapshot = await _firestore
+          .collection('businesses')
+          .where('owner_id', isEqualTo: userId)
+          .limit(1)
+          .get();
 
-    //   if (querySnapshot.docs.isEmpty) return null;
+      if (querySnapshot.docs.isEmpty) return null;
 
-    //   final businessDoc = querySnapshot.docs.first;
+      final businessDoc = querySnapshot.docs.first;
     //   // final businessId = businessDoc.id;
 
     //   // Fetch branches for this business
@@ -38,7 +38,7 @@ class BusinessRepository {
 
     //   //   return Business.fromFirestore(businessDoc, branches: branches);
     //   // }
-    //   return Business.fromFirestore(businessDoc);
+      return Business.fromFirestore(businessDoc);
       
     // } else {
     //   // Fetch business assigned to branch manager from user collection
