@@ -7,52 +7,53 @@ class BusinessRepository {
 
   /// Fetch Business Data Based on Role
   Future<Business?> getBusinessData(String userId, String role) async {
-    if (role == 'owner') {
-      // Fetch business where user is the owner
-      final querySnapshot = await _firestore
-          .collection('businesses')
-          .where('owner_id', isEqualTo: userId)
-          .limit(1)
-          .get();
+    return null;
+    // if (role == 'owner') {
+    //   // Fetch business where user is the owner
+    //   final querySnapshot = await _firestore
+    //       .collection('businesses')
+    //       .where('owner_id', isEqualTo: userId)
+    //       .limit(1)
+    //       .get();
 
-      if (querySnapshot.docs.isEmpty) return null;
+    //   if (querySnapshot.docs.isEmpty) return null;
 
-      final businessDoc = querySnapshot.docs.first;
-      // final businessId = businessDoc.id;
+    //   final businessDoc = querySnapshot.docs.first;
+    //   // final businessId = businessDoc.id;
 
-      // Fetch branches for this business
-      // final branchesSnapshot = await _firestore
-      //     .collection('businesses')
-      //     .doc(businessId)
-      //     .collection('branches')
-      //     .get();
+    //   // Fetch branches for this business
+    //   // final branchesSnapshot = await _firestore
+    //   //     .collection('businesses')
+    //   //     .doc(businessId)
+    //   //     .collection('branches')
+    //   //     .get();
 
-      // if(branchesSnapshot.docs.isEmpty){
-      //   List<Branch> branches = [];
-      //   return Business.fromFirestore(businessDoc);
-      // } else{
-      //     List<Branch> branches = branchesSnapshot.docs
-      //       .map((branchDoc) => Branch.fromFirestore(branchDoc))
-      //       .toList();
+    //   // if(branchesSnapshot.docs.isEmpty){
+    //   //   List<Branch> branches = [];
+    //   //   return Business.fromFirestore(businessDoc);
+    //   // } else{
+    //   //     List<Branch> branches = branchesSnapshot.docs
+    //   //       .map((branchDoc) => Branch.fromFirestore(branchDoc))
+    //   //       .toList();
 
-      //   return Business.fromFirestore(businessDoc, branches: branches);
-      // }
-      return Business.fromFirestore(businessDoc);
+    //   //   return Business.fromFirestore(businessDoc, branches: branches);
+    //   // }
+    //   return Business.fromFirestore(businessDoc);
       
-    } else {
-      // Fetch business assigned to branch manager from user collection
-      final userDoc = await _firestore.collection('users').doc(userId).get();
-      final userData = userDoc.data();
-      if (userData == null || userData['business_id'] == null) return null;
+    // } else {
+    //   // Fetch business assigned to branch manager from user collection
+    //   final userDoc = await _firestore.collection('users').doc(userId).get();
+    //   final userData = userDoc.data();
+    //   if (userData == null || userData['business_id'] == null) return null;
 
-      final businessId = userData['business_id'];
-      final businessDoc =
-          await _firestore.collection('businesses').doc(businessId).get();
+    //   final businessId = userData['business_id'];
+    //   final businessDoc =
+    //       await _firestore.collection('businesses').doc(businessId).get();
 
-      if (!businessDoc.exists) return null;
+    //   if (!businessDoc.exists) return null;
 
-      return Business.fromFirestore(businessDoc);
-    }
+    //   return Business.fromFirestore(businessDoc);
+    // }
   }
 
   /// Create a new business (Only for Owners)

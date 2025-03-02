@@ -32,7 +32,7 @@ class Dashboard extends ConsumerWidget {
     TextEditingController ownerEmailController = TextEditingController();
     String uid = authState.value?.id ?? '';
 
-    Future<List<Branch>> branches = business.getBranches(businessState.value?.branches ?? []);
+    // Future<List<Branch>> branches = business.getBranches(businessState.value?.branches ?? []);
 
 
 
