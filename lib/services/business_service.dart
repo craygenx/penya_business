@@ -81,7 +81,7 @@ class BusinessRepository {
     await _firestore.collection('businesses').doc(businessId).delete();
   }
 
-  Future<List<Branch>> getBranches(List<dynamic> branchIds) async {
+  Future<List<Branch>> getBranches(List<String> branchIds) async {
     if (branchIds.isEmpty) return [];
     final branchSnapshots = await Future.wait(branchIds.map((branchId) =>
         _firestore.collection('branches').doc(branchId).get()));

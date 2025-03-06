@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:penya_business/models/branch_model.dart';
 
 class Business {
   final String id;
@@ -11,7 +12,7 @@ class Business {
   final double totalIncome;
   final double totalProfit;
   final List<String> products;
-  final List<dynamic> branches; // Only fetched for owners
+  final List<String> branches; // Only fetched for owners
 
   Business({
     required this.id,
@@ -40,7 +41,8 @@ class Business {
       marketplaceEnabled: data['marketplace_enabled'] ?? false,
       totalIncome: (data['total_income'] ?? 0).toDouble(),
       totalProfit: (data['total_profit'] ?? 0).toDouble(),
-      branches: data['branches'] ?? [],
+      branches:
+          data['branches'] != null ? List<String>.from(data['branches']) : [],
     );
   }
 
@@ -58,5 +60,14 @@ class Business {
       'products': products,
       'branches': branches,
     };
+  }
+
+  Future<List<Branch>> getBranches(List<String> branchIds) async {
+    if (branchIds.isEmpty) return [];
+    final branchSnapshots = await Future.wait(branchIds.map((branchId) =>
+        FirebaseFirestore.instance.collection('branches').doc(branchId).get()));
+    return branchSnapshots
+        .map((branchSnapshot) => Branch.fromFirestore(branchSnapshot))
+        .toList();
   }
 }

@@ -24,7 +24,7 @@ class BusinessNotifier extends StateNotifier<AsyncValue<Business?>> {
     }
   }
 
-  Future<List<Branch>> getBranches(List<dynamic> branchIds) async {
+  Future<List<Branch>> getBranches(List<String> branchIds) async {
     return _repository.getBranches(branchIds);
   }
 

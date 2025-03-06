@@ -32,7 +32,9 @@ class Branch {
       name: data['name'] ?? '',
       businessEmail: data['business_email'] ?? '',
       businessPhone: data['business_phone'] ?? '',
-      products: data['products'] ?? [],
+      products: data['products'] != null 
+        ? List<String>.from(data['products'])
+        : [],
       ownerId: data['owner_id'] ?? '',
       isSingleEntity: data['is_single_entity'] ?? true,
       marketplaceEnabled: data['marketplace_enabled'] ?? false,
