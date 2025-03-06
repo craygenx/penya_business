@@ -81,15 +81,15 @@ class BusinessRepository {
     await _firestore.collection('businesses').doc(businessId).delete();
   }
 
-  Future<List<Branch>> getBranches(List<String> branchIds) async {
-    if (branchIds.isEmpty) return [];
-    final branchSnapshots = await Future.wait(branchIds.map((branchId) =>
-        _firestore.collection('branches').doc(branchId).get()));
+  // Future<List<Branch>> getBranches(List<String> branchIds) async {
+  //   if (branchIds.isEmpty) return [];
+  //   final branchSnapshots = await Future.wait(branchIds.map((branchId) =>
+  //       _firestore.collection('branches').doc(branchId).get()));
 
-    return branchSnapshots
-        .map((branchSnapshot) => Branch.fromFirestore(branchSnapshot))
-        .toList();
-  }
+  //   return branchSnapshots
+  //       .map((branchSnapshot) => Branch.fromFirestore(branchSnapshot))
+  //       .toList();
+  // }
 
   /// Add a new branch to a business (Only for Owners)
   Future<void> addBranch(String businessId, Branch branch) async {

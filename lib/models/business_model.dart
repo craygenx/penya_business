@@ -35,14 +35,17 @@ class Business {
       name: data['name'] ?? '',
       businessEmail: data['business_email'] ?? '',
       businessPhone: data['business_phone'] ?? '',
-      products: data['products'] ?? [],
+      products: data['products'] != null 
+        ? List<String>.from(data['products'] as List) 
+        : [],
       ownerId: data['owner_id'] ?? '',
       isSingleEntity: data['is_single_entity'] ?? true,
       marketplaceEnabled: data['marketplace_enabled'] ?? false,
       totalIncome: (data['total_income'] ?? 0).toDouble(),
       totalProfit: (data['total_profit'] ?? 0).toDouble(),
-      branches:
-          data['branches'] != null ? List<String>.from(data['branches']) : [],
+      branches: data['branches'] != null 
+        ? (data['branches'] as List).map((e) => e.toString()).toList()  // 👈 Ensures a List<String>
+        : [],
     );
   }
 
